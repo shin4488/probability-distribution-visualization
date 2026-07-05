@@ -71,4 +71,5 @@ Decisions settled through questions and follow-up instructions during developmen
 - **GitHub Actions supply-chain protection**: pin actions in workflows to commit hashes instead of tags like `@v4`
 - **Chart ordering**: order the charts the way a statistics learner studies them. If one distribution presupposes another, show the prerequisite first, and show closely related distributions near each other (Bernoulli → binomial → negative binomial → Poisson → exponential → gamma → beta → normal → log-normal)
 - **No share button**: the state is always synced to the URL, so users are expected to copy it from the address bar
+- **Write as little hand-rolled CSS as possible** (hand-written CSS hurts maintainability). Tailwind CSS was adopted; the only remaining CSS file holds design tokens and theme variables
 - **No TypeScript errors in the host editor (fix the root cause, don't suppress warnings)**: bind-mount node_modules so type declarations also exist on the host. npm (including install) still runs only inside the container

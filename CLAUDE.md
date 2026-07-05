@@ -38,8 +38,10 @@ src/domain/     math, RNG, distribution definitions (pure TS, UI-agnostic → te
                   related distributions adjacent. See the comment in index.ts)
 src/i18n/       ja.ts is the source of truth for all keys; en.ts is forced to the same key set via satisfies
 src/state/      appState.ts (reducer) and urlCodec.ts (URL ⇔ state conversion)
-src/components/ React + Chart.js. Chart colors are read from CSS variables
-src/styles.css  the single place themes are defined (light/dark switched via :root[data-theme])
+src/components/ React + Chart.js, styled with Tailwind utility classes (shared button
+                class strings live in components/ui.ts). Chart colors are read from CSS variables
+src/styles.css  design tokens only (Tailwind @theme + dark-theme variable overrides +
+                chart colors). No layout/component CSS — write Tailwind utilities instead
 ```
 
 ### Design decisions to keep in mind
@@ -48,6 +50,7 @@ src/styles.css  the single place themes are defined (light/dark switched via :ro
 - **The histogram seed is fixed**: if samples changed every frame while dragging a slider, the shape change would be unreadable. Only the "Resample" button updates the seed. The seed is not put in the URL (what you share is the parameters, not the samples)
 - **The URL is the entirety of shareable state**: parameters, ordering, hidden cards, histogram on/off and sample size, language, and theme all live in the query string, continuously synced to the address bar via replaceState. There is deliberately no share button (per the spec — share by copying from the URL bar). Default values are omitted (see the format comment in urlCodec.ts). Invalid values silently fall back to defaults
 - **Theme/language precedence**: URL > localStorage > OS/browser settings. The inline script in index.html prevents a flash before first paint
+- **Styling is Tailwind-first**: do not add hand-written CSS classes (a spec requirement). Theme switching works by overriding the token variables under `:root[data-theme='dark']` in styles.css, which flips every utility and chart color at once
 - **Chart.js registers only the components in use** (components/chartTheme.ts). Charts are updated with `update('none')` rather than destroy/recreate (for slider responsiveness)
 
 ## Configuration files

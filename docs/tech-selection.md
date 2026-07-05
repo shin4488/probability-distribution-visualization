@@ -44,6 +44,17 @@ If bundle size were the top priority uPlot would win, but Chart.js was chosen fo
 Measured (vite build): ~389KB total JS (~131KB gzip), essentially all React + Chart.js.
 Tree shaking is enabled by registering only the chart components in use via `Chart.register()`.
 
+## CSS / styling
+
+| Candidate | Assessment |
+|---|---|
+| **Tailwind CSS v4 (chosen)** | Utility classes co-located with the markup, so there is almost no hand-written CSS to maintain. devDependency only — nothing ships at runtime beyond the generated CSS, and unused utilities are never emitted. v4 exposes `@theme` tokens as native CSS variables, which keeps this project's theming mechanism intact: dark mode still just overrides variables under `[data-theme='dark']`, and Chart.js still reads `--chart-*` via getComputedStyle |
+| Hand-written CSS (initial choice) | Zero dependencies — the initial pick under the supply-chain-minimization policy. Rejected on review: a growing stylesheet of bespoke class names is harder to maintain, and styles live far from the markup they affect |
+| CSS Modules | Solves scoping but everything is still hand-written CSS; maintainability gain is small |
+| Component libraries (MUI, Mantine, ...) | Large runtime dependency trees — directly against the dependency-minimization policy, and heavier bundles |
+
+The remaining [src/styles.css](../src/styles.css) contains only design tokens (colors, shadow, fonts), the dark-theme variable overrides, and a minimal `body` base — no layout/component CSS.
+
 ## Linter / formatter
 
 | Candidate | Assessment |
