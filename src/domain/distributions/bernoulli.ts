@@ -3,7 +3,9 @@ import type { DistributionDef } from '../types';
 export const bernoulli: DistributionDef = {
   id: 'bernoulli',
   kind: 'discrete',
-  params: [{ key: 'p', min: 0, max: 1, step: 0.01, defaultValue: 0.5 }],
+  // デフォルトpは二項分布と同じ0.3に揃える。隣り合う2枚のカードが
+  // 「同じ試行を1回だけ見るか、n回まとめて見るか」という1つの物語として読めるように
+  params: [{ key: 'p', min: 0, max: 1, step: 0.01, defaultValue: 0.3 }],
   density(x, { p }) {
     const k = Math.round(x);
     if (k === 1) return p;
