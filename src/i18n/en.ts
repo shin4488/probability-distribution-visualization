@@ -5,6 +5,7 @@ export const en = {
   'ui.title': 'Probability Distribution Visualizer',
   'ui.tagline': 'Play with the parameters and see how each distribution behaves',
   'ui.homeTitle': 'Back to top (resets the parameters)',
+  'ui.backToTop': 'Scroll back to the top',
   'ui.themeToDark': 'Switch to dark mode',
   'ui.themeToLight': 'Switch to light mode',
   'ui.filterLabel': 'Distributions',

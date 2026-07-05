@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState } from 'react';
+import { BackToTop } from './components/BackToTop';
 import { DistributionCard } from './components/DistributionCard';
 import { FilterChips } from './components/FilterChips';
 import { Toolbar } from './components/Toolbar';
@@ -198,6 +199,8 @@ export function App() {
           ))}
         </main>
       )}
+
+      <BackToTop label={translate(state.locale, 'ui.backToTop')} />
     </div>
   );
 }
