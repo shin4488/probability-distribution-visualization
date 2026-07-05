@@ -64,7 +64,8 @@ export const en = {
     'α={alpha}, β={beta} reads as your belief about a conversion rate after seeing {successes} successes and {failures} failures, with an estimated mean of {meanPct}%. It powers Bayesian A/B testing and expresses uncertainty about rates when data is scarce — watch the peak sharpen as observations grow.',
 
   'dist.gamma.name': 'Gamma',
-  'dist.gamma.tagline': 'Total waiting time; positive with a right tail',
+  'dist.gamma.tagline':
+    'Time until k events have occurred at a constant rate; positive with a right tail',
   'dist.gamma.param.shape': 'Shape k (count)',
   'dist.gamma.param.scale': 'Scale θ (mean per task)',
   'dist.gamma.usecase':
@@ -78,9 +79,9 @@ export const en = {
     'Incomes, house prices, and web response times arise from compounding multiplicative factors. With μ={mu} and σ={sigma}, the median is {median} but the mean is {mean} — dragged upward by the long right tail. This is why the average salary always sounds higher than what most people earn.',
   'dist.negbinomial.name': 'Negative binomial',
   'dist.negbinomial.tagline':
-    'Failures until the r-th success — the sum (composition) of r geometric distributions',
+    'Failures until the r-th success — intuitively, also a model for counts with individual differences',
   'dist.negbinomial.param.r': 'Successes r',
   'dist.negbinomial.param.p': 'Success probability p',
   'dist.negbinomial.usecase':
-    'With a {pPct}% close rate, this models how many rejections you take before landing {r} deals: {mean} rejections on average, or {totalTrials} visits including the successes. It is built by summing {r} geometric distributions, each counting the failures of repeated {pPct}%-Bernoulli trials until one success (the binomial fixes the number of trials and counts successes; this fixes the successes and counts trials — the mirror image). It is also the standard model for overdispersed count data that the Poisson cannot fit.',
+    'With a {pPct}% close rate, this models how many rejections you take before landing {r} deals ({mean} rejections on average, or {totalTrials} visits total). In practice, it is widely used to model count data with extreme individual differences (overdispersion) that the Poisson distribution cannot explain, such as predicting purchase frequencies or hospital visits.',
 } as const satisfies Record<MessageKey, string>;

@@ -71,7 +71,7 @@ export const ja = {
     'α={alpha}, β={beta}は「成功{successes}回・失敗{failures}回を観測したあとのコンバージョン率の確からしさ」と読め、推定平均は{meanPct}%です。A/Bテストのベイズ評価や、データが少ない段階での成功率の不確かさの表現に使われます。観測が増えるほど山が鋭くなり、確信が強まる様子を試してみてください。',
 
   'dist.gamma.name': 'ガンマ分布',
-  'dist.gamma.tagline': '待ち時間の合計。右に裾を引く正の量',
+  'dist.gamma.tagline': '一定レートで起きる出来事がk回発生するまでの時間。右に裾を引く正の量',
   'dist.gamma.param.shape': '形状 k(件数)',
   'dist.gamma.param.scale': '尺度 θ(1件あたりの平均)',
   'dist.gamma.usecase':
@@ -84,11 +84,12 @@ export const ja = {
   'dist.lognormal.usecase':
     '年収・住宅価格・Webページの応答時間のように、成長率などの「掛け算」の積み重ねで決まる量のモデルです。μ={mu}, σ={sigma}のとき中央値は{median}ですが、平均は{mean}と大きめになります。「平均年収が実感より高く見える」のは、この右の長い裾に平均が引っ張られるためです。',
   'dist.negbinomial.name': '負の二項分布',
-  'dist.negbinomial.tagline': 'r回成功するまでの失敗回数。幾何分布をr個合成(合計)したもの',
+  'dist.negbinomial.tagline':
+    'r回成功するまでの失敗回数。直感的には、個人差を考慮した回数の分布でもある',
   'dist.negbinomial.param.r': '成功回数 r',
   'dist.negbinomial.param.p': '成功確率 p',
   'dist.negbinomial.usecase':
-    '成約率{pPct}%の営業で{r}件の契約を取るまでに断られる回数のモデルです。断られる回数は平均{mean}回で、訪問は成功分を合わせて平均{totalTrials}件必要になります。この分布は「成功確率{pPct}%のベルヌーイ試行を繰り返し、1回成功するまでの失敗数」を表す幾何分布を{r}個足し合わせて合成したものです(二項分布が「回数を固定して成功数を数える」のに対し、こちらは「成功数を固定して回数を数える」裏返しの関係)。ポアソン分布よりばらつきが大きい件数データ(過分散)のモデルとしても使われます。',
+    '成約率{pPct}%の営業で、{r}件の契約を取るまでに断られる回数のモデルです（平均{mean}回断られ、総訪問数は平均{totalTrials}件になります）。実務のデータ分析では、ポアソン分布では説明しきれない「個人差による極端なばらつき（過分散）」を表現できるため、購買回数や通院回数などの予測に広く使われます。',
 } as const;
 
 export type MessageKey = keyof typeof ja;
