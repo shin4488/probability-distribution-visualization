@@ -25,6 +25,8 @@ export interface AppState {
   /** 全分布の表示順(非表示のものも順序は保持する) */
   order: DistributionId[];
   hidden: DistributionId[];
+  /** 活用例セクションを全カードで表示するか(右上のトグルで切替) */
+  showUseCases: boolean;
   cards: Record<DistributionId, CardState>;
 }
 
@@ -64,6 +66,7 @@ export type Action =
   | { type: 'setSampleSize'; id: DistributionId; value: number }
   | { type: 'toggleVisibility'; id: DistributionId }
   | { type: 'showAll' }
+  | { type: 'toggleUseCases' }
   | { type: 'moveCard'; sourceId: DistributionId; targetId: DistributionId }
   | { type: 'setLocale'; locale: Locale }
   | { type: 'toggleTheme' }
@@ -115,6 +118,8 @@ export function reducer(state: AppState, action: Action): AppState {
     }
     case 'showAll':
       return { ...state, hidden: [] };
+    case 'toggleUseCases':
+      return { ...state, showUseCases: !state.showUseCases };
     case 'moveCard': {
       if (action.sourceId === action.targetId) return state;
       const order = state.order.filter((id) => id !== action.sourceId);
@@ -143,6 +148,7 @@ export function reducer(state: AppState, action: Action): AppState {
         ...state,
         order: [...DISTRIBUTION_IDS],
         hidden: [],
+        showUseCases: true,
         cards: defaultCards(),
       };
   }

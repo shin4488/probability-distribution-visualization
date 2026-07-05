@@ -8,12 +8,22 @@ interface Props {
   theme: Theme;
   onLocaleChange: (locale: Locale) => void;
   onThemeToggle: () => void;
+  showUseCases: boolean;
+  onToggleUseCases: () => void;
   onReset: () => void;
 }
 
 const LOCALE_LABELS: Record<Locale, string> = { ja: '日本語', en: 'EN' };
 
-export function Toolbar({ locale, theme, onLocaleChange, onThemeToggle, onReset }: Props) {
+export function Toolbar({
+  locale,
+  theme,
+  onLocaleChange,
+  onThemeToggle,
+  showUseCases,
+  onToggleUseCases,
+  onReset,
+}: Props) {
   const t = (key: MessageKey) => translate(locale, key);
   return (
     <header className="flex flex-wrap items-center justify-between gap-3 pt-2 pb-4">
@@ -75,6 +85,24 @@ export function Toolbar({ locale, theme, onLocaleChange, onThemeToggle, onReset 
               />
             </svg>
           )}
+        </button>
+        <button
+          type="button"
+          className={`${iconButtonClass} ${showUseCases ? 'border-accent bg-accent-soft text-accent' : ''}`}
+          onClick={onToggleUseCases}
+          title={t(showUseCases ? 'ui.usecaseHide' : 'ui.usecaseShow')}
+          aria-label={t(showUseCases ? 'ui.usecaseHide' : 'ui.usecaseShow')}
+          aria-pressed={showUseCases}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M12 6.3C10.6 4.9 8.7 4.2 6.5 4.2c-1.6 0-3.1.4-4.5 1v13.6c1.4-.6 2.9-1 4.5-1 2.2 0 4.1.7 5.5 2.1 1.4-1.4 3.3-2.1 5.5-2.1 1.6 0 3.1.4 4.5 1V5.2c-1.4-.6-2.9-1-4.5-1-2.2 0-4.1.7-5.5 2.1Zm0 0v13.6"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
         </button>
         <button
           type="button"

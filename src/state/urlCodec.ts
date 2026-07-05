@@ -17,6 +17,7 @@ import { clampSampleSize, defaultCardState, SAMPLE_SIZE } from './appState';
  *   ?lang=en&theme=dark
  *    &order=poisson,normal,...   デフォルト順と違うときだけ
  *    &hide=beta,gamma            非表示があるときだけ
+ *    &usecase=0                  活用例セクションを隠しているときだけ
  *    &normal=0,1,h,s500          分布ごと: パラメータ値(定義順) + h(ヒストグラムON)
  *                                + s標本数(1000以外のとき)。デフォルトと同じなら省略
  *
@@ -78,6 +79,7 @@ export function encodeAppState(state: AppState): string {
   const isDefaultOrder = state.order.every((id, i) => id === DISTRIBUTION_IDS[i]);
   if (!isDefaultOrder) parts.push(`order=${state.order.join(',')}`);
   if (state.hidden.length > 0) parts.push(`hide=${state.hidden.join(',')}`);
+  if (!state.showUseCases) parts.push('usecase=0');
 
   for (const def of DISTRIBUTIONS) {
     const encoded = encodeCard(def.id, state.cards[def.id]);
@@ -91,6 +93,7 @@ export interface DecodedUrlState {
   theme?: 'light' | 'dark';
   order: DistributionId[];
   hidden: DistributionId[];
+  showUseCases: boolean;
   cards: Record<DistributionId, CardState>;
 }
 
@@ -101,6 +104,7 @@ export function decodeAppState(search: string): DecodedUrlState {
   const result: DecodedUrlState = {
     order: [...DISTRIBUTION_IDS],
     hidden: [],
+    showUseCases: params.get('usecase') !== '0',
     cards: {} as Record<DistributionId, CardState>,
   };
 

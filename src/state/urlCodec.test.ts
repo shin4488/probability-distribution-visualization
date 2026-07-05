@@ -14,6 +14,7 @@ function baseState(): AppState {
     themeTouched: false,
     order: [...DISTRIBUTION_IDS],
     hidden: [],
+    showUseCases: true,
     cards: defaultCards(),
   };
 }
@@ -96,6 +97,14 @@ describe('decodeAppState', () => {
     // 空トークンは位置だけ消費し、後続のパラメータはずれない
     const emptyToken = decodeAppState('?normal=,2');
     expect(emptyToken.cards.normal.params).toEqual({ mu: 60, sigma: 2 });
+  });
+
+  it('活用例の非表示はusecase=0としてroundtripする', () => {
+    const state = baseState();
+    state.showUseCases = false;
+    expect(encodeAppState(state)).toBe('usecase=0');
+    expect(decodeAppState('?usecase=0').showUseCases).toBe(false);
+    expect(decodeAppState('').showUseCases).toBe(true);
   });
 
   it('標本サイズは範囲にクランプされる', () => {

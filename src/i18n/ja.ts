@@ -32,6 +32,8 @@ export const ja = {
   'ui.sampleSize': '標本サイズ',
   'ui.regenerate': '標本を引き直す',
   'ui.usecaseTitle': '活用例',
+  'ui.usecaseShow': '活用例を表示',
+  'ui.usecaseHide': '活用例を隠す',
   'ui.chartDensity': '確率密度',
   'ui.chartMass': '確率',
   'ui.chartHistogram': '標本',

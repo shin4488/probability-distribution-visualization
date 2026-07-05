@@ -59,6 +59,7 @@ function initAppState(): AppState {
     themeTouched: false,
     order: decoded.order,
     hidden: decoded.hidden,
+    showUseCases: decoded.showUseCases,
     cards: decoded.cards,
   };
 }
@@ -165,6 +166,8 @@ export function App() {
         theme={state.theme}
         onLocaleChange={(locale) => dispatch({ type: 'setLocale', locale })}
         onThemeToggle={() => dispatch({ type: 'toggleTheme' })}
+        showUseCases={state.showUseCases}
+        onToggleUseCases={() => dispatch({ type: 'toggleUseCases' })}
         onReset={() => dispatch({ type: 'reset' })}
       />
 
@@ -188,6 +191,7 @@ export function App() {
               seed={seeds[id]}
               locale={state.locale}
               theme={state.theme}
+              showUseCase={state.showUseCases}
               isDragging={draggingId === id}
               {...handlersById[id]}
             />

@@ -23,6 +23,8 @@ export const en = {
   'ui.sampleSize': 'Sample size',
   'ui.regenerate': 'Resample',
   'ui.usecaseTitle': 'How it is used',
+  'ui.usecaseShow': 'Show use cases',
+  'ui.usecaseHide': 'Hide use cases',
   'ui.chartDensity': 'Density',
   'ui.chartMass': 'Probability',
   'ui.chartHistogram': 'Samples',

@@ -16,6 +16,8 @@ interface Props {
   seed: number;
   locale: Locale;
   theme: Theme;
+  /** 活用例セクションを表示するか(全カード共通、右上のトグルで切替) */
+  showUseCase: boolean;
   isDragging: boolean;
   onParamChange: (key: string, value: number) => void;
   onToggleHistogram: () => void;
@@ -33,6 +35,7 @@ function DistributionCardBase({
   seed,
   locale,
   theme,
+  showUseCase,
   isDragging,
   onParamChange,
   onToggleHistogram,
@@ -72,6 +75,10 @@ function DistributionCardBase({
     () => (card.showHistogram ? { sampleSize: card.sampleSize, seed } : null),
     [card.showHistogram, card.sampleSize, seed],
   );
+
+  // use接頭辞だがReactフックではない純関数。条件付きJSXの中で呼ぶと
+  // フック規則のlintに誤検知されるため、無条件にここで計算しておく
+  const useCaseValues = def.useCaseValues(card.params);
 
   const handleDragStart = (e: DragEvent) => {
     // draggable={dragReady}なのでハンドル経由以外でここには来ないはずだが、念のため防御する
@@ -223,14 +230,14 @@ function DistributionCardBase({
         )}
       </div>
 
-      <div className="rounded-r-lg border-l-[3px] border-accent bg-accent-soft px-3 py-2.5">
-        <h3 className="mb-1 text-[0.78rem] font-bold tracking-[0.06em] text-accent uppercase">
-          {t('ui.usecaseTitle')}
-        </h3>
-        <p className="text-[0.84rem] leading-[1.65]">
-          {t(dk('usecase'), def.useCaseValues(card.params))}
-        </p>
-      </div>
+      {showUseCase && (
+        <div className="rounded-r-lg border-l-[3px] border-accent bg-accent-soft px-3 py-2.5">
+          <h3 className="mb-1 text-[0.78rem] font-bold tracking-[0.06em] text-accent uppercase">
+            {t('ui.usecaseTitle')}
+          </h3>
+          <p className="text-[0.84rem] leading-[1.65]">{t(dk('usecase'), useCaseValues)}</p>
+        </div>
+      )}
     </article>
   );
 }
