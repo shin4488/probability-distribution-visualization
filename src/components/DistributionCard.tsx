@@ -6,6 +6,7 @@ import { formatNumber, translate } from '../i18n';
 import type { CardState, Theme } from '../state/appState';
 import { SAMPLE_SIZE } from '../state/appState';
 import { DistributionChart } from './DistributionChart';
+import { HelpTip } from './HelpTip';
 import { ParamSlider } from './ParamSlider';
 import { iconButtonClass, textButtonClass } from './ui';
 
@@ -198,6 +199,7 @@ function DistributionCardBase({
             aria-hidden="true"
           />
           {t('ui.histogram')}
+          <HelpTip text={t('ui.histogramHelp')} label={t('ui.helpLabel')} />
         </label>
         {card.showHistogram && (
           <div className="flex flex-col gap-2">
