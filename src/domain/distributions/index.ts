@@ -4,6 +4,7 @@ import { beta } from './beta';
 import { binomial } from './binomial';
 import { exponential } from './exponential';
 import { gamma } from './gamma';
+import { geometric } from './geometric';
 import { lognormal } from './lognormal';
 import { negbinomial } from './negbinomial';
 import { normal } from './normal';
@@ -11,15 +12,19 @@ import { poisson } from './poisson';
 
 /**
  * デフォルトの表示順 = 統計学の学習順。
- * 「ある分布の前提となる分布を先に」「導出・合成の関係が強い分布同士を隣に」並べる:
+ * 「ある分布の前提となる分布を先に」「導出・合成の関係が強い分布同士を隣に」並べる。
+ * 離散分布どうしの順序は ベルヌーイ→二項→ポアソン→幾何→負の二項(仕様で確定):
  *
  *   ベルヌーイ     すべての土台(1回の二値試行)
- *   └ 二項         ベルヌーイのn回の和
- *   └ 負の二項     同じベルヌーイ試行の裏返し(成功数を固定して回数を数える)
- *   └ ポアソン     二項のn→∞極限(まれな事象の回数)
- *     └ 指数       ポアソン過程の待ち時間(離散→連続への橋渡し)
- *       └ ガンマ   指数の和(r件分の待ち時間)
- *         └ ベータ ガンマ2つの比。ベルヌーイの成功確率pそのものの分布
+ *   └ 二項         ベルヌーイのn回の和(回数を固定して成功数を数える)
+ *   └ ポアソン     二項のn→∞・p→0極限(まれな事象の回数)
+ *   └ 幾何         最初の成功までの失敗数(成功数を固定して回数を数える)。
+ *                  次に続く指数分布の離散版なので、離散→連続の橋渡しの位置に置く
+ *     └ 指数       ポアソン過程の待ち時間。幾何の連続版
+ *       └ ガンマ   指数の和(k回分の待ち時間)
+ *   負の二項       ポアソンのλがガンマに従う混合分布(個人差のある回数)。
+ *                  幾何をr個足したものでもあるため、ポアソン・ガンマの直後に置く
+ *   ベータ         ガンマ2つの比。ベルヌーイの成功確率pそのものの分布
  *   正規           あらゆる和の極限(中心極限定理)。二項の形が近づく先
  *   └ 対数正規     正規の指数変換(掛け算の積み重ね)
  *
@@ -28,10 +33,11 @@ import { poisson } from './poisson';
 export const DISTRIBUTIONS: readonly DistributionDef[] = [
   bernoulli,
   binomial,
-  negbinomial,
   poisson,
+  geometric,
   exponential,
   gamma,
+  negbinomial,
   beta,
   normal,
   lognormal,

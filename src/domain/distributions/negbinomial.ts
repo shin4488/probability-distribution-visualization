@@ -1,10 +1,17 @@
 import { lnChoose } from '../math';
+import { sampleGeometric } from '../random';
 import type { DistributionDef } from '../types';
 
 /**
- * 負の二項分布: r回目の成功が出るまでの「失敗回数」k。
- * NB(r, p) = 幾何分布Geo(p)(1回成功するまでの失敗数)をr個足し合わせたもの。
- * サンプラーもその合成をそのまま実装している(再生性)。
+ * 負の二項分布。同じ分布に2つの見方がある:
+ *
+ * 1. ガンマ・ポアソン混合: ポアソン分布のレートλ自体がガンマ分布に従って
+ *    ばらつくときの回数の周辺分布。「発生ペースに個人差がある回数データ」の
+ *    モデルで、分散が平均の1/p倍に膨らむ(過分散)
+ * 2. ベルヌーイ試行の見方: r回目の成功が出るまでの失敗回数
+ *    = 幾何分布をr個足したもの(r=1なら幾何分布そのもの)
+ *
+ * サンプラーは見方2をそのまま実装している(幾何分布r個の合計)。
  */
 export const negbinomial: DistributionDef = {
   id: 'negbinomial',
@@ -22,13 +29,10 @@ export const negbinomial: DistributionDef = {
   },
   mean: ({ r, p }) => (r * (1 - p)) / p,
   variance: ({ r, p }) => (r * (1 - p)) / (p * p),
-  // 幾何分布(逆関数法: floor(ln(1-u)/ln(1-p)))をr回繰り返して合計する
   sample(rng, { r, p }) {
-    if (p === 1) return 0;
-    const lnQ = Math.log(1 - p);
     let failures = 0;
     for (let i = 0; i < r; i++) {
-      failures += Math.floor(Math.log(1 - rng()) / lnQ);
+      failures += sampleGeometric(rng, p);
     }
     return failures;
   },
@@ -39,13 +43,13 @@ export const negbinomial: DistributionDef = {
   },
   notation: ({ r, p }, fmt) => `NB(${fmt(r)}, ${fmt(p)})`,
   useCaseValues({ r, p }) {
-    const mean = (r * (1 - p)) / p;
     return {
       r,
+      p,
       pPct: p * 100,
-      mean,
-      // 失敗の期待値 + 成功r回 = 期待総試行数
-      totalTrials: mean + r,
+      mean: (r * (1 - p)) / p,
+      // 分散/平均 = 1/p。ポアソン分布(=1)からどれだけ過分散かを例文で見せる
+      overdispersion: 1 / p,
     };
   },
 };

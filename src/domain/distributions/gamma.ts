@@ -30,9 +30,10 @@ export const gamma: DistributionDef = {
     return {
       shape,
       scale,
+      // 例文は「k={shape}件分」と生の値を使う。丸めた整数を使うと
+      // k×θと{mean}が食い違う(shape=2.5, θ=2で「3件×2分=平均5分」)ため
       mean: shape * scale,
       sd: Math.sqrt(shape) * scale,
-      count: Math.max(1, Math.round(shape)),
     };
   },
 };
