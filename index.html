@@ -5,8 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="確率分布をインタラクティブに可視化 / Interactive probability distribution visualizer"
+      content="正規分布・二項分布・ポアソン分布など10種の確率分布をスライダーで動かしてインタラクティブに可視化。標本シミュレーションと実務での活用例つき。Visualize 10 probability distributions interactively with parameter sliders, sample simulations, and practical use cases."
     />
+    <!-- SEO: 正規URL。状態はクエリ文字列に載るため、共有URLが重複コンテンツ扱い
+         されないよう常にルートを正とする -->
+    <link rel="canonical" href="https://shin4488.github.io/probability-distribution-visualization/" />
+    <!-- OGP / Twitterカード: SNS共有時のプレビュー -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://shin4488.github.io/probability-distribution-visualization/" />
+    <meta property="og:title" content="確率分布ビジュアライザー | Probability Distribution Visualizer" />
+    <meta
+      property="og:description"
+      content="パラメータを動かして、分布の形と使いどころを体感しよう。10種の確率分布を標本シミュレーションと活用例つきで可視化。"
+    />
+    <meta property="og:image" content="https://shin4488.github.io/probability-distribution-visualization/ogp.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="確率分布ビジュアライザー" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta name="twitter:card" content="summary_large_image" />
     <link
       rel="icon"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M2 28 Q10 28 13 16 T16 4 T19 16 T30 28 Z' fill='%234f8ef7'/%3E%3C/svg%3E"
@@ -31,8 +49,29 @@
         document.documentElement.dataset.theme = t;
       })();
     </script>
+    <!-- SEO: 構造化データ(検索エンジンにWebアプリであることを伝える) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "確率分布ビジュアライザー | Probability Distribution Visualizer",
+        "url": "https://shin4488.github.io/probability-distribution-visualization/",
+        "description": "正規分布・二項分布・ポアソン分布など10種の確率分布をスライダーでインタラクティブに可視化。標本シミュレーションと実務での活用例つき。",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Web",
+        "inLanguage": ["ja", "en"],
+        "isAccessibleForFree": true
+      }
+    </script>
   </head>
   <body>
+    <noscript>
+      <p>
+        確率分布ビジュアライザー:
+        正規分布・二項分布・ポアソン分布・幾何分布・負の二項分布・指数分布・ガンマ分布・ベータ分布・対数正規分布・ベルヌーイ分布をインタラクティブに可視化するWebアプリです。表示にはJavaScriptが必要です。
+        / An interactive visualizer for 10 probability distributions. JavaScript is required.
+      </p>
+    </noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
