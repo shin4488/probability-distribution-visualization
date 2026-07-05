@@ -69,7 +69,7 @@ export const en = {
   'dist.gamma.param.shape': 'Shape k (count)',
   'dist.gamma.param.scale': 'Scale θ (mean per task)',
   'dist.gamma.usecase':
-    'The total time to handle k={shape} tasks that each take {scale} minutes on average, with mean {mean} and standard deviation {sd} minutes. It fits call-center handle-time totals, insurance claim totals, rainfall — anything positive and right-skewed.',
+    'The total time to handle k={shape} tasks that each take {scale} minutes on average, with mean {mean} and standard deviation {sd} minutes. It fits call-center handle-time totals, insurance claim totals, rainfall — anything positive and right-skewed. That same property is why it also serves as the distribution of the person-to-person Poisson rate λ in the negative binomial: rates are positive, and their individual differences trail off to the right.',
 
   'dist.negbinomial.name': 'Negative binomial',
   'dist.negbinomial.tagline':
@@ -81,7 +81,7 @@ export const en = {
 
   'dist.beta.name': 'Beta',
   'dist.beta.tagline':
-    'A distribution over values in 0–1 (rates and probabilities themselves), built as the ratio X/(X+Y) of two gammas',
+    'A distribution over values in 0–1 (rates and probabilities themselves), built from two independent gammas X and Y as X/(X+Y) — X’s share of the total',
   'dist.beta.param.alpha': 'Shape α',
   'dist.beta.param.beta': 'Shape β',
   'dist.beta.usecase':
@@ -101,5 +101,5 @@ export const en = {
   'dist.lognormal.param.mu': 'Log-mean μ',
   'dist.lognormal.param.sigma': 'Log-std dev σ',
   'dist.lognormal.usecase':
-    'A model for incomes, house prices, and web response times. With μ={mu} and σ={sigma}, the median is {median} but the mean is {mean} — dragged upward by the long right tail. This is why the average salary always sounds higher than what most people earn.',
+    'A salary is built by multiplying yearly raise rates (×1.05 and so on), and a house price by factors like location, size, and age acting as percentage premiums or discounts. A web page response time likewise depends on how many-fold network conditions and payload size stretch it. Quantities built from compounding multipliers like these tend to be log-normal. With μ={mu} and σ={sigma}, the median is {median} but the mean is {mean} — dragged upward by the long right tail. This is why the average salary always sounds higher than what most people earn.',
 } as const satisfies Record<MessageKey, string>;

@@ -78,7 +78,7 @@ export const ja = {
   'dist.gamma.param.shape': '形状 k(件数)',
   'dist.gamma.param.scale': '尺度 θ(1件あたりの平均)',
   'dist.gamma.usecase':
-    '1件あたり平均{scale}分かかる対応をk={shape}件分こなすまでの合計時間のモデルで、平均{mean}分・標準偏差{sd}分です。コールセンターの総対応時間、保険金の支払総額、降水量など「正の値で右に裾を引く量」に幅広く当てはまります。',
+    '1件あたり平均{scale}分かかる対応をk={shape}件分こなすまでの合計時間のモデルで、平均{mean}分・標準偏差{sd}分です。コールセンターの総対応時間、保険金の支払総額、降水量など「正の値で右に裾を引く量」に幅広く当てはまります。負の二項分布に出てきた「人によってばらつく発生ペースλ」の分布として使われるのも、λが正の値で個人差が右に裾を引くというこの性質のためです。',
 
   'dist.negbinomial.name': '負の二項分布',
   'dist.negbinomial.tagline':
@@ -90,7 +90,7 @@ export const ja = {
 
   'dist.beta.name': 'ベータ分布',
   'dist.beta.tagline':
-    '0〜1の値(割合・確率そのもの)の分布。独立なガンマ分布2つの比 X/(X+Y) から作られる',
+    '0〜1の値(割合・確率そのもの)の分布。独立な2つのガンマ分布 X, Y から、全体に占める割合 X/(X+Y) として作られる',
   'dist.beta.param.alpha': '形状 α',
   'dist.beta.param.beta': '形状 β',
   'dist.beta.usecase':
@@ -110,7 +110,7 @@ export const ja = {
   'dist.lognormal.param.mu': '対数平均 μ',
   'dist.lognormal.param.sigma': '対数標準偏差 σ',
   'dist.lognormal.usecase':
-    '年収・住宅価格・Webページの応答時間のモデルです。μ={mu}, σ={sigma}のとき中央値は{median}ですが、平均は{mean}と大きめになります。「平均年収が実感より高く見える」のは、この右の長い裾に平均が引っ張られるためです。',
+    '年収は毎年の昇給率(×1.05など)の掛け算で決まり、住宅価格は立地・広さ・築年数が「何割増し・何割引き」の形で効きます。Webページの応答時間も、回線状況やデータ量が所要時間を「何倍」に引き延ばすかで決まります。こうした倍率の積み重ねで決まる量は対数正規分布に近づきます。μ={mu}, σ={sigma}のとき中央値は{median}ですが、平均は{mean}と大きめになります。「平均年収が実感より高く見える」のは、この右の長い裾に平均が引っ張られるためです。',
 } as const;
 
 export type MessageKey = keyof typeof ja;
