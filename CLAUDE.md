@@ -24,6 +24,7 @@ With VS Code or any devcontainer-capable editor you can also open the repo via "
 - `node_modules` is bind-mounted, so it also physically exists on the host. This is required for the host editor (tsserver) to resolve type declarations like `@types/react` (isolating it in a named volume causes ts(2307)/ts(2875)/ts(7026) in the editor)
 - However, **all npm commands (including install) must run inside the container**: `docker compose run --rm app npm install --save-exact <pkg>`. Never run npm on the host
 - The container is Linux, so native binaries in node_modules (esbuild etc.) are Linux builds. The host uses node_modules only for type resolution; build and test in the container
+- Scratch work (notes, experiment scripts, temporary output) goes in `tmp/` or `scratch/` — both are gitignored, so nothing there ever needs to be committed or cleaned out of a diff
 - **Policy: do not add dependencies** (npm supply-chain protection). When one must be added, pin the version exactly (`--save-exact`) and record the rationale in docs/tech-selection.md
 
 ## Architecture
