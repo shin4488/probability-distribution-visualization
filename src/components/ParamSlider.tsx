@@ -1,4 +1,4 @@
-import { useId } from 'react';
+import { useId, useState } from 'react';
 
 interface Props {
   label: string;
@@ -12,6 +12,18 @@ interface Props {
 /** スライダー+数値入力の複合コントロール。粗く動かすのはスライダー、正確な値は数値入力で */
 export function ParamSlider({ label, min, max, step, value, onChange }: Props) {
   const id = useId();
+  // 数値入力は「編集中の下書き」を持ち、確定(blur/Enter)時にだけonChangeへ流す。
+  // キーストロークごとにclamp済みの値を書き戻すと、フィールドを空にした瞬間に
+  // 最小値へスナップして「0.5」の先頭の「0」やマイナス記号すら打てなくなるため
+  const [draft, setDraft] = useState<string | null>(null);
+
+  const commitDraft = () => {
+    if (draft === null) return;
+    const next = Number(draft);
+    if (draft.trim() !== '' && Number.isFinite(next)) onChange(next);
+    setDraft(null);
+  };
+
   return (
     <div className="grid grid-cols-[minmax(110px,auto)_1fr_78px] items-center gap-2.5">
       <label className="text-[0.82rem] whitespace-nowrap text-muted" htmlFor={id}>
@@ -33,10 +45,11 @@ export function ParamSlider({ label, min, max, step, value, onChange }: Props) {
         min={min}
         max={max}
         step={step}
-        value={value}
-        onChange={(e) => {
-          const next = Number(e.target.value);
-          if (Number.isFinite(next)) onChange(next);
+        value={draft ?? value}
+        onChange={(e) => setDraft(e.target.value)}
+        onBlur={commitDraft}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') commitDraft();
         }}
         aria-label={label}
       />

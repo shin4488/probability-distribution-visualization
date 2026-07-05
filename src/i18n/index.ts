@@ -8,14 +8,22 @@ export const LOCALES: readonly Locale[] = ['ja', 'en'];
 
 const dictionaries: Record<Locale, Record<MessageKey, string>> = { ja, en };
 
+const BCP47: Record<Locale, string> = { ja: 'ja-JP', en: 'en-US' };
+
+// Intl.NumberFormatの生成は比較的重く、スライダー操作のたびに大量に呼ばれるためキャッシュする
+const numberFormats = new Map<Locale, Intl.NumberFormat>();
+
 /**
  * 桁数はここで一括制御する。統計量は有効2桁の小数で十分読め、
  * それ以上は例文の中でノイズになる。
  */
 export function formatNumber(locale: Locale, value: number): string {
-  return new Intl.NumberFormat(locale === 'ja' ? 'ja-JP' : 'en-US', {
-    maximumFractionDigits: 2,
-  }).format(value);
+  let format = numberFormats.get(locale);
+  if (!format) {
+    format = new Intl.NumberFormat(BCP47[locale], { maximumFractionDigits: 2 });
+    numberFormats.set(locale, format);
+  }
+  return format.format(value);
 }
 
 /**

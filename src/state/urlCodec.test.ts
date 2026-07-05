@@ -8,8 +8,10 @@ function baseState(): AppState {
   return {
     locale: 'ja',
     localeExplicit: false,
+    localeTouched: false,
     theme: 'light',
     themeExplicit: false,
+    themeTouched: false,
     order: [...DISTRIBUTION_IDS],
     hidden: [],
     cards: defaultCards(),
@@ -84,6 +86,16 @@ describe('decodeAppState', () => {
     // orderに現れなかった分布は末尾に補完され、全分布が揃う
     expect(decoded.order[0]).toBe('normal');
     expect([...decoded.order].sort()).toEqual([...DISTRIBUTION_IDS].sort());
+  });
+
+  it('空の値はデフォルトに落ちる(最小値へクランプしない)', () => {
+    // ?poisson= のような空値: Number('')===0で最小0.1に丸まってしまわないこと
+    const emptyValue = decodeAppState('?poisson=');
+    expect(emptyValue.cards.poisson.params.lambda).toBe(4);
+
+    // 空トークンは位置だけ消費し、後続のパラメータはずれない
+    const emptyToken = decodeAppState('?normal=,2');
+    expect(emptyToken.cards.normal.params).toEqual({ mu: 0, sigma: 2 });
   });
 
   it('標本サイズは範囲にクランプされる', () => {

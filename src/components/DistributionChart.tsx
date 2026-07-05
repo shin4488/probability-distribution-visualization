@@ -144,21 +144,27 @@ export function DistributionChart({ def, params, histogram, theme, labels }: Pro
   }, [def, params, histogram, labels.density, labels.histogram]);
 
   // テーマ切り替え時は色だけ差し替える(データ再計算は不要)。
+  // App側がuseLayoutEffectでdata-themeを先に書き換えているので、
+  // ここ(passive effect)でgetComputedStyleを読めば必ず新テーマの値になる。
+  // データセットは常に[0]=理論値(密度/確率)、[1]=標本ヒストグラムの並びで、
+  // 翻訳ラベル文字列ではなく位置で識別する(翻訳変更で配色が壊れないように)。
   // themeは本体で参照しないが、CSS変数の値が変わったことを知る唯一のシグナルなので依存に含める
   // biome-ignore lint/correctness/useExhaustiveDependencies(theme): 上記コメント参照
   useEffect(() => {
     const chart = chartRef.current;
     if (!chart) return;
     const colors = readChartColors();
-    for (const dataset of chart.data.datasets) {
-      if (dataset.type === 'line') {
-        dataset.borderColor = colors.line;
-        dataset.backgroundColor = colors.fill;
-      } else if (dataset.label === labels.histogram) {
-        dataset.backgroundColor = colors.histogram;
+    const [density, histogramDataset] = chart.data.datasets;
+    if (density) {
+      if (density.type === 'line') {
+        density.borderColor = colors.line;
+        density.backgroundColor = colors.fill;
       } else {
-        dataset.backgroundColor = colors.line;
+        density.backgroundColor = colors.line;
       }
+    }
+    if (histogramDataset) {
+      histogramDataset.backgroundColor = colors.histogram;
     }
     const scales = chart.options.scales as Record<
       string,
@@ -170,7 +176,7 @@ export function DistributionChart({ def, params, histogram, theme, labels }: Pro
       if (scale.ticks) scale.ticks.color = colors.ticks;
     }
     chart.update('none');
-  }, [theme, labels.histogram]);
+  }, [theme]);
 
   useEffect(
     () => () => {

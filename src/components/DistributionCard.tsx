@@ -1,5 +1,5 @@
 import type { DragEvent } from 'react';
-import { useMemo, useRef } from 'react';
+import { memo, useEffect, useMemo, useRef } from 'react';
 import type { DistributionDef } from '../domain/types';
 import type { Locale, MessageKey } from '../i18n';
 import { formatNumber, translate } from '../i18n';
@@ -26,7 +26,7 @@ interface Props {
   onDragEnterCard: () => void;
 }
 
-export function DistributionCard({
+function DistributionCardBase({
   def,
   card,
   seed,
@@ -52,6 +52,20 @@ export function DistributionCard({
   // そこで「ハンドル上でpointerdownしたときだけ」dragstartを許可する
   const dragArmed = useRef(false);
 
+  // ハンドルの外でボタンを離すとハンドルのpointerupが来ずフラグが残り、
+  // その後のテキスト選択ドラッグが並べ替えに化ける。どこで離してもwindowで必ず解除する
+  useEffect(() => {
+    const disarm = () => {
+      dragArmed.current = false;
+    };
+    window.addEventListener('pointerup', disarm);
+    window.addEventListener('pointercancel', disarm);
+    return () => {
+      window.removeEventListener('pointerup', disarm);
+      window.removeEventListener('pointercancel', disarm);
+    };
+  }, []);
+
   // チャート側のuseEffectがオブジェクト同一性で再描画を判定するため、
   // 中身が変わらない限り同じ参照を保つ
   const histogram = useMemo(
@@ -64,6 +78,10 @@ export function DistributionCard({
       e.preventDefault();
       return;
     }
+    // ドラッグ成立時点でフラグは役目を終える(残すと次の意図しないドラッグを許可してしまう)
+    dragArmed.current = false;
+    // Firefoxはデータ未設定のHTML5ドラッグを開始しないため、ダミーでもsetDataが必須
+    e.dataTransfer.setData('text/plain', def.id);
     e.dataTransfer.effectAllowed = 'move';
     onDragStart();
   };
@@ -94,9 +112,6 @@ export function DistributionCard({
           aria-label={t('ui.dragHint')}
           onPointerDown={() => {
             dragArmed.current = true;
-          }}
-          onPointerUp={() => {
-            dragArmed.current = false;
           }}
         >
           <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true">
@@ -221,3 +236,10 @@ export function DistributionCard({
     </article>
   );
 }
+
+/**
+ * スライダー操作のたびに全カードが再レンダリングされるのを防ぐ。
+ * コールバック群はApp側でIDごとに固定参照になっているため、
+ * 変化したカードのprops(card/seed等)だけが比較で引っかかる
+ */
+export const DistributionCard = memo(DistributionCardBase);

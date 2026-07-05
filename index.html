@@ -16,8 +16,15 @@
       // 描画前にテーマを確定させ、ダークモード時の白いフラッシュを防ぐ。
       // 優先順位: URL(共有された状態) > localStorage(本人の前回設定) > OS設定
       (() => {
-        var m = location.search.match(/[?&]theme=(dark|light)\b/);
-        var t = m ? m[1] : localStorage.getItem('pdv-theme');
+        var t = null;
+        var m = null;
+        // localStorageはCookie全ブロック環境などでアクセス自体が例外を投げるため防御する
+        try {
+          m = location.search.match(/[?&]theme=(dark|light)\b/);
+          t = m ? m[1] : localStorage.getItem('pdv-theme');
+        } catch {
+          t = null;
+        }
         if (t !== 'dark' && t !== 'light') {
           t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         }

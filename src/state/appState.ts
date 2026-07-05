@@ -15,10 +15,13 @@ export interface CardState {
 
 export interface AppState {
   locale: Locale;
-  /** ユーザーが明示的に選んだ場合のみtrue。trueのときだけURL・localStorageに書く */
+  /** URL・localStorage・UI操作のいずれかで明示された場合true。trueのときURLに書く */
   localeExplicit: boolean;
+  /** このセッションで本人がUIから変更した場合のみtrue。trueのときだけlocalStorageへ保存する */
+  localeTouched: boolean;
   theme: Theme;
   themeExplicit: boolean;
+  themeTouched: boolean;
   /** 全分布の表示順(非表示のものも順序は保持する) */
   order: DistributionId[];
   hidden: DistributionId[];
@@ -41,10 +44,18 @@ export function defaultCards(): Record<DistributionId, CardState> {
   return cards;
 }
 
+/** 標本サイズもパラメータと同じ丸め規則(範囲+step格子)に乗せる */
 export function clampSampleSize(value: number): number {
-  if (!Number.isFinite(value)) return SAMPLE_SIZE.defaultValue;
-  const clamped = Math.min(SAMPLE_SIZE.max, Math.max(SAMPLE_SIZE.min, value));
-  return Math.round(clamped / SAMPLE_SIZE.step) * SAMPLE_SIZE.step;
+  return clampParam(
+    {
+      key: 'sampleSize',
+      min: SAMPLE_SIZE.min,
+      max: SAMPLE_SIZE.max,
+      step: SAMPLE_SIZE.step,
+      defaultValue: SAMPLE_SIZE.defaultValue,
+    },
+    value,
+  );
 }
 
 export type Action =
@@ -118,12 +129,13 @@ export function reducer(state: AppState, action: Action): AppState {
       return { ...state, order };
     }
     case 'setLocale':
-      return { ...state, locale: action.locale, localeExplicit: true };
+      return { ...state, locale: action.locale, localeExplicit: true, localeTouched: true };
     case 'toggleTheme':
       return {
         ...state,
         theme: state.theme === 'dark' ? 'light' : 'dark',
         themeExplicit: true,
+        themeTouched: true,
       };
     case 'reset':
       // 言語・テーマは「本人の好み」なのでリセット対象にしない

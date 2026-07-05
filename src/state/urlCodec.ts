@@ -22,6 +22,12 @@ import { clampSampleSize, defaultCardState, SAMPLE_SIZE } from './appState';
  *
  * デフォルト値を省略するのは、URLを短く保ち「何を変えたか」が
  * URLを見ただけで分かるようにするため。
+ *
+ * 【互換性の契約】パラメータ列は定義順の位置ベースなので、公開後は
+ * 各分布のparamsを「末尾への追加」以外で変更してはならない(並べ替え・削除・
+ * 途中挿入をすると、過去の共有URLがエラーなく別のグラフとして開いてしまう)。
+ * それが避けられない変更をする場合は、バージョンパラメータ(例: v=2)を導入して
+ * 旧形式を無視するようにすること。
  */
 
 function encodeCard(id: DistributionId, card: CardState): string | null {
@@ -49,11 +55,15 @@ function decodeCard(id: DistributionId, raw: string): CardState {
   for (const token of tokens) {
     if (token === 'h') {
       card.showHistogram = true;
-    } else if (token.startsWith('s')) {
+    } else if (token !== '' && token.startsWith('s')) {
       card.sampleSize = clampSampleSize(Number(token.slice(1)));
     } else if (paramIndex < def.params.length) {
-      const paramDef = def.params[paramIndex];
-      card.params[paramDef.key] = clampParam(paramDef, Number(token));
+      // 空トークン(?normal=,2 など)はNumber('')===0に化けて最小値へ丸まってしまうため、
+      // 位置だけ消費してデフォルト値のまま残す
+      if (token !== '') {
+        const paramDef = def.params[paramIndex];
+        card.params[paramDef.key] = clampParam(paramDef, Number(token));
+      }
       paramIndex += 1;
     }
   }
