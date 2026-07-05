@@ -96,7 +96,7 @@ export const en = {
   'dist.normal.param.mu': 'Mean μ',
   'dist.normal.param.sigma': 'Std dev σ',
   'dist.normal.usecase':
-    'On a test with mean {mu} and standard deviation {sigma}, about 68% of people score between {lo1} and {hi1}, and about 95% between {lo2} and {hi2}. Heights, measurement errors, standardized scores, and ±3σ quality-control limits all build on this.',
+    'On a test with mean {mu} and standard deviation {sigma}, about 68% of people score between {lo1} and {hi1}, and about 95% between {lo2} and {hi2}. Scores form a bell because many small factors — right or wrong on each question — add up (the central limit theorem). By the same logic, even when each individual sale is skewed, the total sales of a day become normal — so you can estimate tomorrow’s sales as "roughly within mean ±2σ". The ±3σ control limits of quality control use the same idea: a normal distribution keeps 99.7% of values within mean ±3σ, so anything outside is a sign of a real problem rather than random variation.',
 
   'dist.lognormal.name': 'Log-normal',
   'dist.lognormal.tagline':
