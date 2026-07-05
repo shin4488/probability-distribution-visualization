@@ -1,0 +1,19 @@
+# 開発に必要なのはDockerのみ(ホストにNode.js不要)。
+#
+# node_modulesはバインドマウント(リポジトリ直下)に置く。
+# ホストのエディタ(VS Code等)のtsserverが型宣言(@types/react等)を解決するには
+# node_modulesがホストのファイルシステムに実在する必要があるため。
+# npmの実行(install含む)は引き続き必ずコンテナ内で行うこと。
+services:
+  app:
+    image: node:22-alpine
+    working_dir: /app
+    # npm installはlockfileと一致していればすぐ終わるため毎回実行してよい
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+    environment:
+      # コンテナ内のファイル監視でホットリロードを確実に効かせる(bind mount経由ではinotifyが届かないため)
+      - CHOKIDAR_USEPOLLING=true

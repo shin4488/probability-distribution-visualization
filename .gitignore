@@ -1,0 +1,6 @@
+node_modules/
+dist/
+*.local
+.DS_Store
+# セッション固有のローカル設定(コミットしない)
+.claude/settings.local.json
