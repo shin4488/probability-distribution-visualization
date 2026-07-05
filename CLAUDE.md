@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-An SPA that visualizes probability distributions interactively. Nine distributions, each with parameter sliders driving real-time rendering of the PDF/PMF plus a sample histogram. Japanese/English, dark mode, and shareable-URL support.
+An SPA that visualizes probability distributions interactively. Ten distributions, each with parameter sliders driving real-time rendering of the PDF/PMF plus a sample histogram. Japanese/English, dark mode, and shareable-URL support.
 
 The source of truth for requirements is [docs/specification.md](docs/specification.md); the rationale for technology choices is in [docs/tech-selection.md](docs/tech-selection.md).
 

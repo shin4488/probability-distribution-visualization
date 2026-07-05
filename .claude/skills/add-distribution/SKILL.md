@@ -15,7 +15,7 @@ Use `normal.ts` as the template for a continuous distribution, `poisson.ts` for 
 Rules:
 
 - **Do probability math in log space**: products of factorials, gamma functions, and powers overflow double precision, so use `lnGamma`/`lnChoose`/`lnBeta` from `math.ts` and write `Math.exp(ln...)`
-- **`sample` must use only the `Rng` argument (the uniform random source)**. Never call `Math.random()` directly (it breaks seed reproducibility). First check whether existing samplers (`sampleStandardNormal`/`sampleStandardGamma`/`samplePoisson`) can be composed
+- **`sample` must use only the `Rng` argument (the uniform random source)**. Never call `Math.random()` directly (it breaks seed reproducibility). First check whether existing samplers (`sampleStandardNormal`/`sampleStandardGamma`/`samplePoisson`/`sampleGeometric`) can be composed
 - **`plotRange` must cover at least 99% of the distribution** (e.g. mean ± 4σ). For heavy right tails use a quantile-based range (see lognormal.ts)
 - **`useCaseValues`** returns derived values interpolated into the use-case text. Embedding "concrete numbers computed from the current parameters" is this site's core concept (a spec requirement)
 - Keep each parameter's `min`/`max`/`step` within a range where dragging the slider produces a visible change in shape
@@ -31,9 +31,11 @@ To both `src/i18n/ja.ts` and `src/i18n/en.ts`:
 
 ```
 dist.<id>.name          distribution name
-dist.<id>.tagline       one-line description
+dist.<id>.tagline       one-line description: generic/abstract, including how it
+                        relates to other distributions (derivation/limit/composition)
 dist.<id>.param.<key>   label per parameter (include the symbol, e.g. 'Mean μ')
-dist.<id>.usecase       use-case text; {placeholders} are keys of useCaseValues()
+dist.<id>.usecase       use-case text: concrete/practical scenarios;
+                        {placeholders} are keys of useCaseValues()
 ```
 
 ja.ts is the source of truth; en.ts uses `satisfies`, so **a missing key is a compile error** (the type error points at the omission).
