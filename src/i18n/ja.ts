@@ -60,10 +60,10 @@ export const ja = {
 
   'dist.poisson.name': 'ポアソン分布',
   'dist.poisson.tagline':
-    '一定の時間・範囲に「まれな出来事」が起きる回数。試行回数nが大きく確率pが小さい二項分布の極限(λ≈np)',
+    '一定の時間・範囲に「まれな出来事」が起きる回数。機会の数nがとても多く、1回ごとの確率pがごく小さい二項分布が行き着く形で、平均λ=npだけで決まる',
   'dist.poisson.param.lambda': '平均発生回数 λ',
   'dist.poisson.usecase':
-    '1時間あたり平均{lambda}件の問い合わせが届くコールセンターでは、{capacity}件まで捌ける体制を用意しても、それを超える確率が約{overflowPct}%残ります。「大勢の顧客それぞれが小さな確率で問い合わせる」という二項分布の状況を、平均件数λ={lambda}だけで扱えるのが便利な点です。サーバーへのリクエスト数、交通事故件数など「件数」の計画に広く使われます。',
+    '1時間あたり平均{lambda}件の問い合わせが届くコールセンターでは、{capacity}件まで捌ける体制を用意しても、それを超える確率が約{overflowPct}%残ります。「大勢の顧客がそれぞれ小さな確率で問い合わせてくる」という二項分布の状況でも、平均件数λ={lambda}さえ分かれば「何件起きる確率がどれくらいか」を見積もれます。サーバーへのリクエスト数、交通事故件数など「件数」の計画に広く使われます。',
 
   'dist.exponential.name': '指数分布',
   'dist.exponential.tagline':
@@ -82,7 +82,7 @@ export const ja = {
 
   'dist.negbinomial.name': '負の二項分布',
   'dist.negbinomial.tagline':
-    '発生ペースλ自体がガンマ分布でばらつくポアソン分布(混合分布)。「個人差のある回数」を表す',
+    'r回目の成功が出るまでの失敗回数(幾何分布のr個の和)。発生ペースλがガンマ分布でばらつくポアソン分布の混合でもあり、「個人差のある回数」を表す',
   'dist.negbinomial.param.r': '成功回数 r',
   'dist.negbinomial.param.p': '成功確率 p',
   'dist.negbinomial.usecase':

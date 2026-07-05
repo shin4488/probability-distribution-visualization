@@ -51,10 +51,10 @@ export const en = {
 
   'dist.poisson.name': 'Poisson',
   'dist.poisson.tagline':
-    'How many rare events happen in a fixed window — the limit of a binomial with large n and small p (λ≈np)',
+    'How many rare events happen in a fixed window — what a binomial becomes when the chances n are countless and each probability p is tiny, determined by the mean λ=np alone',
   'dist.poisson.param.lambda': 'Average rate λ',
   'dist.poisson.usecase':
-    'A call center receiving {lambda} inquiries per hour on average can staff for {capacity} calls and still be overwhelmed about {overflowPct}% of the time. The binomial situation "many customers, each calling with a tiny probability" collapses into a single number, λ={lambda} — which is what makes it so practical for planning server requests, traffic accidents, and other counts.',
+    'A call center receiving {lambda} inquiries per hour on average can staff for {capacity} calls and still be overwhelmed about {overflowPct}% of the time. Even in the binomial situation "many customers, each calling with a tiny probability", knowing just the average λ={lambda} lets you estimate how likely each possible count is. It is widely used for planning counts: server requests, traffic accidents, incident reports.',
 
   'dist.exponential.name': 'Exponential',
   'dist.exponential.tagline':
@@ -73,7 +73,7 @@ export const en = {
 
   'dist.negbinomial.name': 'Negative binomial',
   'dist.negbinomial.tagline':
-    'A Poisson whose rate λ itself varies by a gamma distribution (a mixture) — counts with individual differences',
+    'Failures before the r-th success (the sum of r geometrics) — equivalently a Poisson whose rate λ varies by a gamma, modeling counts with individual differences',
   'dist.negbinomial.param.r': 'Successes r',
   'dist.negbinomial.param.p': 'Success probability p',
   'dist.negbinomial.usecase':
