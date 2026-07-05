@@ -1,0 +1,50 @@
+{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Glob",
+      "Grep",
+      "Bash(ls)",
+      "Bash(ls *)",
+      "Bash(pwd)",
+      "Bash(cat *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(grep *)",
+      "Bash(wc *)",
+      "Bash(which *)",
+      "Bash(diff *)",
+      "Bash(jq *)",
+      "Bash(git status)",
+      "Bash(git status *)",
+      "Bash(git log)",
+      "Bash(git log *)",
+      "Bash(git diff)",
+      "Bash(git diff *)",
+      "Bash(git show *)",
+      "Bash(git branch)",
+      "Bash(git worktree list)",
+      "Bash(git check-ignore *)",
+      "Bash(docker ps)",
+      "Bash(docker ps *)",
+      "Bash(docker logs *)",
+      "Bash(docker volume ls)",
+      "Bash(docker compose ps)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/biome-fix.sh",
+            "timeout": 90,
+            "statusMessage": "Biomeでlint+formatを適用中..."
+          }
+        ]
+      }
+    ]
+  }
+}

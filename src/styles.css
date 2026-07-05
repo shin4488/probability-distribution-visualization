@@ -1,0 +1,64 @@
+/* テーマ定義の唯一の場所。
+   レイアウト等のスタイルはコンポーネント側のTailwindユーティリティに書き、
+   このファイルには「デザイントークン(色・影・フォント)」と最小限のbaseだけを置く。
+
+   Tailwind v4は@themeのトークンをCSS変数として出力し、ユーティリティは
+   var()参照にコンパイルされる。そのため:root[data-theme='dark']で変数を
+   上書きするだけで、全ユーティリティとChart.js(chartTheme.tsが
+   getComputedStyleで--chart-*を読む)の色が一斉に切り替わる。 */
+@import "tailwindcss";
+
+@theme {
+  --font-sans:
+    "Hiragino Sans", "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  --font-mono: "SF Mono", "Consolas", monospace;
+
+  --color-bg: #f4f6fa;
+  --color-card: #ffffff;
+  --color-fg: #1c2333;
+  --color-muted: #5a6478;
+  --color-border: #e2e6ef;
+  --color-accent: #3b76ef;
+  --color-accent-soft: #e8effd;
+
+  --shadow-card: 0 1px 3px rgb(16 24 40 / 0.06), 0 4px 14px rgb(16 24 40 / 0.05);
+}
+
+/* グラフ専用の色。Tailwindのユーティリティとしては使わないため@themeの外に置く */
+:root {
+  --chart-line: #3b76ef;
+  --chart-fill: rgb(59 118 239 / 0.12);
+  --chart-histogram: rgb(240 150 42 / 0.55);
+  --chart-grid: rgb(28 35 51 / 0.07);
+  --chart-ticks: #7a8398;
+}
+
+/* ダークテーマ = トークンの上書きのみ(index.htmlのスクリプトがdata-themeを設定する) */
+:root[data-theme="dark"] {
+  --color-bg: #12151d;
+  --color-card: #1b202c;
+  --color-fg: #e6eaf2;
+  --color-muted: #97a0b4;
+  --color-border: #2a3040;
+  --color-accent: #6d9bff;
+  --color-accent-soft: #23304b;
+
+  --shadow-card: 0 1px 3px rgb(0 0 0 / 0.4), 0 4px 14px rgb(0 0 0 / 0.3);
+
+  --chart-line: #6d9bff;
+  --chart-fill: rgb(109 155 255 / 0.16);
+  --chart-histogram: rgb(255 176 76 / 0.5);
+  --chart-grid: rgb(230 234 242 / 0.08);
+  --chart-ticks: #8d96ab;
+}
+
+@layer base {
+  body {
+    @apply bg-bg font-sans text-fg antialiased;
+    /* テーマ切替時に背景・文字色をなめらかに変える */
+    transition:
+      background-color 0.25s ease,
+      color 0.25s ease;
+  }
+}

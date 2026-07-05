@@ -1,0 +1,8 @@
+{
+  // ホスト側VS Code用のワークスペース設定(devcontainer側は.devcontainer/devcontainer.jsonに同じ設定を持つ)。
+  // css.customData: 内蔵CSSバリデータにTailwind v4のat-rule(@theme/@apply等)を教え、
+  // unknownAtRules警告を根本解消する(バリデーション自体は有効なまま)
+  "css.customData": [".vscode/tailwind-css-data.json"],
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "biomejs.biome"
+}

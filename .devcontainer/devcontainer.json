@@ -1,0 +1,22 @@
+{
+  "name": "probability-distribution-visualization",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/app",
+  // composeのcommandはdevサーバ起動なので、devcontainerではコンテナを常駐だけさせ、
+  // devサーバはターミナルから `npm run dev` で起動する
+  "overrideCommand": true,
+  "forwardPorts": [5173],
+  "postCreateCommand": "npm install",
+  "customizations": {
+    "vscode": {
+      "extensions": ["biomejs.biome", "bradlc.vscode-tailwindcss"],
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "biomejs.biome",
+        // Tailwind v4のat-rule(@theme/@apply等)をCSSバリデータに教える(.vscode/settings.jsonと同内容)
+        "css.customData": [".vscode/tailwind-css-data.json"]
+      }
+    }
+  }
+}

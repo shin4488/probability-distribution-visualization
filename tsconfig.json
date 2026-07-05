@@ -1,0 +1,12 @@
+// TypeScriptプロジェクトのルート(solution-style)。自身はソースを持たず、
+// 2つのサブプロジェクトへの参照だけを束ねる。`tsc -b`(npm run typecheck / build)が
+// 参照先をまとめて型チェックする。
+//
+// 分割している理由: src/はブラウザで動き、vite.config.tsはNodeで動く。
+// 実行環境が違えば使えるグローバル(DOM APIの有無等)も違うため、
+// libやtargetを環境ごとに正しく設定するには別プロジェクトにする必要がある
+// (Vite公式テンプレートと同じ構成)。
+{
+  "files": [],
+  "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }]
+}

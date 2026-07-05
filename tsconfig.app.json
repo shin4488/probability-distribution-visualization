@@ -1,0 +1,31 @@
+// ブラウザで動くアプリ本体(src/)の型チェック設定。
+// トランスパイルはViteのesbuildが行うため、tscは型検査のみ(noEmit)。
+// エディタ(tsserver)もこの設定でsrc/配下の型エラーを表示する。
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "useDefineForClassFields": true,
+    // ブラウザ実行なのでDOMの型を含める(tsconfig.node.jsonとの主な違い)
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+
+    // "bundler": Viteのようなバンドラのモジュール解決規則(package.jsonのexports等)に合わせる
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    // Viteはファイル単位でトランスパイルするため、単独ファイルで解釈できない構文を型エラーにする
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    // React 17+のJSX変換(各ファイルでのimport React記述が不要になる)
+    "jsx": "react-jsx",
+
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true
+  },
+  "include": ["src"]
+}

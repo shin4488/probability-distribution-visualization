@@ -1,0 +1,9 @@
+node_modules/
+dist/
+*.local
+.DS_Store
+# セッション固有のローカル設定(コミットしない)
+.claude/settings.local.json
+# 人間・AIが途中作業(メモ・実験スクリプト・一時出力など)を置くための使い捨てディレクトリ。ここに置けばgit管理対象にならない
+tmp/
+scratch/
