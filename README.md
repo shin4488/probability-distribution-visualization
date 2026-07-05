@@ -4,7 +4,7 @@ A website that visualizes probability distributions interactively. Move the para
 
 ## Features
 
-- **10 probability distributions**, ordered the way statistics is learned (prerequisite distributions first, closely related ones adjacent): Bernoulli, binomial, Poisson, geometric, exponential, gamma, negative binomial, beta, normal, and log-normal
+- **10 probability distributions**, ordered the way statistics is learned (prerequisite distributions first, closely related ones adjacent): Bernoulli, binomial, Poisson, geometric, negative binomial, normal, log-normal, exponential, gamma, and beta
 - **Parameter controls**: sliders / numeric inputs with real-time chart updates
 - **Sample histograms**: draw samples and overlay them on the theoretical distribution (sample size adjustable from 100 to 10,000, resampling supported)
 - **Use cases**: each distribution comes with a plain-language explanation of how it is used in everyday life and at work, with the current parameter values woven into the text
