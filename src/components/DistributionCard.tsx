@@ -1,5 +1,5 @@
 import type { DragEvent } from 'react';
-import { memo, useEffect, useMemo, useRef } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 import type { DistributionDef } from '../domain/types';
 import type { Locale, MessageKey } from '../i18n';
 import { formatNumber, translate } from '../i18n';
@@ -48,17 +48,16 @@ function DistributionCardBase({
   const fmt = (n: number) => formatNumber(locale, n);
   const dk = (suffix: string) => `dist.${def.id}.${suffix}` as MessageKey;
 
-  // カード全体をドラッグのゴーストにしたいが、draggableをカード全体に付けると
-  // スライダー操作までドラッグ扱いになるブラウザがある。
-  // そこで「ハンドル上でpointerdownしたときだけ」dragstartを許可する
-  const dragArmed = useRef(false);
+  // カード全体をドラッグのゴーストにしたいが、draggableを常時trueにすると
+  // ブラウザはカード内のマウスドラッグを「テキスト選択」ではなく「要素のドラッグ」
+  // として扱うため、分布名・説明・活用例の文字が一切選択できなくなる。
+  // そこで「ハンドルを押している間だけ」draggableを立てる(通常時は選択可能)
+  const [dragReady, setDragReady] = useState(false);
 
-  // ハンドルの外でボタンを離すとハンドルのpointerupが来ずフラグが残り、
-  // その後のテキスト選択ドラッグが並べ替えに化ける。どこで離してもwindowで必ず解除する
+  // ハンドルの外でボタンを離すとハンドルのpointerupが来ないため、
+  // どこで離してもwindowで必ず解除する(ドラッグ成立時はdragEndで解除される)
   useEffect(() => {
-    const disarm = () => {
-      dragArmed.current = false;
-    };
+    const disarm = () => setDragReady(false);
     window.addEventListener('pointerup', disarm);
     window.addEventListener('pointercancel', disarm);
     return () => {
@@ -75,12 +74,11 @@ function DistributionCardBase({
   );
 
   const handleDragStart = (e: DragEvent) => {
-    if (!dragArmed.current) {
+    // draggable={dragReady}なのでハンドル経由以外でここには来ないはずだが、念のため防御する
+    if (!dragReady) {
       e.preventDefault();
       return;
     }
-    // ドラッグ成立時点でフラグは役目を終える(残すと次の意図しないドラッグを許可してしまう)
-    dragArmed.current = false;
     // Firefoxはデータ未設定のHTML5ドラッグを開始しないため、ダミーでもsetDataが必須
     e.dataTransfer.setData('text/plain', def.id);
     e.dataTransfer.effectAllowed = 'move';
@@ -92,10 +90,10 @@ function DistributionCardBase({
       className={`flex flex-col gap-2.5 rounded-[14px] border bg-card px-[18px] py-4 shadow-card transition-opacity ${
         isDragging ? 'border-dashed border-accent opacity-45' : 'border-border'
       }`}
-      draggable
+      draggable={dragReady}
       onDragStart={handleDragStart}
       onDragEnd={() => {
-        dragArmed.current = false;
+        setDragReady(false);
         onDragEnd();
       }}
       onDragOver={(e) => {
@@ -111,9 +109,7 @@ function DistributionCardBase({
           className="cursor-grab rounded-md p-1 text-muted hover:bg-accent-soft hover:text-accent"
           title={t('ui.dragHint')}
           aria-label={t('ui.dragHint')}
-          onPointerDown={() => {
-            dragArmed.current = true;
-          }}
+          onPointerDown={() => setDragReady(true)}
         >
           <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true">
             <circle cx="5" cy="3" r="1.5" fill="currentColor" />
