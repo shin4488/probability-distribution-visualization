@@ -3,7 +3,7 @@ import type { MessageKey } from './ja';
 // satisfiesにより、日本語辞書とキー集合がずれるとコンパイルエラーになる
 export const en = {
   'ui.title': 'Probability Distribution Visualizer',
-  'ui.tagline': 'Play with the parameters and see how each distribution behaves',
+  'ui.tagline': "Let's move the parameters and get a feel for each distribution's shape and uses",
   'ui.homeTitle': 'Back to top (resets the parameters)',
   'ui.backToTop': 'Scroll back to the top',
   'ui.themeToDark': 'Switch to dark mode',
