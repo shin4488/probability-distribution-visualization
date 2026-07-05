@@ -55,7 +55,7 @@ describe('decodeAppState', () => {
     state.order = ['poisson', ...DISTRIBUTION_IDS.filter((id) => id !== 'poisson')];
     state.hidden = ['beta'];
     state.cards.normal = {
-      params: { mu: -1.5, sigma: 2 },
+      params: { mu: 55, sigma: 12 },
       showHistogram: true,
       sampleSize: 2000,
     };
@@ -71,15 +71,15 @@ describe('decodeAppState', () => {
 
   it('範囲外の値はクランプされる', () => {
     const decoded = decodeAppState('?normal=9999,-5');
-    expect(decoded.cards.normal.params.mu).toBe(10); // max
-    expect(decoded.cards.normal.params.sigma).toBe(0.1); // min
+    expect(decoded.cards.normal.params.mu).toBe(100); // max
+    expect(decoded.cards.normal.params.sigma).toBe(1); // min
   });
 
   it('壊れた値はデフォルトに落ちる', () => {
     const decoded = decodeAppState(
       '?normal=abc,def&order=bogus,normal&hide=nope&lang=fr&theme=neon',
     );
-    expect(decoded.cards.normal.params).toEqual({ mu: 0, sigma: 1 });
+    expect(decoded.cards.normal.params).toEqual({ mu: 60, sigma: 10 });
     expect(decoded.locale).toBeUndefined();
     expect(decoded.theme).toBeUndefined();
     expect(decoded.hidden).toEqual([]);
@@ -95,7 +95,7 @@ describe('decodeAppState', () => {
 
     // 空トークンは位置だけ消費し、後続のパラメータはずれない
     const emptyToken = decodeAppState('?normal=,2');
-    expect(emptyToken.cards.normal.params).toEqual({ mu: 0, sigma: 2 });
+    expect(emptyToken.cards.normal.params).toEqual({ mu: 60, sigma: 2 });
   });
 
   it('標本サイズは範囲にクランプされる', () => {

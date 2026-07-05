@@ -4,9 +4,12 @@ import type { DistributionDef } from '../types';
 export const normal: DistributionDef = {
   id: 'normal',
   kind: 'continuous',
+  // デフォルトは標準正規分布N(0,1)ではなく「テストの点数」として現実的なN(60, 10²)。
+  // 活用例には現在のパラメータ値がそのまま埋め込まれるため、初期表示で
+  // 「平均60点・標準偏差10点なら約68%が50〜70点」という実感の湧く文章になる
   params: [
-    { key: 'mu', min: -10, max: 10, step: 0.1, defaultValue: 0 },
-    { key: 'sigma', min: 0.1, max: 5, step: 0.1, defaultValue: 1 },
+    { key: 'mu', min: 0, max: 100, step: 1, defaultValue: 60 },
+    { key: 'sigma', min: 1, max: 30, step: 1, defaultValue: 10 },
   ],
   density(x, { mu, sigma }) {
     const z = (x - mu) / sigma;
