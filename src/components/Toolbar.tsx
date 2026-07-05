@@ -18,7 +18,14 @@ export function Toolbar({ locale, theme, onLocaleChange, onThemeToggle, onReset 
   return (
     <header className="flex flex-wrap items-center justify-between gap-3 pt-2 pb-4">
       <div>
-        <h1 className="text-[1.35rem] font-bold tracking-[0.01em]">{t('ui.title')}</h1>
+        <h1 className="text-[1.35rem] font-bold tracking-[0.01em]">
+          {/* href="."は「クエリを落とした現在のパス」に解決される。GitHub Pagesの
+              サブパス配信(/repo/)でも壊れないよう、絶対パス"/"は使わない。
+              クエリ=共有可能な状態のすべてなので、遷移すれば実質リセットになる */}
+          <a className="transition-colors hover:text-accent" href="." title={t('ui.homeTitle')}>
+            {t('ui.title')}
+          </a>
+        </h1>
         <p className="mt-0.5 text-sm text-muted">{t('ui.tagline')}</p>
       </div>
       <div className="flex items-center gap-2.5">

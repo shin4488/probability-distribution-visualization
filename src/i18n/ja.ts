@@ -13,6 +13,7 @@
 export const ja = {
   'ui.title': '確率分布ビジュアライザー',
   'ui.tagline': 'パラメータを動かして、分布の形と使いどころを体感する',
+  'ui.homeTitle': 'トップに戻る(パラメータをリセット)',
   'ui.themeToDark': 'ダークモードに切り替え',
   'ui.themeToLight': 'ライトモードに切り替え',
   'ui.filterLabel': '表示する分布',
