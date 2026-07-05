@@ -102,6 +102,10 @@ export function Toolbar({
               strokeLinecap="round"
               strokeLinejoin="round"
             />
+            {/* 非表示中は斜線を重ねる(カードの非表示ボタンと同じ「隠している」の視覚言語) */}
+            {!showUseCases && (
+              <path d="M3 3l18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            )}
           </svg>
         </button>
         <button
