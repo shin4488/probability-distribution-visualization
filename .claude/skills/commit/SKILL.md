@@ -16,11 +16,8 @@ description: How to create commits in this repository — branch naming, semanti
 2. Confirm the git identity is the GitHub noreply address. A personal email must never be used — it becomes permanently public in commit metadata once pushed:
 
    ```bash
-   git config user.email   # must print 37034832+shin4488@users.noreply.github.com
+   git config user.email
    ```
-
-   (This is set repo-locally. If it ever prints a personal address, re-set it with
-   `git config user.email "37034832+shin4488@users.noreply.github.com"`.)
 
 3. Work on a branch, not on main: `feat/<topic>`, `fix/<topic>`, `docs/<topic>`, `chore/<topic>`.
 
