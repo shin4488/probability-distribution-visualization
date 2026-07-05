@@ -76,3 +76,12 @@ function knuthPoisson(rng: Rng, lambda: number): number {
   }
   return k;
 }
+
+/**
+ * 幾何分布(最初の成功が出るまでの失敗回数)。逆関数法。
+ * 負の二項分布のサンプラーもこれをr個合計して作られる(再生性)。
+ */
+export function sampleGeometric(rng: Rng, p: number): number {
+  if (p >= 1) return 0;
+  return Math.floor(Math.log(1 - rng()) / Math.log(1 - p));
+}

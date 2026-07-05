@@ -54,6 +54,13 @@ describe('density（既知の値との突き合わせ）', () => {
     expect(exponential.density(0, { lambda: 2.5 })).toBeCloseTo(2.5, 10);
   });
 
+  it('幾何分布 Geo(0.5) の P(X=2) = 0.125', () => {
+    const geometric = getDistribution('geometric');
+    // 失敗2回のあと成功: 0.5^2 * 0.5
+    expect(geometric.density(2, { p: 0.5 })).toBeCloseTo(0.125, 10);
+    expect(geometric.density(0, { p: 1 })).toBe(1);
+  });
+
   it('負の二項分布 NB(2, 0.5) の P(X=1) = 0.25', () => {
     const negbinomial = getDistribution('negbinomial');
     // C(2,1) * 0.5^2 * 0.5^1 = 2 * 0.125

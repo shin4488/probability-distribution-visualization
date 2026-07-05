@@ -20,7 +20,8 @@ export type DistributionId =
   | 'beta'
   | 'gamma'
   | 'lognormal'
-  | 'negbinomial';
+  | 'negbinomial'
+  | 'geometric';
 
 export type DistributionKind = 'continuous' | 'discrete';
 
