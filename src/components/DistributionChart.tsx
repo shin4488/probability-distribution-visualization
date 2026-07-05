@@ -181,7 +181,7 @@ export function DistributionChart({ def, params, histogram, theme, labels }: Pro
   );
 
   return (
-    <div className="chart-container">
+    <div className="relative h-[220px]">
       <canvas ref={canvasRef} role="img" />
     </div>
   );

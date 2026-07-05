@@ -84,7 +84,7 @@ export function App() {
   );
 
   return (
-    <div className="app">
+    <div className="mx-auto max-w-[1240px] px-6 pt-5 pb-16">
       <Toolbar
         locale={state.locale}
         theme={state.theme}
@@ -102,9 +102,9 @@ export function App() {
       />
 
       {visibleOrder.length === 0 ? (
-        <p className="empty-state">{translate(state.locale, 'ui.allHidden')}</p>
+        <p className="py-15 text-center text-muted">{translate(state.locale, 'ui.allHidden')}</p>
       ) : (
-        <main className="card-grid">
+        <main className="grid grid-cols-[repeat(auto-fill,minmax(360px,1fr))] gap-5 max-[420px]:grid-cols-1">
           {visibleOrder.map((id) => (
             <DistributionCard
               key={id}

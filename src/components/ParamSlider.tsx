@@ -13,12 +13,13 @@ interface Props {
 export function ParamSlider({ label, min, max, step, value, onChange }: Props) {
   const id = useId();
   return (
-    <div className="param-slider">
-      <label className="param-slider-label" htmlFor={id}>
+    <div className="grid grid-cols-[minmax(110px,auto)_1fr_78px] items-center gap-2.5">
+      <label className="text-[0.82rem] whitespace-nowrap text-muted" htmlFor={id}>
         {label}
       </label>
       <input
         id={id}
+        className="m-0 w-full cursor-pointer accent-accent"
         type="range"
         min={min}
         max={max}
@@ -27,7 +28,7 @@ export function ParamSlider({ label, min, max, step, value, onChange }: Props) {
         onChange={(e) => onChange(Number(e.target.value))}
       />
       <input
-        className="param-slider-number"
+        className="w-full rounded-md border border-border bg-bg px-1.5 py-1 font-mono text-[0.82rem] text-fg focus:border-transparent focus:outline-2 focus:-outline-offset-1 focus:outline-accent"
         type="number"
         min={min}
         max={max}

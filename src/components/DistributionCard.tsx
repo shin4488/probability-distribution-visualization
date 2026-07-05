@@ -7,6 +7,7 @@ import type { CardState, Theme } from '../state/appState';
 import { SAMPLE_SIZE } from '../state/appState';
 import { DistributionChart } from './DistributionChart';
 import { ParamSlider } from './ParamSlider';
+import { iconButtonClass, textButtonClass } from './ui';
 
 interface Props {
   def: DistributionDef;
@@ -69,7 +70,9 @@ export function DistributionCard({
 
   return (
     <article
-      className={`card${isDragging ? ' card-dragging' : ''}`}
+      className={`flex flex-col gap-2.5 rounded-[14px] border bg-card px-[18px] py-4 shadow-card transition-opacity ${
+        isDragging ? 'border-dashed border-accent opacity-45' : 'border-border'
+      }`}
       draggable
       onDragStart={handleDragStart}
       onDragEnd={() => {
@@ -83,10 +86,10 @@ export function DistributionCard({
       onDragEnter={onDragEnterCard}
       onDrop={(e) => e.preventDefault()}
     >
-      <header className="card-header">
+      <header className="flex items-center gap-2">
         <button
           type="button"
-          className="drag-handle"
+          className="cursor-grab rounded-md p-1 text-muted hover:bg-accent-soft hover:text-accent"
           title={t('ui.dragHint')}
           aria-label={t('ui.dragHint')}
           onPointerDown={() => {
@@ -105,13 +108,13 @@ export function DistributionCard({
             <circle cx="11" cy="13" r="1.5" fill="currentColor" />
           </svg>
         </button>
-        <div className="card-title">
-          <h2>{t(dk('name'))}</h2>
-          <span className="card-notation">{def.notation(card.params, fmt)}</span>
+        <div className="flex min-w-0 flex-1 flex-wrap items-baseline gap-2.5">
+          <h2 className="text-[1.05rem] font-bold">{t(dk('name'))}</h2>
+          <span className="font-mono text-sm text-muted">{def.notation(card.params, fmt)}</span>
         </div>
         <button
           type="button"
-          className="icon-button"
+          className={iconButtonClass}
           onClick={onHide}
           title={t('ui.hideCard')}
           aria-label={t('ui.hideCard')}
@@ -127,14 +130,18 @@ export function DistributionCard({
         </button>
       </header>
 
-      <p className="card-tagline">{t(dk('tagline'))}</p>
+      <p className="text-[0.82rem] text-muted">{t(dk('tagline'))}</p>
 
-      <div className="card-stats">
+      <div className="flex gap-4 text-[0.8rem] text-muted">
         <span>
-          {t('ui.mean')}: <strong>{fmt(def.mean(card.params))}</strong>
+          {t('ui.mean')}:{' '}
+          <strong className="font-semibold text-fg">{fmt(def.mean(card.params))}</strong>
         </span>
         <span>
-          {t('ui.sd')}: <strong>{fmt(Math.sqrt(def.variance(card.params)))}</strong>
+          {t('ui.sd')}:{' '}
+          <strong className="font-semibold text-fg">
+            {fmt(Math.sqrt(def.variance(card.params)))}
+          </strong>
         </span>
       </div>
 
@@ -149,7 +156,7 @@ export function DistributionCard({
         }}
       />
 
-      <div className="card-params">
+      <div className="flex flex-col gap-2">
         {def.params.map((p) => (
           <ParamSlider
             key={p.key}
@@ -163,14 +170,22 @@ export function DistributionCard({
         ))}
       </div>
 
-      <div className="card-histogram">
-        <label className="switch">
-          <input type="checkbox" checked={card.showHistogram} onChange={onToggleHistogram} />
-          <span className="switch-track" aria-hidden="true" />
+      <div className="flex flex-col gap-2 border-t border-dashed border-border pt-2.5">
+        <label className="inline-flex cursor-pointer items-center gap-2 text-sm select-none">
+          <input
+            className="peer sr-only"
+            type="checkbox"
+            checked={card.showHistogram}
+            onChange={onToggleHistogram}
+          />
+          <span
+            className="relative h-5 w-[34px] shrink-0 rounded-full bg-border transition-colors after:absolute after:top-0.5 after:left-0.5 after:h-4 after:w-4 after:rounded-full after:bg-card after:shadow-[0_1px_2px_rgb(0_0_0/0.25)] after:transition-transform after:content-[''] peer-checked:bg-accent peer-checked:after:translate-x-3.5 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent"
+            aria-hidden="true"
+          />
           {t('ui.histogram')}
         </label>
         {card.showHistogram && (
-          <div className="histogram-controls">
+          <div className="flex flex-col gap-2">
             <ParamSlider
               label={t('ui.sampleSize')}
               min={SAMPLE_SIZE.min}
@@ -179,7 +194,7 @@ export function DistributionCard({
               value={card.sampleSize}
               onChange={onSampleSizeChange}
             />
-            <button type="button" className="text-button" onClick={onResample}>
+            <button type="button" className={`${textButtonClass} self-start`} onClick={onResample}>
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path
                   d="M20 8a8 8 0 1 0 1.7 6M21 3v6h-6"
@@ -195,9 +210,13 @@ export function DistributionCard({
         )}
       </div>
 
-      <div className="card-usecase">
-        <h3>{t('ui.usecaseTitle')}</h3>
-        <p>{t(dk('usecase'), def.useCaseValues(card.params))}</p>
+      <div className="rounded-r-lg border-l-[3px] border-accent bg-accent-soft px-3 py-2.5">
+        <h3 className="mb-1 text-[0.78rem] font-bold tracking-[0.06em] text-accent uppercase">
+          {t('ui.usecaseTitle')}
+        </h3>
+        <p className="text-[0.84rem] leading-[1.65]">
+          {t(dk('usecase'), def.useCaseValues(card.params))}
+        </p>
       </div>
     </article>
   );

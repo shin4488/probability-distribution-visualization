@@ -1,6 +1,7 @@
 import type { Locale, MessageKey } from '../i18n';
 import { LOCALES, translate } from '../i18n';
 import type { Theme } from '../state/appState';
+import { iconButtonClass, textButtonClass } from './ui';
 
 interface Props {
   locale: Locale;
@@ -15,18 +16,23 @@ const LOCALE_LABELS: Record<Locale, string> = { ja: '日本語', en: 'EN' };
 export function Toolbar({ locale, theme, onLocaleChange, onThemeToggle, onReset }: Props) {
   const t = (key: MessageKey) => translate(locale, key);
   return (
-    <header className="toolbar">
-      <div className="toolbar-titles">
-        <h1>{t('ui.title')}</h1>
-        <p>{t('ui.tagline')}</p>
+    <header className="flex flex-wrap items-center justify-between gap-3 pt-2 pb-4">
+      <div>
+        <h1 className="text-[1.35rem] font-bold tracking-[0.01em]">{t('ui.title')}</h1>
+        <p className="mt-0.5 text-sm text-muted">{t('ui.tagline')}</p>
       </div>
-      <div className="toolbar-actions">
-        <fieldset className="segmented" aria-label={t('ui.langLabel')}>
+      <div className="flex items-center gap-2.5">
+        <fieldset
+          className="inline-flex overflow-hidden rounded-lg border border-border bg-card"
+          aria-label={t('ui.langLabel')}
+        >
           {LOCALES.map((l) => (
             <button
               key={l}
               type="button"
-              className={l === locale ? 'active' : ''}
+              className={`cursor-pointer px-3 py-1.5 text-sm ${
+                l === locale ? 'bg-accent text-white' : 'text-muted'
+              }`}
               onClick={() => onLocaleChange(l)}
               aria-pressed={l === locale}
             >
@@ -36,7 +42,7 @@ export function Toolbar({ locale, theme, onLocaleChange, onThemeToggle, onReset 
         </fieldset>
         <button
           type="button"
-          className="icon-button"
+          className={iconButtonClass}
           onClick={onThemeToggle}
           title={t(theme === 'dark' ? 'ui.themeToLight' : 'ui.themeToDark')}
           aria-label={t(theme === 'dark' ? 'ui.themeToLight' : 'ui.themeToDark')}
@@ -63,7 +69,12 @@ export function Toolbar({ locale, theme, onLocaleChange, onThemeToggle, onReset 
             </svg>
           )}
         </button>
-        <button type="button" className="text-button" onClick={onReset} title={t('ui.resetTitle')}>
+        <button
+          type="button"
+          className={textButtonClass}
+          onClick={onReset}
+          title={t('ui.resetTitle')}
+        >
           {t('ui.reset')}
         </button>
       </div>
