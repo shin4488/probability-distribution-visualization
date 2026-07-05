@@ -1,0 +1,49 @@
+{
+  "$comment": "VS Code内蔵CSSバリデータにTailwind CSS v4のat-ruleを教えるカスタムデータ。.vscode/settings.jsonのcss.customDataから参照される。これが無いと@theme等がunknownAtRules警告になる",
+  "version": 1.1,
+  "atDirectives": [
+    {
+      "name": "@theme",
+      "description": "Tailwind CSS v4: defines design tokens. Each token is emitted as a CSS variable and generates the corresponding utilities (e.g. --color-accent → bg-accent).",
+      "references": [{ "name": "Tailwind docs", "url": "https://tailwindcss.com/docs/theme" }]
+    },
+    {
+      "name": "@apply",
+      "description": "Tailwind CSS: inlines the given utility classes into a CSS rule.",
+      "references": [
+        {
+          "name": "Tailwind docs",
+          "url": "https://tailwindcss.com/docs/functions-and-directives#apply-directive"
+        }
+      ]
+    },
+    {
+      "name": "@custom-variant",
+      "description": "Tailwind CSS v4: defines a custom variant (e.g. a data-attribute based dark mode)."
+    },
+    {
+      "name": "@utility",
+      "description": "Tailwind CSS v4: defines a custom utility class."
+    },
+    {
+      "name": "@variant",
+      "description": "Tailwind CSS v4: applies a variant inside custom CSS."
+    },
+    {
+      "name": "@source",
+      "description": "Tailwind CSS v4: registers extra source files to scan for class names."
+    },
+    {
+      "name": "@plugin",
+      "description": "Tailwind CSS v4: loads a Tailwind plugin."
+    },
+    {
+      "name": "@config",
+      "description": "Tailwind CSS v4: loads a legacy JS config file."
+    },
+    {
+      "name": "@reference",
+      "description": "Tailwind CSS v4: imports theme/utilities for @apply without emitting CSS."
+    }
+  ]
+}
