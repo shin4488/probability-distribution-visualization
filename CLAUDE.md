@@ -78,7 +78,8 @@ See `.claude/skills/add-distribution/SKILL.md` for the procedure (summary below)
 
 ## Deployment
 
-- GitHub Pages (project page). A push to main runs `.github/workflows/deploy.yml`: lint → typecheck → test → build → deploy
+- `.github/workflows/ci.yml` runs lint (warnings fail via `lint:ci`) → typecheck → test → build on every pull request and on pushes to non-main branches, so breakage shows up as PR status checks
+- GitHub Pages (project page). A push to main runs `.github/workflows/deploy.yml`: the same checks → build → deploy
 - **Workflow actions are pinned to commit hashes** (protection against tag-repointing supply-chain attacks). See the comment at the top of deploy.yml for the update procedure
 - `base: './'` in `vite.config.ts` (relative paths) makes the build work under a subpath. **Never reference assets with absolute `/...` paths**
 - One-time setup: repository Settings → Pages → Source must be set to "GitHub Actions"

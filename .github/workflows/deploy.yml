@@ -31,7 +31,8 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npm run lint
+      # CIと同じく警告でも失敗させる
+      - run: npm run lint:ci
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
