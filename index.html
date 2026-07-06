@@ -81,6 +81,29 @@
         "isAccessibleForFree": true
       }
     </script>
+    <!-- Google Analytics 4: ページビュー等の計測。
+         本番(GitHub Pages)でのみ読み込み、開発中のアクセスを指標に混ぜない。
+         GA4プロパティ作成後、下のGA_MEASUREMENT_IDを実際のID(G-...)に差し替えること。
+         注意: このアプリはパラメータ操作のたびにreplaceStateでURLを書き換えるため、
+         GA4の拡張計測「ブラウザの履歴イベントに基づくページの変更」はオフを推奨
+         (オンだとスライダー操作がページビューとして大量計上され得る) -->
+    <script>
+      (() => {
+        var GA_MEASUREMENT_ID = 'G-XXXXXXXXXX'; // TODO: GA4プロパティ作成後に差し替え
+        if (location.hostname !== 'shin4488.github.io') return;
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+        document.head.appendChild(script);
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function () {
+          // biome-ignore lint/complexity/noArguments: gtag.jsはArgumentsオブジェクト自体を要求する(配列では動作しない)
+          dataLayer.push(arguments);
+        };
+        window.gtag('js', new Date());
+        window.gtag('config', GA_MEASUREMENT_ID);
+      })();
+    </script>
   </head>
   <body>
     <noscript>
