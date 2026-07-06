@@ -62,7 +62,8 @@ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
 ```
 
 - `<type>` is one of: `feat` / `fix` / `docs` / `chore` / `refactor` / `test` / `ci` / `perf`
-- The `Co-Authored-By` trailer is **required on every commit created with Claude**. GitHub renders the commit as authored by "shin4488 and Claude" (two avatars). The commit author/committer themselves come from git config, i.e. shin4488
+- The `Co-Authored-By` trailer is **required on every commit created with an AI**. GitHub renders the commit as authored by "shin4488 and the AI" (two avatars). The commit author/committer themselves come from git config, i.e. shin4488
+- The trailer names the AI that actually made the commit — `Claude Fable 5 <noreply@anthropic.com>` in the examples is only correct when that model did the work. A different model or service substitutes its own name and its vendor's noreply address (e.g. `Claude Sonnet 4.5 <noreply@anthropic.com>`, `GitHub Copilot <noreply@github.com>`)
 - Pass multi-line messages with a heredoc so the trailer line survives shell quoting:
 
   ```bash
