@@ -20,6 +20,10 @@ description: How to create commits in this repository — branch naming, semanti
    ```
 
 3. Work on a branch, not on main: `feat/<topic>`, `fix/<topic>`, `docs/<topic>`, `chore/<topic>`.
+4. **Never force-push** (`--force` / `--force-with-lease` / `-f`) — permissions deny it.
+   If a pushed branch needs different history, prefer additive fixes (revert commits,
+   follow-up commits) or start a fresh branch; if a rewrite is truly unavoidable, ask
+   the product owner to run it themselves.
 
 ## Commit units
 
