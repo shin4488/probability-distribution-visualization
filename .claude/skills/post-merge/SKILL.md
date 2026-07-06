@@ -4,8 +4,7 @@ description: What to do right after a PR is merged into main — verify main and
 model: sonnet
 ---
 
-> `model: sonnet` — this is mechanical work, so it runs on the cheaper Sonnet.
-> The unversioned alias tracks the latest available Sonnet automatically.
+> `model: sonnet` — this is mechanical work, so it runs on the cheaper Sonnet; the unversioned alias tracks the latest available Sonnet automatically.
 
 # After a PR merges
 

@@ -4,8 +4,7 @@ description: How to start a new branch in this repository — when to branch, ho
 model: sonnet
 ---
 
-> `model: sonnet` — this is mechanical work, so it runs on the cheaper Sonnet.
-> The unversioned alias tracks the latest available Sonnet automatically.
+> `model: sonnet` — this is mechanical work, so it runs on the cheaper Sonnet; the unversioned alias tracks the latest available Sonnet automatically.
 
 # Creating a branch
 
