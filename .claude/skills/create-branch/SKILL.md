@@ -44,8 +44,8 @@ git push -u origin <type>/<topic>
 
 - Pushing the branch triggers CI (lint with warnings-as-errors, typecheck, tests,
   build), so breakage is visible before and on the PR.
-- After the PR merges: verify main, then delete the branch locally
-  (`git branch -d <branch>`) and remotely (`git push origin --delete <branch>`).
+- After the PR merges: follow the `post-merge` skill — verify main (checks, deploy,
+  live site), then delete the branch locally and remotely.
 
 ## Checklist before creating
 
