@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState } from 'react';
+import { trackEvent } from './analytics';
 import { BackToTop } from './components/BackToTop';
 import { DistributionCard } from './components/DistributionCard';
 import { FilterChips } from './components/FilterChips';
@@ -171,8 +172,14 @@ export function App() {
       <Toolbar
         locale={state.locale}
         theme={state.theme}
-        onLocaleChange={(locale) => dispatch({ type: 'setLocale', locale })}
-        onThemeToggle={() => dispatch({ type: 'toggleTheme' })}
+        onLocaleChange={(locale) => {
+          trackEvent('lang_switch', { language: locale });
+          dispatch({ type: 'setLocale', locale });
+        }}
+        onThemeToggle={() => {
+          trackEvent('theme_switch', { theme: state.theme === 'dark' ? 'light' : 'dark' });
+          dispatch({ type: 'toggleTheme' });
+        }}
         showUseCases={state.showUseCases}
         onToggleUseCases={() => dispatch({ type: 'toggleUseCases' })}
         onReset={() => dispatch({ type: 'reset' })}
