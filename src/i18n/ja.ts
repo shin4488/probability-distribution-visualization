@@ -42,6 +42,11 @@ export const ja = {
   'ui.chartMass': '確率',
   'ui.chartHistogram': '標本',
   'ui.langLabel': '言語',
+  'ui.feedbackQuestion': 'このサイトは役に立ちましたか？',
+  'ui.feedbackYes': '役に立った',
+  'ui.feedbackNo': 'いまいち',
+  'ui.feedbackThanks': 'フィードバックありがとうございます！今後の改善に活用します。',
+  'ui.feedbackFormLink': 'ご要望・ご感想を送る(1分)',
 
   'dist.bernoulli.name': 'ベルヌーイ分布',
   'dist.bernoulli.tagline':

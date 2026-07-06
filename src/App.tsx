@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState } fro
 import { trackEvent } from './analytics';
 import { BackToTop } from './components/BackToTop';
 import { DistributionCard } from './components/DistributionCard';
+import { FeedbackFooter } from './components/FeedbackFooter';
 import { FilterChips } from './components/FilterChips';
 import { Toolbar } from './components/Toolbar';
 import { DISTRIBUTION_IDS, getDistribution } from './domain/distributions';
@@ -11,28 +12,10 @@ import { detectLocale, isLocale, translate } from './i18n';
 import type { AppState, Theme } from './state/appState';
 import { reducer } from './state/appState';
 import { decodeAppState, encodeAppState } from './state/urlCodec';
+import { readStorage, writeStorage } from './storage';
 
 const THEME_STORAGE_KEY = 'pdv-theme';
 const LANG_STORAGE_KEY = 'pdv-lang';
-
-// Cookie全ブロックやプライベートモードではlocalStorageへのアクセス自体が
-// SecurityErrorを投げる環境があるため、読み書きは必ずこの安全版を通す
-// (保存できなくてもアプリは動き続けるのが正しい挙動)
-function readStorage(key: string): string | null {
-  try {
-    return localStorage.getItem(key);
-  } catch {
-    return null;
-  }
-}
-
-function writeStorage(key: string, value: string): void {
-  try {
-    localStorage.setItem(key, value);
-  } catch {
-    // 保存不可の環境では単に永続化をあきらめる
-  }
-}
 
 /** 初期状態の優先順位: URL(共有リンク) > localStorage(前回の自分の設定) > ブラウザ/OS環境 */
 function initAppState(): AppState {
@@ -212,6 +195,8 @@ export function App() {
           ))}
         </main>
       )}
+
+      <FeedbackFooter locale={state.locale} />
 
       <BackToTop label={translate(state.locale, 'ui.backToTop')} />
     </div>
