@@ -33,6 +33,11 @@ export const en = {
   'ui.chartMass': 'Probability',
   'ui.chartHistogram': 'Samples',
   'ui.langLabel': 'Language',
+  'ui.feedbackQuestion': 'Was this site helpful?',
+  'ui.feedbackYes': 'Helpful',
+  'ui.feedbackNo': 'Not really',
+  'ui.feedbackThanks': 'Thanks for your feedback! It helps us improve.',
+  'ui.feedbackFormLink': 'Send a request or comment (1 min)',
 
   'dist.bernoulli.name': 'Bernoulli',
   'dist.bernoulli.tagline':

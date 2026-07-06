@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState } fro
 import { trackEvent } from './analytics';
 import { BackToTop } from './components/BackToTop';
 import { DistributionCard } from './components/DistributionCard';
+import { FeedbackFooter } from './components/FeedbackFooter';
 import { FilterChips } from './components/FilterChips';
 import { Toolbar } from './components/Toolbar';
 import { DISTRIBUTION_IDS, getDistribution } from './domain/distributions';
@@ -194,6 +195,8 @@ export function App() {
           ))}
         </main>
       )}
+
+      <FeedbackFooter locale={state.locale} />
 
       <BackToTop label={translate(state.locale, 'ui.backToTop')} />
     </div>
