@@ -26,6 +26,7 @@ With VS Code or any devcontainer-capable editor you can also open the repo via "
 - The container is Linux, so native binaries in node_modules (esbuild etc.) are Linux builds. The host uses node_modules only for type resolution; build and test in the container
 - Scratch work (notes, experiment scripts, temporary output) goes in `tmp/` or `scratch/` — both are gitignored, so nothing there ever needs to be committed or cleaned out of a diff
 - **Policy: do not add dependencies** (npm supply-chain protection). When one must be added, pin the version exactly (`--save-exact`) and record the rationale in docs/tech-selection.md
+- **Policy: never commit secrets** — API keys, access tokens, private keys, passwords, `.env` contents, personal email addresses. Identifiers the site already serves to every visitor are *not* secrets (the GA4 measurement ID, the Search Console verification meta tag, the public Google Form URL). Force-push is denied here, so pushed history cannot be scrubbed: if a secret reaches the remote, rotate/invalidate the credential immediately and remove it with a follow-up commit. The pre-commit check lives in the `commit` skill
 
 ## Architecture
 
