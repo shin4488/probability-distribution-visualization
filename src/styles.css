@@ -6,7 +6,12 @@
    var()参照にコンパイルされる。そのため:root[data-theme='dark']で変数を
    上書きするだけで、全ユーティリティとChart.js(chartTheme.tsが
    getComputedStyleで--chart-*を読む)の色が一斉に切り替わる。 */
-@import "tailwindcss";
+/* source(none)で自動ソース検出を無効化し、実際のUIソースだけを@sourceで指定する。
+   自動検出はリポジトリ全体を走査するため、docs/のMarkdownに書かれただけの
+   ユーティリティ名(例: 改善バックログ中の touch-none)が本番CSSに混入する */
+@import "tailwindcss" source(none);
+@source "../src";
+@source "../index.html";
 
 @theme {
   --font-sans:
