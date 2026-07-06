@@ -19,8 +19,18 @@ description: How to create commits in this repository — branch naming, semanti
    git config user.email
    ```
 
-3. Work on a branch, not on main: `feat/<topic>`, `fix/<topic>`, `docs/<topic>`, `chore/<topic>`.
-4. **Never force-push** (`--force` / `--force-with-lease` / `-f`) — permissions deny it.
+3. Review the staged diff for secrets — nothing confidential may enter history:
+
+   ```bash
+   git diff --cached
+   ```
+
+   - Never commit: API keys, access tokens, private keys, passwords, `.env` contents, personal email addresses
+   - Fine to commit: identifiers the site already serves to every visitor (the GA4 measurement ID, the Search Console verification token, the public Google Form URL) — treat "would this value appear in the browser anyway?" as the test
+   - Noticed only after push? History cannot be rewritten here (force-push is denied): rotate/invalidate the credential immediately, then remove it with a follow-up commit
+
+4. Work on a branch, not on main: `feat/<topic>`, `fix/<topic>`, `docs/<topic>`, `chore/<topic>`.
+5. **Never force-push** (`--force` / `--force-with-lease` / `-f`) — permissions deny it.
    If a pushed branch needs different history, prefer additive fixes (revert commits,
    follow-up commits) or start a fresh branch; if a rewrite is truly unavoidable, ask
    the product owner to run it themselves.
@@ -52,7 +62,8 @@ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
 ```
 
 - `<type>` is one of: `feat` / `fix` / `docs` / `chore` / `refactor` / `test` / `ci` / `perf`
-- The `Co-Authored-By` trailer is **required on every commit created with Claude**. GitHub renders the commit as authored by "shin4488 and Claude" (two avatars). The commit author/committer themselves come from git config, i.e. shin4488
+- The `Co-Authored-By` trailer is **required on every commit created with an AI**. GitHub renders the commit as authored by "shin4488 and the AI" (two avatars). The commit author/committer themselves come from git config, i.e. shin4488
+- The trailer names the AI that actually made the commit — `Claude Fable 5 <noreply@anthropic.com>` in the examples is only correct when that model did the work. A different model or service substitutes its own name and its vendor's noreply address (e.g. `Claude Sonnet 4.5 <noreply@anthropic.com>`, `GitHub Copilot <noreply@github.com>`)
 - Pass multi-line messages with a heredoc so the trailer line survives shell quoting:
 
   ```bash
