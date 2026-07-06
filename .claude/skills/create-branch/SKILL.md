@@ -1,7 +1,10 @@
 ---
 name: create-branch
 description: How to start a new branch in this repository — when to branch, how to name it, and the exact commands. Use whenever beginning work that will become a pull request.
+model: sonnet
 ---
+
+> `model: sonnet` — this is mechanical work, so it runs on the cheaper Sonnet; the unversioned alias tracks the latest available Sonnet automatically.
 
 # Creating a branch
 
