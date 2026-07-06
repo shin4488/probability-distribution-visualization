@@ -110,6 +110,12 @@ export function App() {
 
   useEffect(() => {
     document.documentElement.lang = state.locale;
+    // Googleはレンダリング後のDOMを読むため、title・descriptionもロケールへ追従させる
+    // (静的index.htmlの日英併記は初回ペイント用、こちらが確定値)
+    document.title = translate(state.locale, 'ui.docTitle');
+    document
+      .querySelector('meta[name="description"]')
+      ?.setAttribute('content', translate(state.locale, 'ui.metaDescription'));
     if (state.localeTouched) writeStorage(LANG_STORAGE_KEY, state.locale);
   }, [state.locale, state.localeTouched]);
 
