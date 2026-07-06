@@ -1,7 +1,11 @@
 ---
 name: post-merge
 description: What to do right after a PR is merged into main — verify main and the deployed site, then clean up branches. Use whenever the user says a PR was merged (e.g. 「マージしました」).
+model: sonnet
 ---
+
+> `model: sonnet` — this is mechanical work, so it runs on the cheaper Sonnet.
+> The unversioned alias tracks the latest available Sonnet automatically.
 
 # After a PR merges
 
