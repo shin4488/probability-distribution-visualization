@@ -12,6 +12,9 @@
  */
 export const ja = {
   'ui.title': '確率分布ビジュアライザー',
+  'ui.docTitle': '確率分布ビジュアライザー | Probability Distributions',
+  'ui.metaDescription':
+    '正規分布・二項分布・ポアソン分布など10種の確率分布をスライダーで動かしてインタラクティブに可視化。標本シミュレーションと実務での活用例つき。',
   'ui.tagline': 'パラメータを動かして、分布の形と使いどころを体感しよう',
   'ui.homeTitle': 'トップに戻る(パラメータをリセット)',
   'ui.backToTop': 'ページの先頭へ戻る',
