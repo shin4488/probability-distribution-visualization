@@ -5,6 +5,8 @@ interface Props {
   text: string;
   /** ヘルプボタンのaria-label */
   label: string;
+  /** 閉→開に変わったときに呼ばれる(利用状況の計測用) */
+  onOpen?: () => void;
 }
 
 /**
@@ -12,9 +14,14 @@ interface Props {
  * PCはホバー/キーボードフォーカスで、タッチ端末は
  * タップ(クリック)でトグルして表示する。
  */
-export function HelpTip({ text, label }: Props) {
+export function HelpTip({ text, label, onOpen }: Props) {
   const [open, setOpen] = useState(false);
   const tooltipId = useId();
+
+  const show = () => {
+    if (!open) onOpen?.();
+    setOpen(true);
+  };
 
   return (
     <span className="relative inline-flex">
@@ -24,11 +31,14 @@ export function HelpTip({ text, label }: Props) {
         aria-label={label}
         aria-expanded={open}
         aria-describedby={open ? tooltipId : undefined}
-        onMouseEnter={() => setOpen(true)}
+        onMouseEnter={show}
         onMouseLeave={() => setOpen(false)}
-        onFocus={() => setOpen(true)}
+        onFocus={show}
         onBlur={() => setOpen(false)}
-        onClick={() => setOpen((prev) => !prev)}
+        onClick={() => {
+          if (!open) onOpen?.();
+          setOpen((prev) => !prev);
+        }}
       >
         ?
       </button>

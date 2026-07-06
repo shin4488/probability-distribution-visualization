@@ -1,5 +1,6 @@
 import type { DragEvent } from 'react';
 import { memo, useEffect, useMemo, useState } from 'react';
+import { trackEvent, trackHelpOpen, trackParamChange } from '../analytics';
 import type { DistributionDef } from '../domain/types';
 import type { Locale, MessageKey } from '../i18n';
 import { formatNumber, translate } from '../i18n';
@@ -184,7 +185,10 @@ function DistributionCardBase({
             max={p.max}
             step={p.step}
             value={card.params[p.key]}
-            onChange={(value) => onParamChange(p.key, value)}
+            onChange={(value) => {
+              trackParamChange(def.id);
+              onParamChange(p.key, value);
+            }}
           />
         ))}
       </div>
@@ -195,14 +199,22 @@ function DistributionCardBase({
             className="peer sr-only"
             type="checkbox"
             checked={card.showHistogram}
-            onChange={onToggleHistogram}
+            onChange={() => {
+              // 「オンにした」ときだけ計測する(機能がどれだけ発見されているか)
+              if (!card.showHistogram) trackEvent('histogram_on', { distribution: def.id });
+              onToggleHistogram();
+            }}
           />
           <span
             className="relative h-5 w-[34px] shrink-0 rounded-full bg-border transition-colors after:absolute after:top-0.5 after:left-0.5 after:h-4 after:w-4 after:rounded-full after:bg-card after:shadow-[0_1px_2px_rgb(0_0_0/0.25)] after:transition-transform after:content-[''] peer-checked:bg-accent peer-checked:after:translate-x-3.5 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent"
             aria-hidden="true"
           />
           {t('ui.histogram')}
-          <HelpTip text={t('ui.histogramHelp')} label={t('ui.helpLabel')} />
+          <HelpTip
+            text={t('ui.histogramHelp')}
+            label={t('ui.helpLabel')}
+            onOpen={() => trackHelpOpen('sample_simulation')}
+          />
         </label>
         {card.showHistogram && (
           <div className="flex flex-col gap-2">
