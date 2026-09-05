@@ -1,0 +1,17 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$(git rev-parse --show-toplevel)/.codex/hooks/biome-fix.sh\"",
+            "timeout": 90,
+            "statusMessage": "Biomeでlint+formatを適用中..."
+          }
+        ]
+      }
+    ]
+  }
+}

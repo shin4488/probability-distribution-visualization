@@ -93,3 +93,13 @@ See `.claude/skills/add-distribution/SKILL.md` for the procedure (summary below)
 
 - Reordering uses the HTML5 Drag and Drop API, so it does not work on touch devices (everything else does)
 - Vite is kept at v6 for compatibility with Node 20.18 on the host. Check the Node requirement before upgrading
+
+## Shared Claude Code and Codex configuration
+
+- Edit the Claude-side files; Codex shares them through relative symlinks:
+  - `AGENTS.md` → `CLAUDE.md`
+  - `.agents/skills` → `.claude/skills`
+  - `.codex/hooks` → `.claude/hooks`
+- Register Codex hooks in `.codex/hooks.json`. Trust the repository, then review and approve hooks with `/hooks` in the CLI. Repeat after changing a registered command ([instructions](https://learn.chatgpt.com/docs/hooks)).
+- Claude's `permissions` settings do not carry over to Codex.
+- Hooks require Bash, jq, and realpath on the host. Biome uses the current Compose project's container and its installed dependencies.
