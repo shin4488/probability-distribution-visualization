@@ -18,7 +18,7 @@ docker compose run --rm app npm run lint:fix  # Biome (auto-fix)
 docker compose run --rm app npm run build  # production build → dist/
 ```
 
-With VS Code or any devcontainer-capable editor you can also open the repo via "Reopen in Container" from `.devcontainer/`
+With VS Code or any devcontainer-capable editor you can also open the repository via "Reopen in Container" from `.devcontainer/`
 (run `npm run dev` inside the container; port 5173 is auto-forwarded).
 
 - `node_modules` is bind-mounted, so it also physically exists on the host. This is required for the host editor (tsserver) to resolve type declarations like `@types/react` (isolating it in a named volume causes ts(2307)/ts(2875)/ts(7026) in the editor)
@@ -26,7 +26,7 @@ With VS Code or any devcontainer-capable editor you can also open the repo via "
 - The container is Linux, so native binaries in node_modules (esbuild etc.) are Linux builds. The host uses node_modules only for type resolution; build and test in the container
 - Scratch work (notes, experiment scripts, temporary output) goes in `tmp/` or `scratch/` — both are gitignored, so nothing there ever needs to be committed or cleaned out of a diff
 - **Policy: do not add dependencies** (npm supply-chain protection). When one must be added, pin the version exactly (`--save-exact`) and record the rationale in docs/tech-selection.md
-- **Policy: never commit secrets** — API keys, access tokens, private keys, passwords, `.env` contents, personal email addresses. Identifiers the site already serves to every visitor are *not* secrets (the GA4 measurement ID, the Search Console verification meta tag, the public Google Form URL). Force-push is denied here, so pushed history cannot be scrubbed: if a secret reaches the remote, rotate/invalidate the credential immediately and remove it with a follow-up commit. The pre-commit check lives in the `commit` skill
+- **Policy: never commit secrets** — API keys, access tokens, private keys, passwords, `.env` contents, personal email addresses. Identifiers the site already serves to every visitor are *not* secrets (the GA4 measurement ID, the Search Console verification meta tag, the public Google Form URL). Force-push is denied here, so pushed history cannot be scrubbed: if a secret reaches the remote, rotate/invalidate the credential immediately and remove it with a follow-up commit. The pre-commit check lives in the shared `verify-changes` skill
 
 ## Architecture
 
@@ -96,10 +96,19 @@ See `.claude/skills/add-distribution/SKILL.md` for the procedure (summary below)
 
 ## Shared Claude Code and Codex configuration
 
-- Edit the Claude-side files; Codex shares them through relative symlinks:
-  - `AGENTS.md` → `CLAUDE.md`
-  - `.agents/skills` → `.claude/skills`
-  - `.codex/hooks` → `.claude/hooks`
-- Register Codex hooks in `.codex/hooks.json`. Trust the repository, then review and approve hooks with `/hooks` in the CLI. Repeat after changing a registered command ([instructions](https://learn.chatgpt.com/docs/hooks)).
+- Run `make setup` to install [agent-plugins](https://github.com/shin4488/agent-plugins) for the current user in each installed Claude/Codex CLI. Missing CLIs are skipped.
+- Use the plugin's shared Git, PR, release, and verification skills. Keep distribution-specific skills in `.claude/skills`.
+- Edit local instructions and skills on the Claude side: `AGENTS.md` → `CLAUDE.md` and `.agents/skills` → `.claude/skills` are relative symlinks.
+- The plugin calls `.claude/hooks/post-edit.sh` after edits. This repository runs Biome through Docker, so it replaces the plugin's host-side checks. Do not register the same edit hook locally.
+- Reload the tools after installation. Trust the repository and review/approve hooks with `/hooks` in Codex ([instructions](https://learn.chatgpt.com/docs/hooks)).
 - Claude's `permissions` settings do not carry over to Codex.
 - Hooks require Bash, jq, and realpath on the host. Biome uses the current Compose project's container and its installed dependencies.
+
+## Git and release workflow
+
+- Use a topic branch based on the latest `origin/main`; all changes reach `main` through a PR.
+- Use English Conventional Commits and a GitHub noreply author address. AI-created commits need a `Co-Authored-By` trailer identifying the AI that actually did the work.
+- Before committing, run the container lint, typecheck, and tests shown above. Existing results can be reused for the same changes and verification conditions.
+- Never force-push, including `--force-with-lease`. Use follow-up commits for published changes.
+- After a merge, confirm the relevant CI and GitHub Pages deployment for that commit. For user-visible changes, check the affected behavior or assets at [the published site](https://shin4488.github.io/probability-distribution-visualization/).
+- When a clean dependency installation needs verification, run it in an isolated container/worktree rather than replacing `node_modules` under a running development server.
