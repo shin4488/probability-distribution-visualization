@@ -2,9 +2,8 @@
 # Claude / Codex 共通。npm は必ず現在の Compose プロジェクト内で実行する。
 # node_modulesはLinux用なのでホストでは実行しない。編集ファイルのパスをコンテナ内へ直す。
 project_dir=$PWD
-files=("$@")
 biome_files=()
-for file in "${files[@]}"; do
+for file; do
   case "$file" in
     *.ts | *.tsx | *.js | *.jsx | *.json | *.jsonc | *.css | *.html)
       biome_files+=("/app/${file#"$project_dir"/}") ;;
@@ -12,7 +11,6 @@ for file in "${files[@]}"; do
 done
 [ "${#biome_files[@]}" -gt 0 ] || exit 0
 
-cd "$project_dir" || exit 2
 docker info >/dev/null 2>&1 || exit 0
 
 # 固定名だと別 clone のファイルを整形する恐れがある。未作成なら compose run を使う。
