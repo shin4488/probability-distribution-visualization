@@ -22,7 +22,7 @@ procedures (`commit`, `spec-sync`, `add-distribution`); this one covers the judg
 ## 2. Dependencies are a liability (supply-chain first)
 
 - Every dependency is an attack surface. Before adding one: can a few dozen lines of
-  hand-rolled code do the job? (This repo hand-rolls i18n, drag-and-drop, URL sync, and
+  hand-rolled code do the job? (This repository hand-rolls i18n, drag-and-drop, URL sync, and
   samplers for exactly this reason.)
 - If a dependency is justified: compare multiple candidates, record the rationale in
   `docs/tech-selection.md`, install with `--save-exact`, and prefer tools with zero
@@ -72,7 +72,7 @@ procedures (`commit`, `spec-sync`, `add-distribution`); this one covers the judg
 ## 6. Fix root causes; never suppress
 
 When a tool complains or a behavior is wrong, find the mechanism before choosing the fix.
-Precedents from this repo:
+Precedents from this repository:
 
 | Symptom | Wrong fix | Actual fix |
 |---|---|---|

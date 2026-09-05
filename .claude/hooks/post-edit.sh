@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # Claude / Codex 共通。npm は必ず現在の Compose プロジェクト内で実行する。
-source "$(dirname "$0")/edited-files.sh"
+# node_modulesはLinux用なのでホストでは実行しない。編集ファイルのパスをコンテナ内へ直す。
+project_dir=$PWD
+files=("$@")
 biome_files=()
 for file in "${files[@]}"; do
   case "$file" in
