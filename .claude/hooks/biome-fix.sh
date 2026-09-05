@@ -29,15 +29,19 @@ case "$rel_path" in
   *) exit 0 ;;
 esac
 
-container="probability-distribution-visualization-app-1"
-if docker ps --format '{{.Names}}' | grep -qx "$container"; then
-  runner="docker exec $container"
-else
-  cd "$repo_root"
-  runner="docker compose run --rm --no-deps app"
-fi
+cd "$repo_root"
+docker info >/dev/null 2>&1 || exit 0
+
+# 固定のコンテナ名だと、別の clone / worktree のファイルを整形してしまう。
+# 現在の Compose プロジェクトに属する実行中の app だけを再利用する。
+# Compose の旧版はコンテナ未作成時にも非ゼロを返す。その場合は run に進む。
+container="$(docker compose ps --status running -q app 2>/dev/null || true)"
 
 # --write: 安全な自動修正+フォーマットを適用。
-# 自動修正できないlintエラーが残っていても編集をブロックしない(|| true)。
-# 残りはCI(npm run lint)とエディタが検出する
-$runner npx biome check --write "/app/$rel_path" >/dev/null 2>&1 || true
+# 自動修正できない指摘はコンテキストとして返し、編集はブロックしない。
+if [ -n "$container" ]; then
+  output=$(docker exec "$container" npx --no-install biome check --write "/app/$rel_path" 2>&1) && exit 0
+else
+  output=$(docker compose run --rm --no-deps app npx --no-install biome check --write "/app/$rel_path" 2>&1) && exit 0
+fi
+jq -n --arg ctx "$output" '{hookSpecificOutput: {hookEventName: "PostToolUse", additionalContext: $ctx}}'

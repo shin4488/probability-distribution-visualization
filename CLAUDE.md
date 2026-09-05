@@ -93,3 +93,9 @@ See `.claude/skills/add-distribution/SKILL.md` for the procedure (summary below)
 
 - Reordering uses the HTML5 Drag and Drop API, so it does not work on touch devices (everything else does)
 - Vite is kept at v6 for compatibility with Node 20.18 on the host. Check the Node requirement before upgrading
+
+## Claude Code と Codex の共通設定
+
+`AGENTS.md` は `CLAUDE.md`、`.agents/skills` は `.claude/skills`、`.codex/hooks` は `.claude/hooks` への相対シンボリックリンク。共通の指示・skill・hook は Claude 側の実体を編集する。
+
+Codex のフック登録は `.codex/hooks.json`、有効化は `.codex/config.toml` で管理する。初回の信頼設定、依存ツール、動作確認は [.claude/hooks/README.md](.claude/hooks/README.md) を参照。Claude の `permissions` 設定は Codex には引き継がれない。
