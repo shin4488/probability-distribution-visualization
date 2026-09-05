@@ -98,6 +98,6 @@ See `.claude/skills/add-distribution/SKILL.md` for the procedure (summary below)
 
 `AGENTS.md` links to `CLAUDE.md`, `.agents/skills` to `.claude/skills`, and `.codex/hooks` to `.claude/hooks`. Edit the Claude-side originals to update the shared instructions, skills, and hooks.
 
-Codex hook registration lives in `.codex/hooks.json` and is enabled by `.codex/config.toml`. Trust this repository, then review and trust its definitions with `/hooks` in the CLI; review again after changing a registered command. See the [official hook documentation](https://learn.chatgpt.com/docs/hooks). Claude's `permissions` settings do not carry over to Codex.
+Codex loads its hooks from `.codex/hooks.json`. Trust this repository, then review and trust its definitions with `/hooks` in the CLI; review again after changing a registered command. See the [official hook documentation](https://learn.chatgpt.com/docs/hooks). Claude's `permissions` settings do not carry over to Codex.
 
 The shared shell hooks require Bash, jq, and realpath on the host. Biome runs inside the current Compose project's container, using the dependencies installed there.

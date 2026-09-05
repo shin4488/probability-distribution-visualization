@@ -1,3 +1,0 @@
-# Enable hooks; trust the project and review definitions with /hooks first.
-[features]
-hooks = true
