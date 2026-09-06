@@ -87,8 +87,9 @@ Implemented without external libraries (each fits in a few dozen lines, not wort
 
 ## Configuration boundaries
 
-Browser code and build configuration require different globals. [tsconfig.json](../tsconfig.json) references separate app and Node projects so one typecheck covers both without leaking DOM types into the Vite config or Node globals into the app. TypeScript validates types without emitting JavaScript; Vite handles transpilation.
-
-[vite.config.ts](../vite.config.ts) is shared by the dev server, production build, and Vitest. Docker development needs the server reachable from outside its container; project-page deployment needs relative asset paths. Domain/state tests use a Node environment because they do not need a DOM. Keep current settings in the config itself.
-
-[.claude/launch.json](../.claude/launch.json) describes the Docker preview server for Claude Code, not Vite or TypeScript. It must remain strict JSON, so its rationale belongs here rather than in comments inside that file. Other configuration rationale should stay beside the relevant setting when comments are supported.
+- **Type boundaries:** Browser code and build configuration require different globals. [tsconfig.json](../tsconfig.json) references separate app and Node projects so one typecheck covers both without leaking DOM types into the Vite config or Node globals into the app.
+- **Build:** TypeScript validates types without emitting JavaScript; Vite handles transpilation.
+- **Vite configuration:** [vite.config.ts](../vite.config.ts) is shared by the dev server, production build, and Vitest. Docker development needs the server reachable from outside its container; project-page deployment needs relative asset paths.
+- **Test environment:** Domain/state tests use a Node environment because they do not need a DOM.
+- **Preview setup:** [.claude/launch.json](../.claude/launch.json) describes the Docker preview server for Claude Code, not Vite or TypeScript. It must remain strict JSON, so its rationale belongs here rather than in comments inside that file.
+- **Configuration maintenance:** Keep current settings in the config itself. Other configuration rationale should stay beside the relevant setting when comments are supported.

@@ -35,9 +35,12 @@ All npm commands, including installation and formatting, run inside the containe
 
 ### Agent setup
 
-Run `make setup` to install [agent-plugins](https://github.com/shin4488/agent-plugins) for the current user in each installed Claude/Codex CLI; missing CLIs are skipped. Reload the tools afterward. Trust the repository and review/approve hooks using Codex `/hooks`; review again when registered commands change. Claude permissions do not carry over to Codex.
-
-Hooks need Bash, jq, and realpath on the host. The shared plugin calls `.claude/hooks/post-edit.sh`, which runs Biome in the current Compose project's container with its installed dependencies, replacing host-side checks. Do not duplicate the edit hook in local registrations. Edit local skills under `.claude/skills`; `.agents/skills` links there.
+- **Install:** Run `make setup` to install [agent-plugins](https://github.com/shin4488/agent-plugins) for the current user in each installed Claude/Codex CLI; missing CLIs are skipped. Reload the tools afterward.
+- **Approve hooks:** Trust the repository and review/approve hooks using Codex `/hooks`; review again when registered commands change. Claude permissions do not carry over to Codex.
+- **Host requirements:** Hooks need Bash, jq, and realpath on the host.
+- **Edit checks:** The shared plugin calls `.claude/hooks/post-edit.sh`, which runs Biome in the current Compose project's container with its installed dependencies, replacing host-side checks.
+- **Hook registration:** Do not duplicate the edit hook in local registrations.
+- **Local skills:** Edit local skills under `.claude/skills`; `.agents/skills` links there.
 
 ## Deployment
 
