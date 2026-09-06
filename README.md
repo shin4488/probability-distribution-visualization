@@ -31,6 +31,17 @@ docker compose run --rm app npm run lint
 docker compose run --rm app npm run build
 ```
 
+All npm commands, including installation and formatting, run inside the container. The bind-mounted `node_modules` lets the host editor resolve types, but its native binaries are Linux builds and must not be executed on the host. Use `docker compose run --rm app npm run lint:fix` for Biome fixes. Add dependencies only when justified, with `docker compose run --rm app npm install --save-exact <pkg>`, and record the rationale in the technology record.
+
+### Agent setup
+
+- **Install:** Run `make setup` to install [agent-plugins](https://github.com/shin4488/agent-plugins) for the current user in each installed Claude/Codex CLI; missing CLIs are skipped. Reload the tools afterward.
+- **Approve hooks:** Trust the repository and review/approve hooks using Codex `/hooks`; review again when registered commands change. Claude permissions do not carry over to Codex.
+- **Host requirements:** Hooks need Bash, jq, and realpath on the host.
+- **Edit checks:** The shared plugin calls `.claude/hooks/post-edit.sh`, which runs Biome in the current Compose project's container with its installed dependencies, replacing host-side checks.
+- **Hook registration:** Do not duplicate the edit hook in local registrations.
+- **Local skills:** Edit local skills under `.claude/skills`; `.agents/skills` links there.
+
 ## Deployment
 
 Pushing to the `main` branch triggers GitHub Actions to run the tests, build the site, and deploy it to GitHub Pages.
