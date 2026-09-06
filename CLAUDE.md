@@ -14,6 +14,7 @@ docker compose run --rm app npm run lint
 docker compose run --rm app npm run build
 ```
 
+- To fix lint/format findings, run `docker compose run --rm app npm run lint:fix`, then rerun the affected checks. Keep routine development and required verification commands here, even when detailed procedures live elsewhere.
 - **Do not add dependencies** unless justified. Pin additions exactly using `docker compose run --rm app npm install --save-exact <pkg>` and record the reason in `docs/tech-selection.md`. Runtime versions and scripts come from the Docker/package definitions; check compatibility when upgrading.
 - Scratch notes/scripts/output belong in ignored `tmp/` or `scratch/`. Verify clean installs in an isolated container/worktree, without replacing dependencies beneath a running server.
 - **Never commit secrets or personal email addresses.** Public site identifiers (GA measurement ID, verification meta tag, public form URL) are not secrets. Use `verify-changes` for pre-commit checks. If a credential reaches the remote, rotate/invalidate it and remove it in a follow-up commit; never rewrite published history.
