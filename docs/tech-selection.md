@@ -25,7 +25,7 @@
 | Plain TS + Vite | Minimal dependencies, but hand-writing state synchronization for 8 cards (URL, theme, language, ordering) is not worth the cost and maintenance burden |
 
 Build tool: **Vite** (the de-facto standard; devDependency only, never ships at runtime).
-Pinned to Vite 6 so it runs on both Node 20.18 (local host) and Node 22 (container).
+The supported runtime and dependency versions are defined by [docker-compose.yml](../docker-compose.yml) and [package.json](../package.json). Check their compatibility when upgrading; development commands run in Docker.
 
 ## Charting library (requirement: evaluate multiple candidates and record the rationale)
 
@@ -63,7 +63,7 @@ The remaining [src/styles.css](../src/styles.css) contains only design tokens (c
 | ESLint + Prettier | The de-facto standard with the largest body of documentation, but typescript-eslint, assorted plugins, and Prettier add **dozens of packages**, plus multiple config files |
 | oxlint | Fast, but lint-only (a separate formatter is needed) and its rule set is less mature than Biome's |
 
-Configuration lives in [biome.json](../biome.json). `npm run lint` (check) / `npm run lint:fix` (auto-fix) / `npm run format` (format). CI runs `lint` as well.
+Configuration lives in [biome.json](../biome.json). `npm run lint` (check) / `npm run lint:fix` (auto-fix) / `npm run format` (format). CI uses the warning-failing `lint:ci` script; see [package.json](../package.json) and the workflows for the exact checks.
 
 ## Pinning GitHub Actions to commit hashes
 
@@ -84,3 +84,11 @@ Implemented without external libraries (each fits in a few dozen lines, not wort
 
 - HTML5 drag-and-drop does not work on touch devices (no reordering on touch; browsing and parameter controls are unaffected)
 - The RNG is not cryptographic quality (fine for visualization; a fixed seed prioritizes reproducibility)
+
+## Configuration boundaries
+
+Browser code and build configuration require different globals. [tsconfig.json](../tsconfig.json) references separate app and Node projects so one typecheck covers both without leaking DOM types into the Vite config or Node globals into the app. TypeScript validates types without emitting JavaScript; Vite handles transpilation.
+
+[vite.config.ts](../vite.config.ts) is shared by the dev server, production build, and Vitest. Docker development needs the server reachable from outside its container; project-page deployment needs relative asset paths. Domain/state tests use a Node environment because they do not need a DOM. Keep current settings in the config itself.
+
+[.claude/launch.json](../.claude/launch.json) describes the Docker preview server for Claude Code, not Vite or TypeScript. It must remain strict JSON, so its rationale belongs here rather than in comments inside that file. Other configuration rationale should stay beside the relevant setting when comments are supported.

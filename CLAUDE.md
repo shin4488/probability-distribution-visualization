@@ -1,114 +1,46 @@
-# CLAUDE.md
+# Development guide
 
-An SPA that visualizes probability distributions interactively. Ten distributions, each with parameter sliders driving real-time rendering of the PDF/PMF plus a sample histogram. Japanese/English, dark mode, and shareable-URL support.
+A React/TypeScript SPA for interactive probability distributions, with Japanese/English, themes, and URL sharing. Requirements: [docs/specification.md](docs/specification.md); design rationale: [docs/tech-selection.md](docs/tech-selection.md); improvement candidates: [docs/improvement-backlog.md](docs/improvement-backlog.md). Read the sections relevant to the change.
 
-The source of truth for requirements is [docs/specification.md](docs/specification.md); the rationale for technology choices is in [docs/tech-selection.md](docs/tech-selection.md); improvement ideas awaiting work are in [docs/improvement-backlog.md](docs/improvement-backlog.md).
-Before designing or implementing anything non-trivial, read
-[.claude/skills/design-principles/SKILL.md](.claude/skills/design-principles/SKILL.md) —
-the decision-making principles this repository is built on.
+## Environment and verification
 
-## Development environment (Docker only — no Node.js needed on the host)
+- **Run all npm commands, including installation, inside Docker.** Host `node_modules` is for editor type resolution only; its native binaries are Linux builds. Setup details: [README Development](README.md#development).
+- Development: `docker compose up`. Checks:
 
 ```bash
-docker compose up                          # dev server at http://localhost:5173
-docker compose run --rm app npm test       # tests (vitest)
+docker compose run --rm app npm test
 docker compose run --rm app npm run typecheck
-docker compose run --rm app npm run lint   # Biome (check only)
-docker compose run --rm app npm run lint:fix  # Biome (auto-fix)
-docker compose run --rm app npm run build  # production build → dist/
+docker compose run --rm app npm run lint
+docker compose run --rm app npm run build
 ```
 
-With VS Code or any devcontainer-capable editor you can also open the repository via "Reopen in Container" from `.devcontainer/`
-(run `npm run dev` inside the container; port 5173 is auto-forwarded).
+- **Do not add dependencies** unless justified. Pin additions exactly using `docker compose run --rm app npm install --save-exact <pkg>` and record the reason in `docs/tech-selection.md`. Runtime versions and scripts come from the Docker/package definitions; check compatibility when upgrading.
+- Scratch notes/scripts/output belong in ignored `tmp/` or `scratch/`. Verify clean installs in an isolated container/worktree, without replacing dependencies beneath a running server.
+- **Never commit secrets or personal email addresses.** Public site identifiers (GA measurement ID, verification meta tag, public form URL) are not secrets. Use `verify-changes` for pre-commit checks. If a credential reaches the remote, rotate/invalidate it and remove it in a follow-up commit; never rewrite published history.
 
-- `node_modules` is bind-mounted, so it also physically exists on the host. This is required for the host editor (tsserver) to resolve type declarations like `@types/react` (isolating it in a named volume causes ts(2307)/ts(2875)/ts(7026) in the editor)
-- However, **all npm commands (including install) must run inside the container**: `docker compose run --rm app npm install --save-exact <pkg>`. Never run npm on the host
-- The container is Linux, so native binaries in node_modules (esbuild etc.) are Linux builds. The host uses node_modules only for type resolution; build and test in the container
-- Scratch work (notes, experiment scripts, temporary output) goes in `tmp/` or `scratch/` — both are gitignored, so nothing there ever needs to be committed or cleaned out of a diff
-- **Policy: do not add dependencies** (npm supply-chain protection). When one must be added, pin the version exactly (`--save-exact`) and record the rationale in docs/tech-selection.md
-- **Policy: never commit secrets** — API keys, access tokens, private keys, passwords, `.env` contents, personal email addresses. Identifiers the site already serves to every visitor are *not* secrets (the GA4 measurement ID, the Search Console verification meta tag, the public Google Form URL). Force-push is denied here, so pushed history cannot be scrubbed: if a secret reaches the remote, rotate/invalidate the credential immediately and remove it with a follow-up commit. The pre-commit check lives in the shared `verify-changes` skill
+## Architecture and required design constraints
 
-## Architecture
+- Keep `src/domain/` pure TypeScript, independent of React/Chart.js. Start at `types.ts` and `distributions/index.ts` for definitions/registration, `math.ts` for numerical utilities, and `random.ts` / `sampling.ts` for samples and series. Keep prerequisite distributions before dependents and closely related ones adjacent.
+- Before changes involving UI, interaction, or architecture decisions, follow [.claude/skills/design-principles/SKILL.md](.claude/skills/design-principles/SKILL.md). When adding a distribution, follow [.claude/skills/add-distribution/SKILL.md](.claude/skills/add-distribution/SKILL.md), including translations and verification.
+- Calculate overflow-prone probability expressions in log space. Keep histogram seeds fixed while parameters change; only Resample changes the seed, which is not shared in the URL.
+- All shareable state belongs in `src/state/urlCodec.ts` and is continuously synced via `replaceState`. Omit defaults and fall back for invalid values. Sharing uses the address bar; do not add a share button. State transitions belong in `src/state/appState.ts`.
+- Theme/language precedence is URL > localStorage > OS/browser. Preserve the pre-paint script in `index.html`. `src/i18n/ja.ts` defines the keys; English must satisfy the same set.
+- Use Tailwind utilities for layout/components; `src/styles.css` holds tokens and dark-theme overrides, including chart colors. Do not add bespoke CSS classes. Restrict Tailwind scanning to `src/` and `index.html`, excluding docs.
+- Register only needed Chart.js components and update charts with `update('none')`, without destroy/recreate on slider changes. For configuration changes and trade-offs, read [technical rationale](docs/tech-selection.md#configuration-boundaries).
 
-Layers depend strictly upward. The domain layer knows nothing about React or Chart.js.
+## Git, deployment, and shared tooling
 
-```
-src/domain/     math, RNG, distribution definitions (pure TS, UI-agnostic → tested with vitest)
-  types.ts        the DistributionDef interface (the abstraction for a distribution)
-  math.ts         log-space utilities such as lnGamma
-  random.ts       seedable PRNG (mulberry32) and samplers
-  sampling.ts     histogram binning and PDF/PMF point-series generation
-  distributions/  one file per distribution. DISTRIBUTIONS in index.ts is the display-order registry
-                  (order = the order statistics is learned: prerequisites first, closely
-                  related distributions adjacent. See the comment in index.ts)
-src/i18n/       ja.ts is the source of truth for all keys; en.ts is forced to the same key set via satisfies
-src/state/      appState.ts (reducer) and urlCodec.ts (URL ⇔ state conversion)
-src/components/ React + Chart.js, styled with Tailwind utility classes (shared button
-                class strings live in components/ui.ts). Chart colors are read from CSS variables
-src/styles.css  design tokens only (Tailwind @theme + dark-theme variable overrides +
-                chart colors). No layout/component CSS — write Tailwind utilities instead
-```
+- Work from the latest `origin/main` on a topic branch and submit a PR. Use English Conventional Commits, a GitHub noreply author address, and an accurate AI `Co-Authored-By` trailer.
+- Before committing, run container lint, typecheck, and tests. CI also requires a build and rejects lint warnings via `lint:ci`; exact jobs/triggers are in `.github/workflows/`. Never force-push, including `--force-with-lease`.
+- A push to main deploys GitHub Pages. **Keep asset paths relative (`base: './'`); never use absolute `/...` asset paths.** Pin workflow actions to commit hashes; use the update procedure in `.github/workflows/deploy.yml`.
+- After merge, confirm CI and Pages deployment for the commit; verify user-visible changes at [the published site](https://shin4488.github.io/probability-distribution-visualization/). Deployment setup is in [README](README.md#deployment).
+- Shared skills live in the plugin; local skills are edited under `.claude/skills` (`.agents/skills` is its relative symlink). Select the relevant skills without duplicating their procedures.
+- The plugin invokes `.claude/hooks/post-edit.sh` for Docker Biome checks, replacing host checks. Do not register the same edit hook locally. Claude permissions do not carry over to Codex. Installation and hook approval: [README](README.md#agent-setup).
 
-### Design decisions to keep in mind
+## Focused reading and maintenance
 
-- **Probability math happens in log space**: binomial coefficients and Γ(x) overflow double precision, so write `exp(lnΓ(...) + ...)` (see the comments in math.ts)
-- **The histogram seed is fixed**: if samples changed every frame while dragging a slider, the shape change would be unreadable. Only the "Resample" button updates the seed. The seed is not put in the URL (what you share is the parameters, not the samples)
-- **The URL is the entirety of shareable state**: parameters, ordering, hidden cards, histogram on/off and sample size, language, and theme all live in the query string, continuously synced to the address bar via replaceState. There is deliberately no share button (per the spec — share by copying from the URL bar). Default values are omitted (see the format comment in urlCodec.ts). Invalid values silently fall back to defaults
-- **Theme/language precedence**: URL > localStorage > OS/browser settings. The inline script in index.html prevents a flash before first paint
-- **Styling is Tailwind-first**: do not add hand-written CSS classes (a spec requirement). Theme switching works by overriding the token variables under `:root[data-theme='dark']` in styles.css, which flips every utility and chart color at once. Tailwind's content scanning is explicitly restricted to `src/` and `index.html` via `@source` in styles.css — docs are not scanned, so class names merely mentioned in Markdown don't leak into the production CSS
-- **Chart.js registers only the components in use** (components/chartTheme.ts). Charts are updated with `update('none')` rather than destroy/recreate (for slider responsiveness)
-
-## Configuration files
-
-Who reads each file and why it exists. Files that allow comments also carry this explanation inline; `.claude/launch.json` is strict JSON (comments would break parsing), so it is documented only here.
-
-| File | Read by | Purpose / why it exists |
-|---|---|---|
-| `.claude/launch.json` | Claude Code (browser preview) | Tells Claude Code how to start this project's dev server when it verifies changes in a browser: the `dev` configuration runs `docker compose up` and watches port 5173. Without it, Claude cannot launch/reuse the dev server for previews. Not read by Vite, tsc, or the app. Must stay strict JSON — no comments |
-| `tsconfig.json` | `tsc -b`, editors | Solution-style root with no sources of its own; it only references the two sub-projects below so one `tsc -b` (used by `npm run typecheck` and `npm run build`) checks everything. Split projects are needed because browser code and Node code have different globals |
-| `tsconfig.app.json` | `tsc -b`, editors (tsserver) | Type-checks the browser app (`src/`): DOM lib, `jsx: react-jsx`, `moduleResolution: bundler` to match Vite. `noEmit` — Vite's esbuild does the transpiling; tsc only validates types |
-| `tsconfig.node.json` | `tsc -b`, editors (tsserver) | Type-checks `vite.config.ts`, which runs in Node, not the browser — so no DOM lib. Keeping it separate prevents browser types leaking into config code and vice versa |
-| `vite.config.ts` | Vite dev server, Vite build, Vitest | One file shared by three consumers: `npm run dev` (dev server; `server.host: true` binds 0.0.0.0 so the Docker container is reachable from the host), `npm run build` (`base: './'` for GitHub Pages subpath serving), and `npm test` (the `test` block; node environment since domain/state tests need no DOM) |
-
-Other config files document themselves with inline comments: `docker-compose.yml` (dev environment), `biome.json` (lint/format; see also docs/tech-selection.md), `.devcontainer/devcontainer.json` (editor-in-container), `.github/workflows/deploy.yml` (CI/CD and hash pinning).
-
-## Adding a distribution
-
-See `.claude/skills/add-distribution/SKILL.md` for the procedure (summary below):
-
-1. Implement `DistributionDef` in `src/domain/distributions/<id>.ts` (use an existing file as the template)
-2. Add the id to `DistributionId` in `types.ts` and register it in `DISTRIBUTIONS` in `distributions/index.ts` at its learning-order position (after its prerequisites, near strongly related distributions)
-3. Add `dist.<id>.name / tagline / param.<key> / usecase` to both `i18n/ja.ts` and `en.ts` (the usecase text must contain parameter-value placeholders — a spec requirement)
-4. Run the tests (the sum-of-density ≈ 1 and sampler-convergence tests automatically sweep the whole registry, so new tests are only needed for spot checks against known values)
-
-## Deployment
-
-- `.github/workflows/ci.yml` runs lint (warnings fail via `lint:ci`) → typecheck → test → build on every pull request and on pushes to non-main branches, so breakage shows up as PR status checks
-- GitHub Pages (project page). A push to main runs `.github/workflows/deploy.yml`: the same checks → build → deploy
-- **Workflow actions are pinned to commit hashes** (protection against tag-repointing supply-chain attacks). See the comment at the top of deploy.yml for the update procedure
-- `base: './'` in `vite.config.ts` (relative paths) makes the build work under a subpath. **Never reference assets with absolute `/...` paths**
-- One-time setup: repository Settings → Pages → Source must be set to "GitHub Actions"
-
-## Known limitations
-
-- Reordering uses the HTML5 Drag and Drop API, so it does not work on touch devices (everything else does)
-- Vite is kept at v6 for compatibility with Node 20.18 on the host. Check the Node requirement before upgrading
-
-## Shared Claude Code and Codex configuration
-
-- Run `make setup` to install [agent-plugins](https://github.com/shin4488/agent-plugins) for the current user in each installed Claude/Codex CLI. Missing CLIs are skipped.
-- Use the plugin's shared Git, PR, release, and verification skills. Keep distribution-specific skills in `.claude/skills`.
-- Edit local instructions and skills on the Claude side: `AGENTS.md` → `CLAUDE.md` and `.agents/skills` → `.claude/skills` are relative symlinks.
-- The plugin calls `.claude/hooks/post-edit.sh` after edits. This repository runs Biome through Docker, so it replaces the plugin's host-side checks. Do not register the same edit hook locally.
-- Reload the tools after installation. Trust the repository and review/approve hooks with `/hooks` in Codex ([instructions](https://learn.chatgpt.com/docs/hooks)).
-- Claude's `permissions` settings do not carry over to Codex.
-- Hooks require Bash, jq, and realpath on the host. Biome uses the current Compose project's container and its installed dependencies.
-
-## Git and release workflow
-
-- Use a topic branch based on the latest `origin/main`; all changes reach `main` through a PR.
-- Use English Conventional Commits and a GitHub noreply author address. AI-created commits need a `Co-Authored-By` trailer identifying the AI that actually did the work.
-- Before committing, run the container lint, typecheck, and tests shown above. Existing results can be reused for the same changes and verification conditions.
-- Never force-push, including `--force-with-lease`. Use follow-up commits for published changes.
-- After a merge, confirm the relevant CI and GitHub Pages deployment for that commit. For user-visible changes, check the affected behavior or assets at [the published site](https://shin4488.github.io/probability-distribution-visualization/).
-- When a clean dependency installation needs verification, run it in an isolated container/worktree rather than replacing `node_modules` under a running development server.
+- `AGENTS.md` links to `CLAUDE.md`; read the shared text once and edit the original.
+- Scope `rg` to relevant directories and names/headings/symbols. Use `-g` to omit dependencies, build output, logs, lockfiles, and generated code; read them directly for dependency, generation, type, or failure investigations. Widen paths or relax exclusions when needed.
+- Run required checks, report failures/key results, and reuse results only with the same diff, dependencies, configuration, and execution conditions.
+- Keep lasting rules, required conditions, key commands, and references here. Progress belongs in the task or existing issues/PRs; inventories and current values belong in their original definitions. Update this guide for changed rules/conditions, moved references, or newly essential guidance.
+- Choose skills by their descriptions and follow the relevant `SKILL.md`. Preserve mandatory skill conditions here without copying catalogs or procedures.
