@@ -1,11 +1,11 @@
 ---
 name: add-distribution
-description: Procedure for adding a new probability distribution to this project. Use when the user asks to "add the ~ distribution".
+description: Add a probability distribution, its registry entry, translations, and verification.
 ---
 
 # Adding a new probability distribution
 
-In this project one distribution = one file, and no UI code changes are needed. The whole task is these 4 steps.
+Each distribution lives in one domain file and uses the shared UI.
 
 ## 1. Write the domain definition
 
@@ -53,6 +53,6 @@ The existing tests automatically sweep the whole registry:
 - sum/integral of the density ≈ 1 (math.test.ts)
 - sample mean/variance of the sampler converges to theory (random.test.ts)
 
-The only tests you should add are 1–2 spot checks against known values (e.g. `P(X=2) = 0.375`).
+Add spot checks against independently known values (e.g. `P(X=2) = 0.375`) and any boundaries the registry-wide tests do not cover. Avoid duplicating those sweeps.
 
-Finally run `docker compose up` and visually check the new card's chart, histogram, use-case text, and URL sharing (`?<id>=...`).
+Also run the required lint and build checks from the root guide. Then run `docker compose up` and visually check the new card's chart, histogram, use-case text, and URL sharing (`?<id>=...`).
