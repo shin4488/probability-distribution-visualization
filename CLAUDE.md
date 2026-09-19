@@ -1,47 +1,45 @@
 # Development guide
 
-A React/TypeScript SPA for interactive probability distributions, with Japanese/English, themes, and URL sharing. Requirements: [docs/specification.md](docs/specification.md); design rationale: [docs/tech-selection.md](docs/tech-selection.md); improvement candidates: [docs/improvement-backlog.md](docs/improvement-backlog.md). Read the sections relevant to the change.
+React/TypeScript probability visualizations with Japanese/English UI and URL sharing. Read relevant sections of [requirements](docs/specification.md), [technical rationale](docs/tech-selection.md), or the [improvement backlog](docs/improvement-backlog.md) as needed.
 
-## Environment and verification
+## Environment and checks
 
-- **Run all npm commands, including installation, inside Docker.** Host `node_modules` is for editor type resolution only; its native binaries are Linux builds. Setup details: [README Development](README.md#development).
-- Development: `docker compose up`. Checks:
+- Run all npm commands, including installation, inside Docker. Host `node_modules` provides editor types but contains Linux binaries. Start with `docker compose up`; see [local development](README.md#local-development).
+- For code, dependency, or build/test configuration changes, run the following before committing. CI treats lint warnings as failures; fix remaining findings with `npm run lint:fix` inside the container and rerun affected checks.
 
 ```bash
-docker compose run --rm app npm test
+docker compose run --rm app npm run lint:ci
 docker compose run --rm app npm run typecheck
-docker compose run --rm app npm run lint
+docker compose run --rm app npm test
 docker compose run --rm app npm run build
 ```
 
-- To fix lint/format findings, run `docker compose run --rm app npm run lint:fix`, then rerun the affected checks. Keep routine development and required verification commands here, even when detailed procedures live elsewhere.
-- **Do not add dependencies** unless justified. Pin additions exactly using `docker compose run --rm app npm install --save-exact <pkg>` and record the reason in `docs/tech-selection.md`. Runtime versions and scripts come from the Docker/package definitions; check compatibility when upgrading.
-- Scratch notes/scripts/output belong in ignored `tmp/` or `scratch/`. Verify clean installs in an isolated container/worktree, without replacing dependencies beneath a running server.
-- **Never commit secrets or personal email addresses.** Public site identifiers (GA measurement ID, verification meta tag, public form URL) are not secrets. Use `verify-changes` for pre-commit checks. If a credential reaches the remote, rotate/invalidate it and remove it in a follow-up commit; never rewrite published history.
+- For documentation/skill-only changes, check instructions, links, and metadata. Run application checks if runtime behavior is affected.
+- Justify new dependencies in `docs/tech-selection.md` and pin them with `docker compose run --rm app npm install --save-exact <pkg>`. Runtime versions and scripts come from Docker/package definitions.
+- Put scratch output in ignored `tmp/` or `scratch/`. Use an isolated container/worktree for clean-install checks; preserve dependencies used by running servers.
 
-## Architecture and required design constraints
+## Design constraints and references
 
-- Keep `src/domain/` pure TypeScript, independent of React/Chart.js. Start at `types.ts` and `distributions/index.ts` for definitions/registration, `math.ts` for numerical utilities, and `random.ts` / `sampling.ts` for samples and series. Keep prerequisite distributions before dependents and closely related ones adjacent.
-- Before changes involving UI, interaction, or architecture decisions, follow [.claude/skills/design-principles/SKILL.md](.claude/skills/design-principles/SKILL.md). When adding a distribution, follow [.claude/skills/add-distribution/SKILL.md](.claude/skills/add-distribution/SKILL.md), including translations and verification.
-- Calculate overflow-prone probability expressions in log space. Keep histogram seeds fixed while parameters change; only Resample changes the seed, which is not shared in the URL.
-- All shareable state belongs in `src/state/urlCodec.ts` and is continuously synced via `replaceState`. Omit defaults and fall back for invalid values. Sharing uses the address bar; do not add a share button. State transitions belong in `src/state/appState.ts`.
-- Theme/language precedence is URL > localStorage > OS/browser. Preserve the pre-paint script in `index.html`. `src/i18n/ja.ts` defines the keys; English must satisfy the same set.
-- Use Tailwind utilities for layout/components; `src/styles.css` holds tokens and dark-theme overrides, including chart colors. Do not add bespoke CSS classes. Restrict Tailwind scanning to `src/` and `index.html`, excluding docs.
-- Register only needed Chart.js components and update charts with `update('none')`, without destroy/recreate on slider changes. For configuration changes and trade-offs, read [technical rationale](docs/tech-selection.md#configuration-boundaries).
+- Keep `src/domain/` pure TypeScript. `types.ts` and `distributions/index.ts` define the registry; `math.ts`, `random.ts`, and `sampling.ts` implement calculations. Use log space for overflow-prone expressions. Only Resample changes histogram seeds; seeds stay out of the URL.
+- For decisions about UI behavior, state, architecture, or dependencies, use [design-principles](.claude/skills/design-principles/SKILL.md). Routine edits that preserve these decisions do not need it. Add distributions with [add-distribution](.claude/skills/add-distribution/SKILL.md).
+- Shareable state lives in `src/state/urlCodec.ts`, synced with `replaceState`; omit defaults and fall back on invalid values. Share through the address bar, without a share button. Transitions belong in `src/state/appState.ts`.
+- Theme/language precedence is URL > localStorage > OS/browser. Preserve the pre-paint script in `index.html`. `src/i18n/ja.ts` defines translation keys; English must match.
+- Use Tailwind utilities for layout/components; `src/styles.css` holds tokens and theme/chart colors. Do not add bespoke classes. Scan only `src/` and `index.html` with Tailwind.
+- Register only needed Chart.js components. Use `update('none')` instead of recreating charts on slider changes. See [configuration boundaries](docs/tech-selection.md#configuration-boundaries) for configuration trade-offs.
 
-## Git, deployment, and shared tooling
+## Git and deployment
 
-- Work from the latest `origin/main` on a topic branch and submit a PR. Use English Conventional Commits, a GitHub noreply author address, and an accurate AI `Co-Authored-By` trailer.
-- Before committing, run container lint, typecheck, and tests. CI also requires a build and rejects lint warnings via `lint:ci`; exact jobs/triggers are in `.github/workflows/`. Never force-push, including `--force-with-lease`.
-- A push to main deploys GitHub Pages. **Keep asset paths relative (`base: './'`); never use absolute `/...` asset paths.** Pin workflow actions to commit hashes; use the update procedure in `.github/workflows/deploy.yml`.
-- After merge, confirm CI and Pages deployment for the commit; verify user-visible changes at [the published site](https://shin4488.github.io/probability-distribution-visualization/). Deployment setup is in [README](README.md#deployment).
-- Shared skills live in the plugin; local skills are edited under `.claude/skills` (`.agents/skills` is its relative symlink). Select the relevant skills without duplicating their procedures.
-- The plugin invokes `.claude/hooks/post-edit.sh` for Docker Biome checks, replacing host checks. Do not register the same edit hook locally. Claude permissions do not carry over to Codex. Installation and hook approval: [README](README.md#agent-setup).
+- Start from latest `origin/main` on a topic branch. Commit and submit a PR when requested; use English Conventional Commits, a GitHub noreply author address, and an accurate AI `Co-Authored-By` trailer. Never force-push, including `--force-with-lease`.
+- Never commit secrets or personal email addresses. Public site identifiers are not secrets. Use `verify-changes` before committing. Rotate leaked credentials and remove them in a follow-up commit; do not rewrite published history.
+- Main deploys GitHub Pages. Keep `base: './'` and relative asset paths. Pin workflow actions to commit hashes; the update procedure is in `.github/workflows/deploy.yml`.
+- After merge, confirm CI/Pages for that commit and check user-visible changes at [the published site](https://shin4488.github.io/probability-distribution-visualization/). See [deployment](README.md#deployment) for setup.
+- Shared skills belong to the plugin; `.agents/skills` links to `.claude/skills`. The plugin invokes `.claude/hooks/post-edit.sh` for Docker Biome checks; do not register it twice. Claude permissions do not carry over to Codex.
 
-## Focused reading and maintenance
+## Working approach
 
-- `AGENTS.md` links to `CLAUDE.md`; read the shared text once and edit the original.
-- Scope `rg` to relevant directories and names/headings/symbols. Use `-g` to omit dependencies, build output, logs, lockfiles, and generated code; read them directly for dependency, generation, type, or failure investigations. Widen paths or relax exclusions when needed.
-- Run required checks, report failures/key results, and reuse results only with the same diff, dependencies, configuration, and execution conditions.
-- Keep lasting rules, required conditions, key commands, and references here. Progress belongs in the task or existing issues/PRs; inventories and current values belong in their original definitions. Update this guide for changed rules/conditions, moved references, or newly essential guidance.
-- Choose skills by their descriptions and follow the relevant `SKILL.md`. Preserve mandatory skill conditions here without copying catalogs or procedures.
+- `AGENTS.md` links to this file. Read the shared instructions once and edit `CLAUDE.md`.
+- Start with the relevant files, headings, or symbols; expand the search as needed. Load only the documentation and skills that apply to the task.
+- Ask about unresolved questions before proceeding with work that depends on the answer. Do not reconfirm decisions already made.
+- Preserve each document's language. Write natural Japanese for Japanese readers and idiomatic English for English-speaking readers.
+- Run mandatory checks when their conditions apply. Reuse results while the diff, dependencies, configuration, and execution conditions remain unchanged. Fix issues and briefly report results and anything unverified.
+- Keep lasting rules and useful references here. Do not duplicate progress notes, configuration values, or procedures maintained in other documents or skills.
