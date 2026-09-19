@@ -1,54 +1,71 @@
 # Probability Distribution Visualizer
 
-A website that visualizes probability distributions interactively. Move the parameter sliders and watch the probability density function (PDF) / probability mass function (PMF) charts update in real time.
+An interactive web application for exploring and visualizing standard probability distributions in real time.  
+Adjust parameter sliders and immediately see probability density (PDF) and mass (PMF) charts react dynamically.
 
-## Features
+---
 
-- **10 probability distributions**, ordered the way statistics is learned (prerequisite distributions first, closely related ones adjacent): Bernoulli, binomial, Poisson, geometric, negative binomial, normal, log-normal, exponential, gamma, and beta
-- **Parameter controls**: sliders / numeric inputs with real-time chart updates
-- **Sample histograms**: draw samples and overlay them on the theoretical distribution (sample size adjustable from 100 to 10,000, resampling supported)
-- **Use cases**: each distribution comes with a plain-language explanation of how it is used in everyday life and at work, with the current parameter values woven into the text
-- **URL sharing**: the whole state (parameters, card order, visibility, language, theme) is continuously synced to the address bar, so copying the URL is all it takes to let someone else open the exact same view
-- **Reorder & filter**: drag-and-drop card reordering and chip-based show/hide toggles (all distributions shown by default)
-- **Japanese / English** and **dark / light mode** support
+## Key Features
 
-## Development
+- **10 Core Distributions**: Covers foundational distributions organized logically (Bernoulli, Binomial, Poisson, Geometric, Negative Binomial, Normal, Log-Normal, Exponential, Gamma, and Beta).
+- **Interactive Controls & Sampling**: Real-time parameter sliders with empirical sample histograms overlaid against theoretical curves.
+- **Contextual Explanations**: Plain-language real-world use cases with active parameters woven directly into the text.
+- **Deep Linking**: Complete application state (parameters, card visibility, sort order, theme, language) is continuously synchronized to the URL query for easy sharing.
+- **Bilingual & Responsive**: Full Japanese / English localization and Dark / Light theme support.
 
-Docker is the only requirement (no Node.js needed on the host).
+---
 
-```bash
-docker compose up    # http://localhost:5173
+## Application Flow
+
+```mermaid
+flowchart LR
+    Sliders["Parameter Controls<br>(Sliders / Inputs)"] --> Engine["Distribution Math Engine<br>(PDF / PMF & Random Sampling)"]
+    Engine --> Charts["Chart Components<br>(Theoretical Curve & Histogram)"]
+    Engine --> State["URL State Sync<br>(Shareable Query Params)"]
 ```
 
-With a devcontainer-capable editor such as VS Code, you can also "Reopen in Container" and run `npm run dev` from the integrated terminal.
+---
 
-Tests, type checking, lint, and build:
+## Tech Stack
+
+- **Frontend**: React, TypeScript, Vite
+- **Math & Charts**: Custom mathematical distribution functions, Canvas / SVG rendering
+- **Quality & Styling**: Biome, Vitest, Testing Library
+- **Environment**: Docker, Docker Compose
+
+---
+
+## Local Development
+
+The project is fully containerized, so Node.js does not need to be installed on your host machine.
+
+### Quick Start
 
 ```bash
+# Start dev server (http://localhost:5173)
+docker compose up
+```
+
+### Development Commands
+
+Run quality checks and test suites through the container:
+
+```bash
+# Unit & component tests
 docker compose run --rm app npm test
+
+# TypeScript type verification
 docker compose run --rm app npm run typecheck
+
+# Lint & formatting check
 docker compose run --rm app npm run lint
+
+# Production build
 docker compose run --rm app npm run build
 ```
 
-All npm commands, including installation and formatting, run inside the container. The bind-mounted `node_modules` lets the host editor resolve types, but its native binaries are Linux builds and must not be executed on the host. Use `docker compose run --rm app npm run lint:fix` for Biome fixes. Add dependencies only when justified, with `docker compose run --rm app npm install --save-exact <pkg>`, and record the rationale in the technology record.
-
-### Agent setup
-
-- **Install:** Run `make setup` to install [agent-plugins](https://github.com/shin4488/agent-plugins) for the current user in each installed Claude/Codex CLI; missing CLIs are skipped. Reload the tools afterward.
-- **Approve hooks:** Trust the repository and review/approve hooks using Codex `/hooks`; review again when registered commands change. Claude permissions do not carry over to Codex.
-- **Host requirements:** Hooks need Bash, jq, and realpath on the host.
-- **Edit checks:** The shared plugin calls `.claude/hooks/post-edit.sh`, which runs Biome in the current Compose project's container with its installed dependencies, replacing host-side checks.
-- **Hook registration:** Do not duplicate the edit hook in local registrations.
-- **Local skills:** Edit local skills under `.claude/skills`; `.agents/skills` links there.
+---
 
 ## Deployment
 
-Pushing to the `main` branch triggers GitHub Actions to run the tests, build the site, and deploy it to GitHub Pages.
-One-time setup: set the repository's Settings → Pages → Source to **GitHub Actions**.
-
-## Documentation
-
-- [docs/specification.md](docs/specification.md) — requirements specification
-- [docs/tech-selection.md](docs/tech-selection.md) — rationale for the framework and charting-library choices
-- [CLAUDE.md](CLAUDE.md) — architecture and development guide
+Pushing to the `main` branch automatically triggers GitHub Actions to run tests, build static assets, and deploy to GitHub Pages.
