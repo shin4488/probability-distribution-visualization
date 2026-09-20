@@ -7,6 +7,7 @@ Adjust parameter sliders and immediately see probability density (PDF) and mass 
 
 ## Key Features
 
+- **Visual Use-Case Finder**: Open “Find by use case” to choose an illustrated quantity and a real-world situation, check candidate distributions and assumptions, then try the matching chart. No knowledge of distribution names is needed.
 - **10 Core Distributions**: Covers foundational distributions organized logically (Bernoulli, Binomial, Poisson, Geometric, Negative Binomial, Normal, Log-Normal, Exponential, Gamma, and Beta).
 - **Interactive Controls & Sampling**: Real-time parameter sliders with empirical sample histograms overlaid against theoretical curves.
 - **Contextual Explanations**: Plain-language real-world use cases with active parameters woven directly into the text.

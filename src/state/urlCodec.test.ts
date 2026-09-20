@@ -6,6 +6,9 @@ import { decodeAppState, encodeAppState } from './urlCodec';
 
 function baseState(): AppState {
   return {
+    page: 'charts',
+    category: 'all',
+    selectedCase: null,
     locale: 'ja',
     localeExplicit: false,
     localeTouched: false,
@@ -111,5 +114,39 @@ describe('decodeAppState', () => {
     const decoded = decodeAppState('?normal=0,1,h,s999999');
     expect(decoded.cards.normal.sampleSize).toBe(10000);
     expect(decoded.cards.normal.showHistogram).toBe(true);
+  });
+});
+
+describe('ケースから探すページの共有URL', () => {
+  it('選んだケースとカテゴリを、既存のグラフ設定とともに復元する', () => {
+    const state = baseState();
+    state.page = 'guide';
+    state.category = 'count';
+    state.selectedCase = 'poisson';
+    state.cards.poisson.params.lambda = 7;
+    const decoded = decodeAppState(`?${encodeAppState(state)}`);
+    expect(decoded.page).toBe('guide');
+    expect(decoded.category).toBe('count');
+    expect(decoded.selectedCase).toBe('poisson');
+    expect(decoded.cards.poisson.params.lambda).toBe(7);
+  });
+
+  it('旧URLや不正なページ・カテゴリ・ケースは初期値に戻す', () => {
+    for (const search of ['', '?page=unknown&category=unknown&case=unknown']) {
+      const decoded = decodeAppState(search);
+      expect(decoded.page).toBe('charts');
+      expect(decoded.category).toBe('all');
+      expect(decoded.selectedCase).toBeNull();
+    }
+  });
+
+  it('グラフへの移動後も元のケースに戻るための情報を保持する', () => {
+    const state = baseState();
+    state.selectedCase = 'exponential';
+    state.category = 'waiting';
+    const decoded = decodeAppState(`?${encodeAppState(state)}`);
+    expect(decoded.page).toBe('charts');
+    expect(decoded.selectedCase).toBe('exponential');
+    expect(decoded.category).toBe('waiting');
   });
 });

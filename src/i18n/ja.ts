@@ -1,3 +1,4 @@
+import { guideJa } from './guide.ja';
 /**
  * 日本語辞書。キー構成:
  *   ui.*                     画面共通の文言
@@ -11,6 +12,7 @@
  * この辞書が全キーの正であり、英語辞書はsatisfiesで同じキー集合を強制される。
  */
 export const ja = {
+  ...guideJa,
   'ui.title': '確率分布ビジュアライザー',
   'ui.docTitle': '確率分布ビジュアライザー | Probability Distributions',
   'ui.metaDescription':

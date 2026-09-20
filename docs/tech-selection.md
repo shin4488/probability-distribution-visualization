@@ -93,3 +93,7 @@ Implemented without external libraries (each fits in a few dozen lines, not wort
 - **Test environment:** Domain/state tests use a Node environment because they do not need a DOM. Vitest 4 replaces the unmaintained 3.x line to include the redirect-mock file-read fix ([GHSA-82fw-gwwq-j7x9](https://github.com/vitest-dev/vitest/security/advisories/GHSA-82fw-gwwq-j7x9)); it supports the existing Node 22 / Vite 6 setup without additional test configuration.
 - **Preview setup:** [.claude/launch.json](../.claude/launch.json) describes the Docker preview server for Claude Code, not Vite or TypeScript. It must remain strict JSON, so its rationale belongs here rather than in comments inside that file.
 - **Configuration maintenance:** Keep current settings in the config itself. Other configuration rationale should stay beside the relevant setting when comments are supported.
+
+## Use-case guide navigation
+
+The visual guide uses the existing query codec and reducer (`page`, `category`, `case`) rather than a routing dependency. Relative page links load the same static entry point, so shared URLs work on GitHub Pages without rewrite rules. Case selection uses replaceState like other shareable state; explicit back-to-cases and return-from-chart links preserve the selected category and chart parameters. SVG illustrations are schematic, localized, and independent of numerical domain code.

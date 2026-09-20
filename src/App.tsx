@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { trackEvent } from './analytics';
 import { BackToTop } from './components/BackToTop';
+import { CaseGuide } from './components/CaseGuide';
 import { DistributionCard } from './components/DistributionCard';
 import { FeedbackFooter } from './components/FeedbackFooter';
 import { FilterChips } from './components/FilterChips';
@@ -34,6 +35,9 @@ function initAppState(): AppState {
     decoded.theme !== undefined || storedTheme === 'light' || storedTheme === 'dark';
 
   return {
+    page: decoded.page,
+    category: decoded.category,
+    selectedCase: decoded.selectedCase,
     locale,
     localeExplicit,
     // touched=このセッションで本人がUI操作したか。共有URL経由の値をlocalStorageへ
@@ -96,12 +100,21 @@ export function App() {
     document.documentElement.lang = state.locale;
     // Googleはレンダリング後のDOMを読むため、title・descriptionもロケールへ追従させる
     // (静的index.htmlの日英併記は初回ペイント用、こちらが確定値)
-    document.title = translate(state.locale, 'ui.docTitle');
+    document.title = translate(
+      state.locale,
+      state.page === 'guide' ? 'guide.docTitle' : 'ui.docTitle',
+    );
     document
       .querySelector('meta[name="description"]')
-      ?.setAttribute('content', translate(state.locale, 'ui.metaDescription'));
+      ?.setAttribute(
+        'content',
+        translate(
+          state.locale,
+          state.page === 'guide' ? 'guide.metaDescription' : 'ui.metaDescription',
+        ),
+      );
     if (state.localeTouched) writeStorage(LANG_STORAGE_KEY, state.locale);
-  }, [state.locale, state.localeTouched]);
+  }, [state.locale, state.localeTouched, state.page]);
 
   // カードに渡すコールバック群。dispatch/setSeedsは参照が安定しているので
   // 一度だけ作れば済み、React.memoしたカードの不要な再レンダリングを防げる
@@ -154,6 +167,7 @@ export function App() {
     <div className="mx-auto max-w-[1240px] px-6 pt-5 pb-16">
       <Toolbar
         locale={state.locale}
+        page={state.page}
         theme={state.theme}
         onLocaleChange={(locale) => {
           trackEvent('lang_switch', { language: locale });
@@ -168,32 +182,76 @@ export function App() {
         onReset={() => dispatch({ type: 'reset' })}
       />
 
-      <FilterChips
-        locale={state.locale}
-        order={state.order}
-        hidden={state.hidden}
-        onToggle={(id) => dispatch({ type: 'toggleVisibility', id })}
-        onShowAll={() => dispatch({ type: 'showAll' })}
-      />
+      <nav
+        aria-label={translate(state.locale, 'ui.title')}
+        className="mb-7 flex gap-1 border-b border-border"
+      >
+        {(['charts', 'guide'] as const).map((page) => (
+          <a
+            key={page}
+            href={`?${encodeAppState({ ...state, page })}`}
+            aria-current={state.page === page ? 'page' : undefined}
+            className={`border-b-2 px-4 py-3 text-sm font-semibold transition-colors ${state.page === page ? 'border-accent text-accent' : 'border-transparent text-muted hover:text-accent'}`}
+          >
+            {translate(state.locale, `nav.${page}`)}
+          </a>
+        ))}
+      </nav>
 
-      {visibleOrder.length === 0 ? (
-        <p className="py-15 text-center text-muted">{translate(state.locale, 'ui.allHidden')}</p>
+      {state.page === 'guide' ? (
+        <CaseGuide state={state} dispatch={dispatch} />
       ) : (
-        <main className="grid grid-cols-[repeat(auto-fill,minmax(360px,1fr))] gap-5 max-[420px]:grid-cols-1">
-          {visibleOrder.map((id) => (
-            <DistributionCard
-              key={id}
-              def={getDistribution(id)}
-              card={state.cards[id]}
-              seed={seeds[id]}
-              locale={state.locale}
-              theme={state.theme}
-              showUseCase={state.showUseCases}
-              isDragging={draggingId === id}
-              {...handlersById[id]}
-            />
-          ))}
-        </main>
+        <>
+          {state.selectedCase && (
+            <aside className="mb-5 rounded-xl border border-border bg-card p-4 text-sm">
+              <p className="font-semibold">
+                {translate(state.locale, `guide.case.${state.selectedCase}.title`)}
+              </p>
+              <p className="mt-2 text-muted">{translate(state.locale, 'guide.chartNote')}</p>
+              <a
+                href={`?${encodeAppState({ ...state, page: 'guide' })}`}
+                className="mt-3 inline-block font-semibold text-accent underline underline-offset-4"
+              >
+                ← {translate(state.locale, 'nav.guide')}
+              </a>
+            </aside>
+          )}
+          <FilterChips
+            locale={state.locale}
+            order={state.order}
+            hidden={state.hidden}
+            onToggle={(id) => dispatch({ type: 'toggleVisibility', id })}
+            onShowAll={() => dispatch({ type: 'showAll' })}
+          />
+
+          {visibleOrder.length === 0 ? (
+            <p className="py-15 text-center text-muted">
+              {translate(state.locale, 'ui.allHidden')}
+            </p>
+          ) : (
+            <main
+              className={
+                state.selectedCase && visibleOrder.length === 1
+                  ? 'mx-auto grid max-w-3xl grid-cols-1 gap-5'
+                  : 'grid grid-cols-[repeat(auto-fill,minmax(360px,1fr))] gap-5 max-[420px]:grid-cols-1'
+              }
+            >
+              {visibleOrder.map((id) => (
+                <DistributionCard
+                  key={id}
+                  def={getDistribution(id)}
+                  card={state.cards[id]}
+                  seed={seeds[id]}
+                  locale={state.locale}
+                  theme={state.theme}
+                  showUseCase={state.showUseCases}
+                  isDragging={draggingId === id}
+                  {...handlersById[id]}
+                />
+              ))}
+            </main>
+          )}
+        </>
       )}
 
       <FeedbackFooter locale={state.locale} />

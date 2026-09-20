@@ -1,7 +1,9 @@
+import { guideEn } from './guide.en';
 import type { MessageKey } from './ja';
 
 // satisfiesにより、日本語辞書とキー集合がずれるとコンパイルエラーになる
 export const en = {
+  ...guideEn,
   'ui.title': 'Probability Distribution Visualizer',
   'ui.docTitle': 'Probability Distribution Visualizer | Interactive Statistics',
   'ui.metaDescription':
