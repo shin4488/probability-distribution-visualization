@@ -18,7 +18,6 @@ export const guideEn = {
   'guide.why': 'Why this distribution?',
   'guide.conditions': 'When this is a useful model',
   'guide.caution': 'When to consider another model',
-  'guide.parameters': 'What to change in the chart',
   'guide.open': 'Explore this distribution',
   'guide.alternative': 'If you have a different question',
   'guide.references': 'Read more about the distributions',
@@ -34,8 +33,6 @@ export const guideEn = {
   'guide.case.bernoulli.caution':
     'This does not directly describe three or more outcomes. To count clicks across several impressions, take a look at the binomial distribution.',
   'guide.case.bernoulli.alternative': 'To count clicks across a fixed number of impressions',
-  'guide.case.bernoulli.parameters':
-    'p is the chance of a click: p = 0.3 means 30%. Increase p and the bar for a click gets taller.',
   'guide.case.binomial.title': 'How many of 10 sales calls will convert?',
   'guide.case.binomial.summary':
     'Sales conversions, opened emails, or defective items in a batch of 100.',
@@ -43,20 +40,16 @@ export const guideEn = {
   'guide.case.binomial.conditions':
     'Use this when you know how many calls you will make and each has the same chance of converting. One call’s outcome must not affect the others.',
   'guide.case.binomial.caution':
-    'If some customers are much more likely to convert, or referrals link the outcomes, check whether these assumptions still fit.',
+    'If one company’s purchase makes another company more likely to buy, the outcomes affect each other. If existing and new customers have very different conversion rates, treating every call as having the same probability can also misrepresent how much the count varies.',
   'guide.case.binomial.alternative': 'To describe uncertainty about the conversion rate itself',
-  'guide.case.binomial.parameters':
-    'n is the number of calls and p is the chance of a conversion on each call. Try n = 10 and p = 0.3 for ten calls with a 30% conversion rate.',
   'guide.case.poisson.title': 'How many enquiries arrive in an hour?',
   'guide.case.poisson.summary': 'Enquiries, customer arrivals, or defects within a fixed interval.',
   'guide.case.poisson.why': 'Model the number of events within a fixed time or area.',
   'guide.case.poisson.conditions':
-    'Use the same interval for each count, such as one hour. Enquiries should occur independently, at a steady average rate during that interval.',
+    'For hourly enquiry counts, the expected count should be roughly the same in each hour being compared, with a steady arrival rate throughout each hour. One enquiry should not trigger another.',
   'guide.case.poisson.caution':
-    'If enquiries are busier by day, treat day and night separately. If counts vary much more than this model predicts, consider the negative binomial distribution too.',
+    'If the average is 20 enquiries per hour during the day but two at night, model day and night separately. Even within one time slot, some days may be much busier than others. If that variation exceeds what a Poisson distribution predicts, consider a negative binomial distribution, which allows greater variability.',
   'guide.case.poisson.alternative': 'When event rates vary between people or places',
-  'guide.case.poisson.parameters':
-    'λ is the average number of enquiries in your chosen interval. For five per hour, set λ = 5. Increasing it moves the peak towards larger counts.',
   'guide.case.negbinomial.title': 'Visit counts vary a lot between customers',
   'guide.case.negbinomial.summary':
     'Visits, purchases, or posts, with some people much more active than others.',
@@ -67,40 +60,32 @@ export const guideEn = {
   'guide.case.negbinomial.caution':
     'If many people never visit for a separate reason, or visit rates change over time, you may need to account for those processes too.',
   'guide.case.negbinomial.alternative': 'When everyone has approximately the same event rate',
-  'guide.case.negbinomial.parameters':
-    'This chart uses r and p to change the shape. The mean count is r(1−p)/p. A smaller p gives a larger variance relative to the mean.',
   'guide.case.geometric.title': 'How many misses before the first hit?',
   'guide.case.geometric.summary': 'Unsuccessful draws or sales attempts before the first success.',
   'guide.case.geometric.why': 'Count failures before the first success.',
   'guide.case.geometric.conditions':
     'Use this when every attempt has the same chance of success and earlier outcomes do not affect later ones. A string of misses must not make the next attempt more likely to succeed.',
   'guide.case.geometric.caution':
-    'The chart counts misses before the first hit. Add 1 to include the successful attempt. Guaranteed wins or improving odds need a different model.',
+    'Count the misses before the first hit: zero if the first attempt succeeds, or two if the third succeeds. Add one to count all attempts including the hit. Guaranteed wins or increasing odds do not fit this use.',
   'guide.case.geometric.alternative': 'To model time until the next event instead of attempts',
-  'guide.case.geometric.parameters':
-    'p is the chance of a hit on each attempt; p = 0.3 means 30%. Zero on the horizontal axis means no misses: a hit on the first attempt.',
   'guide.case.exponential.title': 'How long until the next enquiry?',
   'guide.case.exponential.summary': 'Time until the next customer or request arrives.',
   'guide.case.exponential.why':
-    'Model the waiting time to the next event in a constant-rate Poisson process.',
+    'Describe the time until the next randomly arriving enquiry, customer, or request.',
   'guide.case.exponential.conditions':
-    'Use this when enquiries occur independently at a steady average rate. In this model, time already spent waiting does not change the outlook for the remaining wait.',
+    'The average arrival rate should remain steady throughout the period you are waiting, and arrivals should not affect each other. Having already waited ten minutes does not make an arrival overdue: the outlook for the remaining wait is the same as when you started.',
   'guide.case.exponential.caution':
-    'This is not suitable for scheduled arrivals. For equipment lifetimes, consider another model if failure becomes more likely as the equipment ages.',
+    'This does not fit customers with scheduled arrival times. It also does not describe equipment lifetimes well when wear makes failure more likely as the equipment ages.',
   'guide.case.exponential.alternative': 'To model the total wait until several events occur',
-  'guide.case.exponential.parameters':
-    'λ is the average number of events per minute. At λ = 0.5, the mean wait is two minutes. Increasing λ makes the wait shorter.',
   'guide.case.gamma.title': 'How long will three tasks take in total?',
   'guide.case.gamma.summary': 'Total time for a sequence of similar tasks.',
   'guide.case.gamma.why':
-    'A sum of independent exponential durations with the same rate follows a gamma distribution.',
+    'Describe the total time for three tasks completed in sequence. If their durations are independent and follow the same exponential distribution, their sum follows a gamma distribution. At two minutes per task on average, the average total is six minutes.',
   'guide.case.gamma.conditions':
-    'Use this for a sequence of tasks with independent durations that share the same exponential distribution. The model adds those durations together.',
+    'Tasks must have the same average duration, and a long task must not affect how long the others take. Check that each duration can be described by an exponential distribution. Adding durations does not automatically make the total gamma-distributed.',
   'guide.case.gamma.caution':
-    'Reconsider this if tasks take nearly fixed times or one delay affects the next task. You can read k as a task count only when it is a positive integer.',
+    'This use does not fit tasks with nearly fixed durations, or sequences where one delay affects the next task.',
   'guide.case.gamma.alternative': 'When durations grow through multiplicative effects',
-  'guide.case.gamma.parameters':
-    'For three tasks, set k = 3. If each takes two minutes on average, set θ = 2. The total mean is then 3 × 2 = 6 minutes.',
   'guide.case.normal.title': 'How much do product dimensions vary?',
   'guide.case.normal.summary':
     'Dimensions or measurement errors concentrated around a centre with roughly symmetric spread.',
@@ -110,8 +95,6 @@ export const guideEn = {
   'guide.case.normal.caution':
     'This distribution includes negative values. For quantities that cannot be negative, or have a few very large values, check whether the model predicts unrealistic outcomes.',
   'guide.case.normal.alternative': 'For positive values with a long right tail',
-  'guide.case.normal.parameters':
-    'μ is the mean and σ controls the spread. Changing μ moves the peak; increasing σ makes it wider. The chart’s initial values and example use test scores.',
   'guide.case.lognormal.title': 'Response times are usually short, sometimes very long',
   'guide.case.lognormal.summary':
     'Positive quantities such as response times or prices with a long right tail.',
@@ -123,19 +106,16 @@ export const guideEn = {
     'Mostly small values with a few large ones do not uniquely identify this distribution. Compare it with alternatives such as gamma against your actual data.',
   'guide.case.lognormal.alternative':
     'If the duration is better explained as a sum of waiting times',
-  'guide.case.lognormal.parameters':
-    'Increasing μ shifts values upwards; increasing σ stretches the right tail. These parameters describe the mean and standard deviation of the logarithms, not the original durations.',
   'guide.case.beta.title': 'How certain are we about the conversion rate?',
   'guide.case.beta.summary':
     'Uncertainty about a success rate from limited observations, including A/B tests.',
-  'guide.case.beta.why': 'Represent uncertainty about a probability between 0 and 1.',
+  'guide.case.beta.why':
+    'Use successes and failures to estimate an unknown conversion rate. Three successes in ten calls do not establish that the true rate is exactly 30%. A beta distribution represents how plausible different rates between 0% and 100% are.',
   'guide.case.beta.conditions':
-    'Use this to learn about an unknown conversion rate from successes and failures. Assume independent calls with the same conversion probability, and express your initial belief about that probability as a beta distribution.',
+    'Assume calls share the same conversion probability and do not affect each other. Start with a beta distribution describing plausible rates before seeing the data, then update it with recorded successes and failures.',
   'guide.case.beta.caution':
-    'This describes your belief about a rate, not a count. The result also depends on your initial belief, so this chart alone does not decide which version wins an A/B test.',
+    'With little data, starting with all rates equally plausible can give a different estimate from starting near 30% based on past experience—even with identical observations. When comparing A/B variants, check both this starting assumption and the amount of data collected.',
   'guide.case.beta.alternative': 'To model conversion counts for a specified success probability',
-  'guide.case.beta.parameters':
-    'If all rates initially seem equally plausible, start with α = β = 1. After one success and four failures, try α = 2 and β = 5.',
   'guide.categoryLabel': '01　What would you like to measure?',
   'guide.caseLabel': '02　Choose a situation like yours',
   'guide.detailLabel': '03　Connect your case to a distribution',
@@ -144,7 +124,6 @@ export const guideEn = {
   'guide.category.waiting.hint': 'Measure the wait until an event',
   'guide.category.measurement.hint': 'Explore how measured values spread',
   'guide.category.proportion.hint': 'Explore uncertainty about a rate',
-  'guide.illustration': 'Illustration of the idea, not observed data',
   'guide.scene.bernoulli': 'One impression → click / no click',
   'guide.scene.binomial': '3 successes out of 10 → count successes',
   'guide.scene.poisson': '5 events in 1 hour → count within an interval',

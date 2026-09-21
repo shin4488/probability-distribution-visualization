@@ -138,26 +138,27 @@ export function CaseGuide({ state, dispatch }: { state: AppState; dispatch: Disp
         </>
       ) : (
         <>
-          <button
-            type="button"
-            className={`${textButtonClass} mb-6`}
-            onClick={() => dispatch({ type: 'selectCase', id: null })}
-          >
-            ← {t('guide.back')}
-          </button>
-          <p className="mb-2 text-xs font-bold tracking-wider text-accent">
-            {t('guide.detailLabel')}
-          </p>
-          <h2
-            ref={headingRef}
-            tabIndex={-1}
-            className="scroll-mt-6 text-2xl font-bold leading-relaxed outline-none sm:text-3xl"
-          >
-            {t(`guide.case.${selected.id}.title`)}
-          </h2>
-          <p className="mt-2 mb-6 text-sm leading-7 text-muted">
-            {t(`guide.case.${selected.id}.summary`)}
-          </p>
+          <header className="mb-6 flex flex-col gap-4 lg:flex-row-reverse lg:items-center lg:justify-between lg:gap-8">
+            <button
+              type="button"
+              className={`${textButtonClass} shrink-0 self-start lg:self-center`}
+              onClick={() => dispatch({ type: 'selectCase', id: null })}
+            >
+              ← {t('guide.back')}
+            </button>
+            <div className="min-w-0">
+              <p className="mb-2 text-xs font-bold tracking-wider text-accent">
+                {t('guide.detailLabel')}
+              </p>
+              <h2
+                ref={headingRef}
+                tabIndex={-1}
+                className="scroll-mt-6 text-2xl font-bold leading-relaxed outline-none sm:text-3xl"
+              >
+                {t(`guide.case.${selected.id}.title`)}
+              </h2>
+            </div>
+          </header>
           <div className="grid items-start gap-6 lg:grid-cols-[0.9fr_1.1fr]">
             <div className="rounded-2xl border border-border bg-card p-6 shadow-card">
               <figure className="rounded-xl bg-accent-soft p-5">
@@ -167,7 +168,6 @@ export function CaseGuide({ state, dispatch }: { state: AppState; dispatch: Disp
                 <figcaption className="mt-3 text-center text-sm font-semibold leading-6">
                   {t(`guide.scene.${selected.id}`)}
                 </figcaption>
-                <p className="mt-2 text-center text-xs text-muted">{t('guide.illustration')}</p>
               </figure>
               <div className="py-4 text-center text-xl text-accent" aria-hidden="true">
                 ↓
@@ -195,13 +195,6 @@ export function CaseGuide({ state, dispatch }: { state: AppState; dispatch: Disp
                   {t(`guide.case.${selected.id}.caution`)}
                 </p>
               </section>
-              <section className="rounded-xl border border-border bg-card p-5">
-                <h3 className="font-bold">{t('guide.parameters')}</h3>
-                <p className="mt-2 text-sm leading-7 text-muted">
-                  {t(`guide.case.${selected.id}.parameters`)}
-                </p>
-              </section>
-
               <section className="rounded-xl border border-accent/30 bg-accent-soft p-5">
                 <h3 className="text-xs font-bold text-muted">{t('guide.alternative')}</h3>
                 <p className="mt-2 text-sm leading-6">
