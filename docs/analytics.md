@@ -37,7 +37,7 @@ Every event includes `page_type` (`charts`, `guide_list`, `guide_detail`) and `m
 
 ## Reading the dashboard
 
-The saved [GA4 dashboard](https://analytics.google.com/analytics/web/?authuser=0#/a154552231p544288691/assetlibrary/builder/edit/15812634856) is named **確率分布｜訪問・ケース選択・グラフ操作**. Its collection, **確率分布の利用状況 → モニタリング**, is saved but not published to the report navigation.
+The saved [GA4 dashboard](https://analytics.google.com/analytics/web/?authuser=0#/a154552231p544288691/reports/builder/15812634856) is named **確率分布｜訪問・ケース選択・グラフ操作**. Its collection, **確率分布の利用状況 → モニタリング**, is published to the report navigation for users of this property.
 
 The nine cards cover users, sessions, graph users, the ordered guide funnel, distributions used, daily users, devices, ratings, and session sources. The graph-user and distribution cards filter event names containing `distribution_explore`; the rating card filters names containing `feedback_rating`. These filters allow setup before GA has received the new events. Do not introduce event names containing these names; switch to exact matches once they are available in the filter picker.
 
