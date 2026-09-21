@@ -1,11 +1,11 @@
 import type { DragEvent } from 'react';
 import { memo, useEffect, useMemo, useState } from 'react';
 import { trackEvent, trackExplore, trackHelpOpen, trackParamChange } from '../analytics';
-import type { DistributionDef } from '../domain/types';
+import { clampParam, type DistributionDef } from '../domain/types';
 import type { Locale, MessageKey } from '../i18n';
 import { formatNumber, translate } from '../i18n';
 import type { CardState, Theme } from '../state/appState';
-import { SAMPLE_SIZE } from '../state/appState';
+import { clampSampleSize, SAMPLE_SIZE } from '../state/appState';
 import { DistributionChart } from './DistributionChart';
 import { HelpTip } from './HelpTip';
 import { ParamSlider } from './ParamSlider';
@@ -187,7 +187,7 @@ function DistributionCardBase({
             step={p.step}
             value={card.params[p.key]}
             onChange={(value) => {
-              if (value !== card.params[p.key]) trackParamChange(def.id, p.key);
+              if (clampParam(p, value) !== card.params[p.key]) trackParamChange(def.id, p.key);
               onParamChange(p.key, value);
             }}
           />
@@ -229,7 +229,8 @@ function DistributionCardBase({
               step={SAMPLE_SIZE.step}
               value={card.sampleSize}
               onChange={(value) => {
-                if (value !== card.sampleSize) trackParamChange(def.id, 'sample_size');
+                if (clampSampleSize(value) !== card.sampleSize)
+                  trackParamChange(def.id, 'sample_size');
                 onSampleSizeChange(value);
               }}
             />
