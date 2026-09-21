@@ -88,7 +88,8 @@
     <!-- Google Analytics 4: ページビュー等の計測。
          本番(GitHub Pages)でのみ読み込み、開発中のアクセスを指標に混ぜない。
          注意: このアプリはパラメータ操作のたびにreplaceStateでURLを書き換えるため、
-         GA4の拡張計測「ブラウザの履歴イベントに基づくページの変更」はオフを推奨
+         ページビューはアプリが明示的に送信する。
+         GA4の拡張計測「ブラウザの履歴イベントに基づくページの変更」はオフが必須
          (オンだとスライダー操作がページビューとして大量計上され得る) -->
     <script>
       (() => {
@@ -104,7 +105,7 @@
           dataLayer.push(arguments);
         };
         window.gtag('js', new Date());
-        window.gtag('config', GA_MEASUREMENT_ID);
+        window.gtag('config', GA_MEASUREMENT_ID, { send_page_view: false });
       })();
     </script>
   </head>

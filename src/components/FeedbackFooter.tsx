@@ -84,6 +84,7 @@ export function FeedbackFooter({ locale }: Props) {
         <a
           className="underline decoration-dotted underline-offset-4 transition-colors hover:text-accent"
           href={FEEDBACK_FORM_URL}
+          onClick={() => trackEvent('feedback_form_open')}
           target="_blank"
           rel="noreferrer"
         >
