@@ -176,10 +176,7 @@ export function CaseGuide({ state, dispatch }: { state: AppState; dispatch: Disp
                   {t(`guide.scene.${selected.id}`)}
                 </figcaption>
               </figure>
-              <div className="py-4 text-center text-xl text-accent" aria-hidden="true">
-                ↓
-              </div>
-              <p className="text-xs font-semibold text-muted">{t('guide.candidate')}</p>
+              <p className="mt-5 text-xs font-semibold text-muted">{t('guide.candidate')}</p>
               <h3 className="mt-2 text-2xl font-bold text-accent">
                 {t(`dist.${selected.id}.name`)}
               </h3>
