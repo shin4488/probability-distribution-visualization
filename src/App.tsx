@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState } from 'react';
-import { trackEvent } from './analytics';
+import { flushPendingEvents, trackEvent, trackPageView } from './analytics';
 import { BackToTop } from './components/BackToTop';
 import { CaseGuide } from './components/CaseGuide';
 import { DistributionCard } from './components/DistributionCard';
@@ -70,6 +70,22 @@ export function App() {
   // ハンドラをカードごとに固定参照で持つ(React.memoを効かせる)ため、
   // ドラッグ中IDはstateと並行してrefでも追いかける
   const draggingIdRef = useRef<DistributionId | null>(null);
+
+  useEffect(() => {
+    trackPageView({ page: state.page, selectedCase: state.selectedCase, category: state.category });
+  }, [state.page, state.selectedCase, state.category]);
+
+  useEffect(() => {
+    const onVisibility = () => {
+      if (document.visibilityState === 'hidden') flushPendingEvents();
+    };
+    window.addEventListener('pagehide', flushPendingEvents);
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => {
+      window.removeEventListener('pagehide', flushPendingEvents);
+      document.removeEventListener('visibilitychange', onVisibility);
+    };
+  }, []);
 
   // 状態→URLの同期。アドレスバーのURLをコピーすればそのまま共有リンクになる。
   // replaceStateは高頻度呼び出しでブラウザに拒否されることがあるため
@@ -178,8 +194,14 @@ export function App() {
           dispatch({ type: 'toggleTheme' });
         }}
         showUseCases={state.showUseCases}
-        onToggleUseCases={() => dispatch({ type: 'toggleUseCases' })}
-        onReset={() => dispatch({ type: 'reset' })}
+        onToggleUseCases={() => {
+          trackEvent('use_cases_toggle', { enabled: state.showUseCases ? 'false' : 'true' });
+          dispatch({ type: 'toggleUseCases' });
+        }}
+        onReset={() => {
+          trackEvent('settings_reset');
+          dispatch({ type: 'reset' });
+        }}
       />
 
       <nav

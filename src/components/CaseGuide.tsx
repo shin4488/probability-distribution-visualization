@@ -1,4 +1,5 @@
 import { type Dispatch, useEffect, useRef } from 'react';
+import { trackCategorySelect, trackEvent } from '../analytics';
 import { DISTRIBUTION_IDS } from '../domain/distributions';
 import type { DistributionId } from '../domain/types';
 import { CATEGORIES, type Category, GUIDE_CASES } from '../guide/catalog';
@@ -75,7 +76,10 @@ export function CaseGuide({ state, dispatch }: { state: AppState; dispatch: Disp
                   key={category}
                   type="button"
                   aria-pressed={state.category === category}
-                  onClick={() => dispatch({ type: 'selectCategory', category })}
+                  onClick={() => {
+                    if (state.category !== category) trackCategorySelect(category);
+                    dispatch({ type: 'selectCategory', category });
+                  }}
                   className={`cursor-pointer rounded-xl border p-4 text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent ${state.category === category ? 'border-accent bg-accent-soft ring-1 ring-accent' : 'border-border bg-card hover:border-accent'}`}
                 >
                   <div className="mb-3 h-16">
@@ -103,7 +107,10 @@ export function CaseGuide({ state, dispatch }: { state: AppState; dispatch: Disp
                 <button
                   type="button"
                   className={textButtonClass}
-                  onClick={() => dispatch({ type: 'selectCategory', category: 'all' })}
+                  onClick={() => {
+                    trackCategorySelect('all');
+                    dispatch({ type: 'selectCategory', category: 'all' });
+                  }}
                 >
                   {t('guide.showAll')}
                 </button>
@@ -179,6 +186,12 @@ export function CaseGuide({ state, dispatch }: { state: AppState; dispatch: Disp
               <p className="mt-3 text-sm leading-7">{t(`guide.case.${selected.id}.why`)}</p>
               <a
                 href={chartHref(selected.id)}
+                onClick={() =>
+                  trackEvent('guide_chart_open', {
+                    distribution: selected.id,
+                    guide_category: state.category,
+                  })
+                }
                 className="mt-6 flex items-center justify-center gap-3 rounded-lg bg-accent px-4 py-3 text-sm font-bold text-on-accent hover:opacity-90"
               >
                 {t('guide.open')} <span aria-hidden="true">→</span>
@@ -209,7 +222,13 @@ export function CaseGuide({ state, dispatch }: { state: AppState; dispatch: Disp
                 </p>
                 <button
                   type="button"
-                  onClick={() => dispatch({ type: 'selectCase', id: selected.alternative })}
+                  onClick={() => {
+                    trackEvent('guide_alternative_select', {
+                      distribution: selected.alternative,
+                      from_distribution: selected.id,
+                    });
+                    dispatch({ type: 'selectCase', id: selected.alternative });
+                  }}
                   className="mt-3 cursor-pointer text-sm font-bold text-accent underline underline-offset-4"
                 >
                   {t(`dist.${selected.alternative}.name`)} →

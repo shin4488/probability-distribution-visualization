@@ -67,6 +67,10 @@ docker compose run --rm app npm run build
 
 ---
 
+## Analytics
+
+Production-only GA4 tracks content navigation, graph exploration, and feedback. See [measurement definitions and dashboard guidance](docs/analytics.md) for event meanings and verification.
+
 ## Deployment
 
 Pushing to the `main` branch automatically triggers GitHub Actions to run tests, build static assets, and deploy to GitHub Pages.

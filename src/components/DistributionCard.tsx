@@ -1,6 +1,6 @@
 import type { DragEvent } from 'react';
 import { memo, useEffect, useMemo, useState } from 'react';
-import { trackEvent, trackHelpOpen, trackParamChange } from '../analytics';
+import { trackEvent, trackExplore, trackHelpOpen, trackParamChange } from '../analytics';
 import type { DistributionDef } from '../domain/types';
 import type { Locale, MessageKey } from '../i18n';
 import { formatNumber, translate } from '../i18n';
@@ -187,7 +187,7 @@ function DistributionCardBase({
             step={p.step}
             value={card.params[p.key]}
             onChange={(value) => {
-              trackParamChange(def.id);
+              if (value !== card.params[p.key]) trackParamChange(def.id, p.key);
               onParamChange(p.key, value);
             }}
           />
@@ -202,7 +202,10 @@ function DistributionCardBase({
             checked={card.showHistogram}
             onChange={() => {
               // 「オンにした」ときだけ計測する(機能がどれだけ発見されているか)
-              if (!card.showHistogram) trackEvent('histogram_on', { distribution: def.id });
+              if (!card.showHistogram) {
+                trackExplore(def.id, 'histogram');
+                trackEvent('histogram_on', { distribution: def.id });
+              }
               onToggleHistogram();
             }}
           />
@@ -225,9 +228,20 @@ function DistributionCardBase({
               max={SAMPLE_SIZE.max}
               step={SAMPLE_SIZE.step}
               value={card.sampleSize}
-              onChange={onSampleSizeChange}
+              onChange={(value) => {
+                if (value !== card.sampleSize) trackParamChange(def.id, 'sample_size');
+                onSampleSizeChange(value);
+              }}
             />
-            <button type="button" className={`${textButtonClass} self-start`} onClick={onResample}>
+            <button
+              type="button"
+              className={`${textButtonClass} self-start`}
+              onClick={() => {
+                trackExplore(def.id, 'resample');
+                trackEvent('sample_resample', { distribution: def.id });
+                onResample();
+              }}
+            >
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path
                   d="M20 8a8 8 0 1 0 1.7 6M21 3v6h-6"
