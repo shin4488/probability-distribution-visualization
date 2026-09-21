@@ -171,6 +171,7 @@ function DistributionCardBase({
         histogram={histogram}
         theme={theme}
         labels={{
+          description: `${t(dk('name'))} ${def.notation(card.params, fmt)}`,
           density: t(def.kind === 'continuous' ? 'ui.chartDensity' : 'ui.chartMass'),
           histogram: t('ui.chartHistogram'),
         }}

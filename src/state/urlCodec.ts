@@ -6,6 +6,7 @@ import {
 } from '../domain/distributions';
 import type { DistributionId } from '../domain/types';
 import { clampParam } from '../domain/types';
+import { type Category, isCategory } from '../guide/catalog';
 import { isLocale } from '../i18n';
 import type { AppState, CardState } from './appState';
 import { clampSampleSize, defaultCardState, SAMPLE_SIZE } from './appState';
@@ -15,6 +16,8 @@ import { clampSampleSize, defaultCardState, SAMPLE_SIZE } from './appState';
  * パーセントエンコードを避けている):
  *
  *   ?lang=en&theme=dark
+ *    &page=guide                ケースから探すページ(chartsは省略)
+ *    &category=count&case=poisson 選択したカテゴリ・ケース(初期値は省略)
  *    &order=poisson,normal,...   デフォルト順と違うときだけ
  *    &hide=beta,gamma            非表示があるときだけ
  *    &usecase=0                  活用例セクションを隠しているときだけ
@@ -73,6 +76,9 @@ function decodeCard(id: DistributionId, raw: string): CardState {
 
 export function encodeAppState(state: AppState): string {
   const parts: string[] = [];
+  if (state.page === 'guide') parts.push('page=guide');
+  if (state.category !== 'all') parts.push(`category=${state.category}`);
+  if (state.selectedCase) parts.push(`case=${state.selectedCase}`);
   if (state.localeExplicit) parts.push(`lang=${state.locale}`);
   if (state.themeExplicit) parts.push(`theme=${state.theme}`);
 
@@ -89,6 +95,9 @@ export function encodeAppState(state: AppState): string {
 }
 
 export interface DecodedUrlState {
+  page: 'charts' | 'guide';
+  category: Category;
+  selectedCase: DistributionId | null;
   locale?: 'ja' | 'en';
   theme?: 'light' | 'dark';
   order: DistributionId[];
@@ -101,7 +110,12 @@ export interface DecodedUrlState {
 export function decodeAppState(search: string): DecodedUrlState {
   const params = new URLSearchParams(search);
 
+  const category = params.get('category') ?? '';
+  const selectedCase = params.get('case') ?? '';
   const result: DecodedUrlState = {
+    page: params.get('page') === 'guide' ? 'guide' : 'charts',
+    category: isCategory(category) ? category : 'all',
+    selectedCase: isDistributionId(selectedCase) ? selectedCase : null,
     order: [...DISTRIBUTION_IDS],
     hidden: [],
     showUseCases: params.get('usecase') !== '0',

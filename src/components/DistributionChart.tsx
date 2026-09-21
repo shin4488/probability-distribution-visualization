@@ -11,7 +11,7 @@ interface Props {
   /** nullならヒストグラム非表示 */
   histogram: { sampleSize: number; seed: number } | null;
   theme: Theme;
-  labels: { density: string; histogram: string };
+  labels: { description: string; density: string; histogram: string };
 }
 
 type XY = { x: number; y: number };
@@ -188,7 +188,7 @@ export function DistributionChart({ def, params, histogram, theme, labels }: Pro
 
   return (
     <div className="relative h-[220px]">
-      <canvas ref={canvasRef} role="img" />
+      <canvas ref={canvasRef} role="img" aria-label={labels.description} />
     </div>
   );
 }

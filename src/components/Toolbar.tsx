@@ -5,6 +5,7 @@ import { iconButtonClass, textButtonClass } from './ui';
 
 interface Props {
   locale: Locale;
+  page: 'charts' | 'guide';
   theme: Theme;
   onLocaleChange: (locale: Locale) => void;
   onThemeToggle: () => void;
@@ -17,6 +18,7 @@ const LOCALE_LABELS: Record<Locale, string> = { ja: '日本語', en: 'EN' };
 
 export function Toolbar({
   locale,
+  page,
   theme,
   onLocaleChange,
   onThemeToggle,
@@ -48,7 +50,7 @@ export function Toolbar({
               key={l}
               type="button"
               className={`cursor-pointer px-3 py-1.5 text-sm ${
-                l === locale ? 'bg-accent text-white' : 'text-muted'
+                l === locale ? 'bg-accent text-on-accent' : 'text-muted'
               }`}
               onClick={() => onLocaleChange(l)}
               aria-pressed={l === locale}
@@ -86,36 +88,45 @@ export function Toolbar({
             </svg>
           )}
         </button>
-        <button
-          type="button"
-          className={`${iconButtonClass} ${showUseCases ? 'border-accent bg-accent-soft text-accent' : ''}`}
-          onClick={onToggleUseCases}
-          title={t(showUseCases ? 'ui.usecaseHide' : 'ui.usecaseShow')}
-          aria-label={t(showUseCases ? 'ui.usecaseHide' : 'ui.usecaseShow')}
-          aria-pressed={showUseCases}
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path
-              d="M12 6.3C10.6 4.9 8.7 4.2 6.5 4.2c-1.6 0-3.1.4-4.5 1v13.6c1.4-.6 2.9-1 4.5-1 2.2 0 4.1.7 5.5 2.1 1.4-1.4 3.3-2.1 5.5-2.1 1.6 0 3.1.4 4.5 1V5.2c-1.4-.6-2.9-1-4.5-1-2.2 0-4.1.7-5.5 2.1Zm0 0v13.6"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            {/* 非表示中は斜線を重ねる(カードの非表示ボタンと同じ「隠している」の視覚言語) */}
-            {!showUseCases && (
-              <path d="M3 3l18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-            )}
-          </svg>
-        </button>
-        <button
-          type="button"
-          className={textButtonClass}
-          onClick={onReset}
-          title={t('ui.resetTitle')}
-        >
-          {t('ui.reset')}
-        </button>
+        {page === 'charts' && (
+          <>
+            <button
+              type="button"
+              className={`${iconButtonClass} ${showUseCases ? 'border-accent bg-accent-soft text-accent' : ''}`}
+              onClick={onToggleUseCases}
+              title={t(showUseCases ? 'ui.usecaseHide' : 'ui.usecaseShow')}
+              aria-label={t(showUseCases ? 'ui.usecaseHide' : 'ui.usecaseShow')}
+              aria-pressed={showUseCases}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  d="M12 6.3C10.6 4.9 8.7 4.2 6.5 4.2c-1.6 0-3.1.4-4.5 1v13.6c1.4-.6 2.9-1 4.5-1 2.2 0 4.1.7 5.5 2.1 1.4-1.4 3.3-2.1 5.5-2.1 1.6 0 3.1.4 4.5 1V5.2c-1.4-.6-2.9-1-4.5-1-2.2 0-4.1.7-5.5 2.1Zm0 0v13.6"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                {/* 非表示中は斜線を重ねる(カードの非表示ボタンと同じ「隠している」の視覚言語) */}
+                {!showUseCases && (
+                  <path
+                    d="M3 3l18 18"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
+                )}
+              </svg>
+            </button>
+            <button
+              type="button"
+              className={textButtonClass}
+              onClick={onReset}
+              title={t('ui.resetTitle')}
+            >
+              {t('ui.reset')}
+            </button>
+          </>
+        )}
       </div>
     </header>
   );

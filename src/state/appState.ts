@@ -1,6 +1,7 @@
 import { DISTRIBUTION_IDS, DISTRIBUTIONS, getDistribution } from '../domain/distributions';
 import type { DistributionId, ParamValues } from '../domain/types';
 import { clampParam, defaultParams } from '../domain/types';
+import type { Category } from '../guide/catalog';
 import type { Locale } from '../i18n';
 
 export type Theme = 'light' | 'dark';
@@ -14,6 +15,9 @@ export interface CardState {
 }
 
 export interface AppState {
+  page: 'charts' | 'guide';
+  category: Category;
+  selectedCase: DistributionId | null;
   locale: Locale;
   /** URL・localStorage・UI操作のいずれかで明示された場合true。trueのときURLに書く */
   localeExplicit: boolean;
@@ -61,6 +65,8 @@ export function clampSampleSize(value: number): number {
 }
 
 export type Action =
+  | { type: 'selectCategory'; category: Category }
+  | { type: 'selectCase'; id: DistributionId | null }
   | { type: 'setParam'; id: DistributionId; key: string; value: number }
   | { type: 'toggleHistogram'; id: DistributionId }
   | { type: 'setSampleSize'; id: DistributionId; value: number }
@@ -74,6 +80,10 @@ export type Action =
 
 export function reducer(state: AppState, action: Action): AppState {
   switch (action.type) {
+    case 'selectCategory':
+      return { ...state, category: action.category, selectedCase: null };
+    case 'selectCase':
+      return { ...state, selectedCase: action.id };
     case 'setParam': {
       const def = getDistribution(action.id);
       const paramDef = def.params.find((p) => p.key === action.key);
@@ -146,6 +156,8 @@ export function reducer(state: AppState, action: Action): AppState {
       // 言語・テーマは「本人の好み」なのでリセット対象にしない
       return {
         ...state,
+        category: 'all',
+        selectedCase: null,
         order: [...DISTRIBUTION_IDS],
         hidden: [],
         showUseCases: true,

@@ -1,3 +1,4 @@
+import { guideJa } from './guide.ja';
 /**
  * 日本語辞書。キー構成:
  *   ui.*                     画面共通の文言
@@ -11,6 +12,7 @@
  * この辞書が全キーの正であり、英語辞書はsatisfiesで同じキー集合を強制される。
  */
 export const ja = {
+  ...guideJa,
   'ui.title': '確率分布ビジュアライザー',
   'ui.docTitle': '確率分布ビジュアライザー | Probability Distributions',
   'ui.metaDescription':
@@ -86,11 +88,11 @@ export const ja = {
 
   'dist.gamma.name': 'ガンマ分布',
   'dist.gamma.tagline':
-    '一定レートで起きる出来事がk回発生するまでの合計待ち時間。指数分布をk個足し合わせたもの',
-  'dist.gamma.param.shape': '形状 k(件数)',
-  'dist.gamma.param.scale': '尺度 θ(1件あたりの平均)',
+    '正の量のばらつきを表す分布。kが正の整数なら、独立で同じ発生率の指数分布k個の和として、k回発生するまでの合計待ち時間を表す',
+  'dist.gamma.param.shape': '形状 k',
+  'dist.gamma.param.scale': '尺度 θ',
   'dist.gamma.usecase':
-    '1件あたり平均{scale}分かかる対応をk={shape}件分こなすまでの合計時間のモデルで、平均{mean}分・標準偏差{sd}分です。コールセンターの総対応時間、保険金の支払総額、降水量など「正の値で右に裾を引く量」に幅広く当てはまります。負の二項分布に出てきた「人によってばらつく発生ペースλ」の分布として使われるのも、λが正の値で個人差が右に裾を引くというこの性質のためです。',
+    '所要時間をk={shape}, θ={scale}分のガンマ分布でモデル化すると、平均{mean}分・標準偏差{sd}分です。kが正の整数で、各対応時間が独立かつ同じ指数分布に従うときは、k件の合計対応時間と読めます。整数でないkも正の量のモデルとして使えますが、件数ではありません。降水量や保険金額などでも候補になりますが、右に裾が長いというだけで当てはまるとは限りません。',
 
   'dist.negbinomial.name': '負の二項分布',
   'dist.negbinomial.tagline':
@@ -106,7 +108,7 @@ export const ja = {
   'dist.beta.param.alpha': '形状 α',
   'dist.beta.param.beta': '形状 β',
   'dist.beta.usecase':
-    'α={alpha}, β={beta}は「成功{successes}回・失敗{failures}回を観測したあとのコンバージョン率の確からしさ」と読め、推定平均は{meanPct}%です。A/Bテストのベイズ評価や、データが少ない段階での成功率の不確かさの表現に使われます。観測が増えるほど山が鋭くなり、確信が強まる様子を試してみてください。',
+    '成約率への見込みをα={alpha}, β={beta}のベータ分布で表すと、その平均は{meanPct}%です。一様な事前分布（α=β=1）から始める場合、成功を1回観測するたびにα、失敗を1回観測するたびにβを1増やします。小数や1未満の値も形状として有効ですが、現在のα・βをそのまま観測件数に読み替えることはできません。A/Bテストなどで、率の不確かさを表す候補になります。',
 
   'dist.normal.name': '正規分布',
   'dist.normal.tagline':
