@@ -202,20 +202,6 @@ export function App() {
         <CaseGuide state={state} dispatch={dispatch} />
       ) : (
         <>
-          {state.selectedCase && (
-            <aside className="mb-5 rounded-xl border border-border bg-card p-4 text-sm">
-              <p className="font-semibold">
-                {translate(state.locale, `guide.case.${state.selectedCase}.title`)}
-              </p>
-              <p className="mt-2 text-muted">{translate(state.locale, 'guide.chartNote')}</p>
-              <a
-                href={`?${encodeAppState({ ...state, page: 'guide' })}`}
-                className="mt-3 inline-block font-semibold text-accent underline underline-offset-4"
-              >
-                ← {translate(state.locale, 'nav.guide')}
-              </a>
-            </aside>
-          )}
           <FilterChips
             locale={state.locale}
             order={state.order}

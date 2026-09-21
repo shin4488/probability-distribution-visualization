@@ -79,11 +79,11 @@ export const en = {
 
   'dist.gamma.name': 'Gamma',
   'dist.gamma.tagline':
-    'Total waiting time until k events occur at a constant rate — the sum of k exponentials',
-  'dist.gamma.param.shape': 'Shape k (count)',
-  'dist.gamma.param.scale': 'Scale θ (mean per task)',
+    'A distribution for positive quantities. For positive integer k, it is the sum of k independent exponentials with the same rate: the total wait until k events occur',
+  'dist.gamma.param.shape': 'Shape k',
+  'dist.gamma.param.scale': 'Scale θ',
   'dist.gamma.usecase':
-    'The total time to handle k={shape} tasks that each take {scale} minutes on average, with mean {mean} and standard deviation {sd} minutes. It fits call-center handle-time totals, insurance claim totals, rainfall — anything positive and right-skewed. That same property is why it also serves as the distribution of the person-to-person Poisson rate λ in the negative binomial: rates are positive, and their individual differences trail off to the right.',
+    'A gamma model for duration with k={shape} and θ={scale} minutes has mean {mean} and standard deviation {sd} minutes. For positive integer k, it can describe the total duration of k independent tasks whose times share the same exponential distribution. Non-integer k is also valid for positive quantities, but is not a task count. Rainfall and claim amounts are other potential uses; a long right tail alone does not establish a good fit.',
 
   'dist.negbinomial.name': 'Negative binomial',
   'dist.negbinomial.tagline':
@@ -99,7 +99,7 @@ export const en = {
   'dist.beta.param.alpha': 'Shape α',
   'dist.beta.param.beta': 'Shape β',
   'dist.beta.usecase':
-    'α={alpha}, β={beta} reads as your belief about a conversion rate after seeing {successes} successes and {failures} failures, with an estimated mean of {meanPct}%. It powers Bayesian A/B testing and expresses uncertainty about rates when data is scarce — watch the peak sharpen as observations grow.',
+    'A Beta(α={alpha}, β={beta}) belief about a conversion rate has mean {meanPct}%. Starting from a uniform prior (α=β=1), each observed success adds 1 to α and each failure adds 1 to β. Fractional shapes and values below 1 are also valid, but the current shapes cannot in general be read as observed counts. This is one way to describe uncertainty about a rate in settings such as A/B testing.',
 
   'dist.normal.name': 'Normal',
   'dist.normal.tagline':

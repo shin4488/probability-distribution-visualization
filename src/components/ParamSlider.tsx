@@ -25,34 +25,39 @@ export function ParamSlider({ label, min, max, step, value, onChange }: Props) {
   };
 
   return (
-    <div className="grid grid-cols-[minmax(110px,auto)_1fr_78px] items-center gap-2.5">
-      <label className="text-[0.82rem] whitespace-nowrap text-muted" htmlFor={id}>
-        {label}
-      </label>
-      <input
-        id={id}
-        className="m-0 w-full cursor-pointer accent-accent"
-        type="range"
-        min={min}
-        max={max}
-        step={step}
-        value={value}
-        onChange={(e) => onChange(Number(e.target.value))}
-      />
-      <input
-        className="w-full rounded-md border border-border bg-bg px-1.5 py-1 font-mono text-[0.82rem] text-fg focus:border-transparent focus:outline-2 focus:-outline-offset-1 focus:outline-accent"
-        type="number"
-        min={min}
-        max={max}
-        step={step}
-        value={draft ?? value}
-        onChange={(e) => setDraft(e.target.value)}
-        onBlur={commitDraft}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') commitDraft();
-        }}
-        aria-label={label}
-      />
+    <div className="@container">
+      <div className="grid grid-cols-[minmax(0,1fr)_78px] items-center gap-2.5 @min-[400px]:grid-cols-[minmax(110px,auto)_minmax(0,1fr)_78px]">
+        <label
+          className="col-span-2 text-[0.82rem] text-muted @min-[400px]:col-span-1"
+          htmlFor={id}
+        >
+          {label}
+        </label>
+        <input
+          id={id}
+          className="m-0 w-full cursor-pointer accent-accent"
+          type="range"
+          min={min}
+          max={max}
+          step={step}
+          value={value}
+          onChange={(e) => onChange(Number(e.target.value))}
+        />
+        <input
+          className="w-full rounded-md border border-border bg-bg px-1.5 py-1 font-mono text-[0.82rem] text-fg focus:border-transparent focus:outline-2 focus:-outline-offset-1 focus:outline-accent"
+          type="number"
+          min={min}
+          max={max}
+          step={step}
+          value={draft ?? value}
+          onChange={(e) => setDraft(e.target.value)}
+          onBlur={commitDraft}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') commitDraft();
+          }}
+          aria-label={label}
+        />
+      </div>
     </div>
   );
 }

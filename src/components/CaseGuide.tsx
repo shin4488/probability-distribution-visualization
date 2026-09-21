@@ -54,7 +54,6 @@ export function CaseGuide({ state, dispatch }: { state: AppState; dispatch: Disp
             <h2 className="text-2xl font-bold leading-relaxed tracking-tight sm:text-3xl">
               {t('guide.title')}
             </h2>
-            <p className="mt-3 max-w-3xl text-sm leading-7 text-muted">{t('guide.intro')}</p>
             <ol className="mt-6 flex flex-wrap gap-x-7 gap-y-3 text-sm">
               {(['step1', 'step2', 'step3'] as const).map((step, i) => (
                 <li key={step} className="flex items-center gap-2">
@@ -67,10 +66,9 @@ export function CaseGuide({ state, dispatch }: { state: AppState; dispatch: Disp
             </ol>
           </section>
           <section aria-labelledby="guide-categories" className="mb-9">
-            <h2 id="guide-categories" className="text-lg font-bold">
+            <h2 id="guide-categories" className="mb-4 text-lg font-bold">
               {t('guide.categoryLabel')}
             </h2>
-            <p className="mt-1 mb-4 text-sm text-muted">{t('guide.categoryHint')}</p>
             <div className="grid grid-cols-2 gap-3 lg:grid-cols-5">
               {CATEGORIES.filter((category) => category !== 'all').map((category) => (
                 <button
@@ -111,9 +109,6 @@ export function CaseGuide({ state, dispatch }: { state: AppState; dispatch: Disp
                 </button>
               )}
             </div>
-            <p role="status" className="mb-3 text-sm text-muted">
-              {t(`guide.category.${state.category}`)} · {cases.length}
-            </p>
             <div className="grid gap-4 md:grid-cols-2">
               {cases.map((item) => (
                 <button
@@ -184,11 +179,10 @@ export function CaseGuide({ state, dispatch }: { state: AppState; dispatch: Disp
               <p className="mt-3 text-sm leading-7">{t(`guide.case.${selected.id}.why`)}</p>
               <a
                 href={chartHref(selected.id)}
-                className="mt-6 flex items-center justify-center gap-3 rounded-lg bg-accent px-4 py-3 text-sm font-bold text-white hover:opacity-90"
+                className="mt-6 flex items-center justify-center gap-3 rounded-lg bg-accent px-4 py-3 text-sm font-bold text-on-accent hover:opacity-90"
               >
                 {t('guide.open')} <span aria-hidden="true">→</span>
               </a>
-              <p className="mt-3 text-xs leading-5 text-muted">{t('guide.chartNote')}</p>
             </div>
             <div className="space-y-4">
               <section className="rounded-xl border border-border bg-card p-5">
@@ -207,6 +201,7 @@ export function CaseGuide({ state, dispatch }: { state: AppState; dispatch: Disp
                   {t(`guide.case.${selected.id}.parameters`)}
                 </p>
               </section>
+
               <section className="rounded-xl border border-accent/30 bg-accent-soft p-5">
                 <h3 className="text-xs font-bold text-muted">{t('guide.alternative')}</h3>
                 <p className="mt-2 text-sm leading-6">
@@ -222,8 +217,10 @@ export function CaseGuide({ state, dispatch }: { state: AppState; dispatch: Disp
               </section>
             </div>
           </div>
-          <details className="mt-5 text-sm text-muted">
-            <summary className="cursor-pointer">{t('guide.references')}</summary>
+          <section className="mt-5 text-sm text-muted" aria-labelledby="guide-references">
+            <h3 id="guide-references" className="font-semibold">
+              {t('guide.references')}
+            </h3>
             <ul className="mt-3 space-y-2">
               <li>
                 <a
@@ -242,12 +239,9 @@ export function CaseGuide({ state, dispatch }: { state: AppState; dispatch: Disp
                 </a>
               </li>
             </ul>
-          </details>
+          </section>
         </>
       )}
-      <p className="mt-8 border-t border-border pt-5 text-sm leading-7 text-muted">
-        {t('guide.note')}
-      </p>
     </main>
   );
 }

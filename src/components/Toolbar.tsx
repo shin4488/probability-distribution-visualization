@@ -50,7 +50,7 @@ export function Toolbar({
               key={l}
               type="button"
               className={`cursor-pointer px-3 py-1.5 text-sm ${
-                l === locale ? 'bg-accent text-white' : 'text-muted'
+                l === locale ? 'bg-accent text-on-accent' : 'text-muted'
               }`}
               onClick={() => onLocaleChange(l)}
               aria-pressed={l === locale}

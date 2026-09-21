@@ -30,9 +30,6 @@ export const beta: DistributionDef = {
     return {
       alpha,
       beta: b,
-      // Beta(α,β)は「成功α-1回・失敗β-1回を観測した後の成功率の信念」と読める
-      successes: Math.max(0, Math.round(alpha - 1)),
-      failures: Math.max(0, Math.round(b - 1)),
       meanPct: (alpha / (alpha + b)) * 100,
     };
   },
