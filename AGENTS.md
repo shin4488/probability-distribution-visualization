@@ -39,6 +39,6 @@ docker compose run --rm app npm run build
 
 - Read relevant code, docs, and skills first; expand the search when evidence is insufficient.
 - Resolve uncertainties from existing sources; ask before dependent work if they remain. Do not reconfirm agreed decisions.
-- Preserve each document's language and use idiomatic wording.
+- Preserve each document's language. Write natural Japanese for Japanese readers and idiomatic English for English-speaking readers.
 - Run applicable required checks and fix failures. Reuse results only while the diff, dependencies, configuration, and execution conditions are unchanged; report results and gaps briefly.
 - Keep durable rules and references here; do not duplicate progress, configuration values, or procedures from docs or skills.
