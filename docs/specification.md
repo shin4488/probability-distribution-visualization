@@ -48,7 +48,7 @@ Target the following distributions.
 
 ## Ground rules
 
-- Write CLAUDE.md so development can continue in a later session
+- Write AGENTS.md so development can continue in a later session
 - Create the minimum necessary Agent Skills (if needed)
 - If anything in the specification is unclear, ask instead of interpreting it on your own
 

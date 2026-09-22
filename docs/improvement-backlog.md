@@ -27,7 +27,7 @@ Effort: **S** = hours, **M** = a day or two, **L** = a week-scale project.
 ### Touch-device reordering (fixes a known limitation) — M
 
 Card reordering uses the HTML5 Drag and Drop API, which does not fire on touch
-devices — the one feature mobile users lack (README/CLAUDE.md "Known limitations").
+devices — the one feature mobile users lack (README/AGENTS.md "Known limitations").
 
 Steps:
 
@@ -50,7 +50,7 @@ Steps:
    care where the reorder came from
 6. Verify on real devices (iOS Safari, Android Chrome) — DevTools touch emulation
    is not trustworthy for pointer events — plus a desktop mouse regression pass
-7. Delete the Known-limitations bullet from README.md and CLAUDE.md; `spec-sync`
+7. Delete the Known-limitations bullet from README.md and AGENTS.md; `spec-sync`
    the confirmed interaction
 
 ### CDF view toggle — M
@@ -195,7 +195,7 @@ Steps:
 5. Verify beyond the gate: `docker compose up` dev-server HMR works from the
    host; `npm run build` then inspect `dist/index.html` — all asset URLs must
    still be relative (GitHub Pages subpath serving)
-6. Update the Known-limitations note in README.md/CLAUDE.md and the Vite entry in
+6. Update the Known-limitations note in README.md/AGENTS.md and the Vite entry in
    docs/tech-selection.md
 
 ### Smoke-test the built output in CI — S

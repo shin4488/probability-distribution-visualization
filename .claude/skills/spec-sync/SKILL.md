@@ -33,4 +33,4 @@ Keep each bullet one or two lines: **what was decided** and, when not obvious, *
 Update existing bullets instead of appending contradictory new ones (e.g. when the
 distribution ordering changes, rewrite the ordering bullet).
 
-Update any affected descriptions in CLAUDE.md and README.md in the same change.
+Update any affected descriptions in AGENTS.md and README.md in the same change.
