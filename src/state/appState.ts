@@ -21,7 +21,7 @@ export interface AppState {
   locale: Locale;
   /** URL・localStorage・UI操作のいずれかで明示された場合true。trueのときURLに書く */
   localeExplicit: boolean;
-  /** このセッションで本人がUIから変更した場合のみtrue。trueのときだけlocalStorageへ保存する */
+  /** 共有URLの設定で本人の保存済みの好みを上書きしないよう、UIで変更したときだけ保存する。 */
   localeTouched: boolean;
   theme: Theme;
   themeExplicit: boolean;
@@ -50,7 +50,7 @@ export function defaultCards(): Record<DistributionId, CardState> {
   return cards;
 }
 
-/** 標本サイズもパラメータと同じ丸め規則(範囲+step格子)に乗せる */
+/** 手編集された共有URLでも、スライダーで選べる範囲・刻みにそろえる。 */
 export function clampSampleSize(value: number): number {
   return clampParam(
     {
