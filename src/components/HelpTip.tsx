@@ -27,7 +27,7 @@ export function HelpTip({ text, label, onOpen }: Props) {
     <span className="relative inline-flex">
       <button
         type="button"
-        className="inline-flex h-4 w-4 cursor-help items-center justify-center rounded-full border border-muted text-[0.65rem] font-bold text-muted hover:border-accent hover:text-accent"
+        className="inline-flex size-4 cursor-help items-center justify-center rounded-full border border-muted text-[0.65rem] font-bold text-muted hover:border-accent hover:text-accent"
         aria-label={label}
         aria-expanded={open}
         aria-describedby={open ? tooltipId : undefined}

@@ -58,7 +58,7 @@ export function CaseGuide({ state, dispatch }: { state: AppState; dispatch: Disp
             <ol className="mt-6 flex flex-wrap gap-x-7 gap-y-3 text-sm">
               {(['step1', 'step2', 'step3'] as const).map((step, i) => (
                 <li key={step} className="flex items-center gap-2">
-                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-accent-soft text-xs font-bold text-accent">
+                  <span className="flex size-6 items-center justify-center rounded-full bg-accent-soft text-xs font-bold text-accent">
                     {i + 1}
                   </span>
                   {t(`guide.${step}`)}

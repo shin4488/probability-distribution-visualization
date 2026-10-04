@@ -25,7 +25,7 @@ export function BackToTop({ label }: Props) {
   return (
     <button
       type="button"
-      className="fixed right-6 bottom-6 z-10 inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-border bg-card text-muted shadow-card transition-colors hover:border-accent hover:text-accent"
+      className="fixed right-6 bottom-6 z-10 inline-flex size-11 cursor-pointer items-center justify-center rounded-full border border-border bg-card text-muted shadow-card transition-colors hover:border-accent hover:text-accent"
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       title={label}
       aria-label={label}

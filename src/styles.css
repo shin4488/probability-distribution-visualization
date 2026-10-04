@@ -62,10 +62,7 @@
 
 @layer base {
   body {
-    @apply bg-bg font-sans text-fg antialiased;
-    /* テーマ切替時に背景・文字色をなめらかに変える */
-    transition:
-      background-color 0.25s ease,
-      color 0.25s ease;
+    /* transition-*: テーマ切替時に背景・文字色をなめらかに変える */
+    @apply bg-bg font-sans text-fg antialiased transition-colors duration-250 ease-[ease];
   }
 }
