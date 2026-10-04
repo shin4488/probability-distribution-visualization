@@ -42,3 +42,4 @@ docker compose run --rm app npm run build
 - Preserve each document's language. Write natural Japanese for Japanese readers and idiomatic English for English-speaking readers.
 - Run applicable required checks and fix failures. Reuse results only while the diff, dependencies, configuration, and execution conditions are unchanged; report results and gaps briefly.
 - Keep durable rules and references here; do not duplicate progress, configuration values, or procedures from docs or skills.
+- Comments state only intent and assumptions the code cannot show. Leave out anything that goes stale as the code changes, such as history, volatile values, or locations of other documents.
