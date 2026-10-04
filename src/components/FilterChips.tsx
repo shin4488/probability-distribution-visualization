@@ -26,7 +26,7 @@ export function FilterChips({ locale, order, hidden, onToggle, onShowAll }: Prop
           <button
             key={id}
             type="button"
-            className={`cursor-pointer rounded-full border px-[13px] py-[5px] text-[0.83rem] transition-colors ${
+            className={`cursor-pointer rounded-full border px-3.25 py-1.25 text-[0.83rem] transition-colors ${
               visible
                 ? 'border-accent bg-accent-soft font-semibold text-accent'
                 : 'border-border bg-card text-muted'

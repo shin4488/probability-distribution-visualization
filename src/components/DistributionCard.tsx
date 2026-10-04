@@ -95,7 +95,7 @@ function DistributionCardBase({
 
   return (
     <article
-      className={`flex flex-col gap-2.5 rounded-[14px] border bg-card px-[18px] py-4 shadow-card transition-opacity ${
+      className={`flex flex-col gap-2.5 rounded-[14px] border bg-card px-4.5 py-4 shadow-card transition-opacity ${
         isDragging ? 'border-dashed border-accent opacity-45' : 'border-border'
       }`}
       draggable={dragReady}
@@ -210,7 +210,7 @@ function DistributionCardBase({
             }}
           />
           <span
-            className="relative h-5 w-[34px] shrink-0 rounded-full bg-border transition-colors after:absolute after:top-0.5 after:left-0.5 after:h-4 after:w-4 after:rounded-full after:bg-card after:shadow-[0_1px_2px_rgb(0_0_0/0.25)] after:transition-transform after:content-[''] peer-checked:bg-accent peer-checked:after:translate-x-3.5 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent"
+            className="relative h-5 w-8.5 shrink-0 rounded-full bg-border transition-colors after:absolute after:top-0.5 after:left-0.5 after:size-4 after:rounded-full after:bg-card after:shadow-[0_1px_2px_rgb(0_0_0/0.25)] after:transition-transform peer-checked:bg-accent peer-checked:after:translate-x-3.5 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent"
             aria-hidden="true"
           />
           {t('ui.histogram')}
@@ -259,7 +259,7 @@ function DistributionCardBase({
       </div>
 
       {showUseCase && (
-        <div className="rounded-r-lg border-l-[3px] border-accent bg-accent-soft px-3 py-2.5">
+        <div className="rounded-r-lg border-l-3 border-accent bg-accent-soft px-3 py-2.5">
           <h3 className="mb-1 text-[0.78rem] font-bold tracking-[0.06em] text-accent uppercase">
             {t('ui.usecaseTitle')}
           </h3>

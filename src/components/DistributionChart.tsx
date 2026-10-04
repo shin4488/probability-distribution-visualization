@@ -187,7 +187,7 @@ export function DistributionChart({ def, params, histogram, theme, labels }: Pro
   );
 
   return (
-    <div className="relative h-[220px]">
+    <div className="relative h-55">
       <canvas ref={canvasRef} role="img" aria-label={labels.description} />
     </div>
   );

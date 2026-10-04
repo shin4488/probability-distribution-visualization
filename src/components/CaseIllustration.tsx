@@ -43,7 +43,7 @@ export function CaseIllustration({ id, locale }: { id: DistributionId; locale: L
             strokeWidth="2"
           />
           <circle cx="246" cy="29" r="18" fill="currentColor" />
-          <path d="m238 29 5 5 10-11" stroke="var(--color-card)" strokeWidth="3" fill="none" />
+          <path d="m238 29 5 5 10-11" className="stroke-card" strokeWidth="3" fill="none" />
           <circle cx="246" cy="83" r="18" fill="none" stroke="currentColor" strokeWidth="2" />
           <path d="m240 77 12 12m0-12-12 12" stroke="currentColor" strokeWidth="2" />
         </>
@@ -110,7 +110,7 @@ export function CaseIllustration({ id, locale }: { id: DistributionId; locale: L
                 cx={x}
                 cy="55"
                 r="22"
-                fill="var(--color-card)"
+                className="fill-card"
                 stroke="currentColor"
                 strokeWidth="2"
               />
@@ -118,7 +118,7 @@ export function CaseIllustration({ id, locale }: { id: DistributionId; locale: L
             </g>
           ))}
           <circle cx="255" cy="55" r="22" fill="currentColor" />
-          <path d="m245 55 7 7 13-15" stroke="var(--color-card)" strokeWidth="3" fill="none" />
+          <path d="m245 55 7 7 13-15" className="stroke-card" strokeWidth="3" fill="none" />
         </>
       )}
       {id === 'gamma' && (
