@@ -6,7 +6,7 @@
 # npmの実行(install含む)は引き続き必ずコンテナ内で行うこと。
 services:
   app:
-    image: node:22-alpine
+    image: node:25-alpine
     working_dir: /app
     # npm installはlockfileと一致していればすぐ終わるため毎回実行してよい
     command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
