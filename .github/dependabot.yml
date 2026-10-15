@@ -27,6 +27,10 @@ updates:
       interval: weekly
     cooldown:
       default-days: 7
+    # Node.js 25はLTSにならない最後の奇数版。27以降は全メジャーがLTSになるため、除外が要るのは25だけ
+    ignore:
+      - dependency-name: node
+        versions: [">= 25, < 26"]
     groups:
       docker-compose:
         patterns: ["*"]
