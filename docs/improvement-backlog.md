@@ -144,36 +144,6 @@ Steps:
 
 ## Development / code quality
 
-### Dependabot for pinned deps and hash-pinned actions — S
-
-Exact-pinned npm deps and SHA-pinned actions are the supply-chain policy, but both
-go stale silently; today updates depend on someone remembering.
-
-Steps:
-
-1. Create `.github/dependabot.yml`:
-
-   ```yaml
-   version: 2
-   updates:
-     - package-ecosystem: npm
-       directory: "/"
-       schedule:
-         interval: weekly
-       open-pull-requests-limit: 5
-     - package-ecosystem: github-actions
-       directory: "/"
-       schedule:
-         interval: weekly
-   ```
-
-2. Dependabot is GitHub-native (no npm dependency) and understands SHA pinning:
-   it bumps the commit hash and the version comment together, matching the
-   deploy.yml convention
-3. After merging, check the repo's Insights → Dependency graph → Dependabot tab
-   shows both ecosystems; the first update PRs flow through normal CI + review
-4. Record the decision in docs/tech-selection.md
-
 ### Vite 6 → 7 upgrade — S
 
 Vite is held at v6 "for compatibility with Node 20.18 on the host". But the
