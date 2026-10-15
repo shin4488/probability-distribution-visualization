@@ -71,6 +71,14 @@ Actions used in workflows are pinned to **commit hashes**, not tags like `@v4` (
 Tags can be re-pointed to a different commit later, so tag pinning can execute tampered code if the upstream is compromised.
 See the comment at the top of [deploy.yml](../.github/workflows/deploy.yml) for how to look up the hashes.
 
+## Dependency updates (Dependabot)
+
+Exact-pinned npm dependencies and hash-pinned actions do not update themselves, so [Dependabot](../.github/dependabot.yml) proposes updates. It is built into GitHub and needs no npm dependency, and for hash-pinned actions it updates the hash and the version comment together.
+
+- Updates are grouped into one pull request per ecosystem, because every merge to main deploys to production.
+- A cooldown skips releases that were published only recently, so a compromised release that is quickly withdrawn is not proposed.
+- Dependabot security updates are enabled in the repository settings. They are not delayed by the cooldown.
+
 ## Deliberately hand-rolled pieces
 
 Implemented without external libraries (each fits in a few dozen lines, not worth another dependency):
