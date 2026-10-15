@@ -144,30 +144,6 @@ Steps:
 
 ## Development / code quality
 
-### Vite 6 → 7 upgrade — S
-
-Vite is held at v6 "for compatibility with Node 20.18 on the host". But the
-container already runs `node:22-alpine` (docker-compose.yml) and the host never
-executes Vite — host node_modules exists only for tsserver type resolution.
-
-Steps:
-
-1. Verify the premise: confirm nothing on the host actually *runs* Vite (tsserver
-   only reads `.d.ts`). If so, the host-Node constraint is obsolete
-2. Check Vite 7's Node requirement in its release notes against the container's
-   Node version (`docker compose run --rm app node --version`)
-3. Upgrade inside the container:
-   `docker compose run --rm app npm install --save-exact vite@<exact 7.x.y>`
-   (also bump `@vitejs/plugin-react` if its peer range requires it)
-4. Read the v7 migration guide for breaking changes touching this repo's config
-   surface: `base: './'`, `server.host: true`, the `test` block (Vitest
-   compatibility)
-5. Verify beyond the gate: `docker compose up` dev-server HMR works from the
-   host; `npm run build` then inspect `dist/index.html` — all asset URLs must
-   still be relative (GitHub Pages subpath serving)
-6. Update the Known-limitations note in README.md/AGENTS.md and the Vite entry in
-   docs/tech-selection.md
-
 ### Smoke-test the built output in CI — S
 
 CI proves the build *succeeds* but never inspects what it produced. A base-path or

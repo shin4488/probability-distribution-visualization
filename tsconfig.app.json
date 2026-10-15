@@ -1,5 +1,5 @@
 // ブラウザで動くアプリ本体(src/)の型チェック設定。
-// トランスパイルはViteのesbuildが行うため、tscは型検査のみ(noEmit)。
+// トランスパイルはViteが行うため、tscは型検査のみ(noEmit)。
 // エディタ(tsserver)もこの設定でsrc/配下の型エラーを表示する。
 {
   "compilerOptions": {
