@@ -226,8 +226,8 @@ Steps:
    (proposal: `/<id>/` serving ja with a link to `?lang=en`, matching the
    URL-parameter language precedence), what each page contains, and whether the
    page redirects into the SPA or is a standing page linking into it
-2. Write `scripts/prerender.mjs` — zero dependencies: Node 22 (already the
-   container version) can import the TypeScript i18n/registry modules directly
+2. Write `scripts/prerender.mjs` — zero dependencies: the container's Node.js
+   can import the TypeScript i18n/registry modules directly
    via `--experimental-strip-types`, so names/taglines/usecases come from the
    single source of truth instead of a copy
 3. For each distribution × locale, emit `dist/<id>/index.html` from a template:
