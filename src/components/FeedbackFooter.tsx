@@ -5,10 +5,7 @@ import { translate } from '../i18n';
 import { readStorage, writeStorage } from '../storage';
 import { textButtonClass } from './ui';
 
-// ご意見フォーム(Googleフォーム)のURL。
-// URL未設定(プレースホルダ)の間はリンクを表示しない(死にリンクを出さない)
 const FEEDBACK_FORM_URL = 'https://forms.gle/K17hDfJhBRAfTXbX6';
-const formReady = !FEEDBACK_FORM_URL.includes('PLACEHOLDER');
 
 // 回答をいつ・どう答えたかの保存キー。回答直後はお礼表示にし、
 // 1日経ったら再び質問する(仕様: 改善後の評価変化を追いつつ、しつこくしない)
@@ -80,17 +77,15 @@ export function FeedbackFooter({ locale }: Props) {
           </button>
         </div>
       )}
-      {formReady && (
-        <a
-          className="underline decoration-dotted underline-offset-4 transition-colors hover:text-accent"
-          href={FEEDBACK_FORM_URL}
-          onClick={() => trackEvent('feedback_form_open')}
-          target="_blank"
-          rel="noreferrer"
-        >
-          {t('ui.feedbackFormLink')}
-        </a>
-      )}
+      <a
+        className="underline decoration-dotted underline-offset-4 transition-colors hover:text-accent"
+        href={FEEDBACK_FORM_URL}
+        onClick={() => trackEvent('feedback_form_open')}
+        target="_blank"
+        rel="noreferrer"
+      >
+        {t('ui.feedbackFormLink')}
+      </a>
     </footer>
   );
 }
