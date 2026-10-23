@@ -22,7 +22,7 @@ export function randomSeed(): number {
 
 /** 標準正規分布 N(0,1)。Box-Muller法 */
 export function sampleStandardNormal(rng: Rng): number {
-  // rng()が0を返すとlog(0)=-∞になるため下駄を履かせる
+  // rng()が0を返すとlog(0)=-∞になるため、最小の正の数に置き換える
   const u1 = Math.max(rng(), Number.MIN_VALUE);
   const u2 = rng();
   return Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
@@ -30,8 +30,8 @@ export function sampleStandardNormal(rng: Rng): number {
 
 /**
  * ガンマ分布 Gamma(shape, 1)。Marsaglia-Tsang法。
- * shape < 1 は棄却率が悪化するため、shape+1で生成してから
- * u^(1/shape) を掛けて補正する標準的なブースト手法を使う。
+ * shape < 1 は棄却率が悪化し、shape < 1/3 ではdが負になってcを計算できないため、
+ * shape+1で生成してから u^(1/shape) を掛けて補正する標準的なブースト手法を使う。
  */
 export function sampleStandardGamma(rng: Rng, shape: number): number {
   if (shape < 1) {

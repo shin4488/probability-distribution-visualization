@@ -238,6 +238,8 @@ export function App() {
             </p>
           ) : (
             <main
+              // ケースの詳細からグラフを開くと、選んだケースがURLに残り、その分布だけが表示される。
+              // そのときは1枚のカードを幅広く中央に置く
               className={
                 state.selectedCase && visibleOrder.length === 1
                   ? 'mx-auto grid max-w-3xl grid-cols-1 gap-5'

@@ -28,7 +28,7 @@ export type DistributionKind = 'continuous' | 'discrete';
 /**
  * 1つの確率分布を表す自己完結した定義。
  * UI層はこのインターフェースだけに依存し、個々の分布の数式は知らない。
- * 新しい分布の追加 = このインターフェースの実装を1ファイル追加し、registryに登録するだけ。
+ * そのため分布を追加しても、グラフのUIに分布ごとの処理は要らない。
  */
 export interface DistributionDef {
   id: DistributionId;
@@ -63,7 +63,7 @@ export function defaultParams(def: DistributionDef): ParamValues {
   return values;
 }
 
-/** 値をParamDefの範囲に丸める(URLから来た不正値の防御に使う) */
+/** 値をParamDefの範囲とstepの格子に丸める(URLや数値入力から来た範囲外・刻み外の値を防ぐ) */
 export function clampParam(param: ParamDef, value: number): number {
   if (!Number.isFinite(value)) return param.defaultValue;
   const clamped = Math.min(param.max, Math.max(param.min, value));

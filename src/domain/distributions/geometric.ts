@@ -27,7 +27,7 @@ export const geometric: DistributionDef = {
   notation: ({ p }, fmt) => `Geo(${fmt(p)})`,
   useCaseValues({ p }) {
     const mean = (1 - p) / p;
-    // 例文用: 平均の2倍を超えて外れ続ける確率 P(X ≥ k) = (1-p)^k
+    // 例文用: 平均試行回数(mean+1)の2倍の回数だけ続けて外れる確率 P(X ≥ k) = (1-p)^k
     const streak = Math.max(1, Math.ceil(2 * (mean + 1)));
     return {
       pPct: p * 100,

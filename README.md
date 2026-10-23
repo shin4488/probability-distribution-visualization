@@ -1,40 +1,36 @@
 # Probability Distribution Visualizer
 
-An interactive web application for exploring and visualizing standard probability distributions in real time.  
-Adjust parameter sliders and immediately see probability density (PDF) and mass (PMF) charts react dynamically.
-
----
+An interactive web app for exploring 10 probability distributions. Move a parameter slider and the probability density (PDF) or probability mass (PMF) chart updates immediately.
 
 ## Key Features
 
-- **Visual Use-Case Finder**: Open “Find by use case” to choose an illustrated quantity and a real-world situation, check candidate distributions and assumptions, then try the matching chart. No knowledge of distribution names is needed.
-- **10 Core Distributions**: Covers foundational distributions organized logically (Bernoulli, Binomial, Poisson, Geometric, Negative Binomial, Normal, Log-Normal, Exponential, Gamma, and Beta).
-- **Interactive Controls & Sampling**: Real-time parameter sliders with empirical sample histograms overlaid against theoretical curves.
-- **Contextual Explanations**: Plain-language real-world use cases with active parameters woven directly into the text.
-- **Deep Linking**: Complete application state (parameters, card visibility, sort order, theme, language) is continuously synchronized to the URL query for easy sharing.
-- **Bilingual & Responsive**: Full Japanese / English localization and Dark / Light theme support.
-
----
+- Find by use case: choose an illustrated type of quantity and a concrete situation, check a candidate distribution with its assumptions and limitations, then open its chart. No knowledge of distribution names is needed.
+- 10 distributions in learning order: Bernoulli, binomial, Poisson, geometric, negative binomial, normal, log-normal, exponential, gamma, and beta.
+- Parameter sliders and number inputs, with an optional sample histogram shown on the same chart as the theoretical curve.
+- Use-case text for each distribution that includes numbers computed from the current parameters.
+- Shareable URLs: the query string keeps parameters, sample settings, card visibility and order, the use-case toggle, the guide page with its category and case, and any theme or language chosen explicitly.
+- Japanese and English text, and light and dark themes.
 
 ## Application Flow
 
 ```mermaid
 flowchart LR
-    Sliders["Parameter Controls<br>(Sliders / Inputs)"] --> Engine["Distribution Math Engine<br>(PDF / PMF & Random Sampling)"]
-    Engine --> Charts["Chart Components<br>(Theoretical Curve & Histogram)"]
-    Engine --> State["URL State Sync<br>(Shareable Query Params)"]
+    URL["URL query"] -->|decode on load| State["App state<br>(src/state)"]
+    Controls["Controls<br>(sliders, toolbar, guide)"] -->|actions| State
+    State -->|replaceState| URL
+    State --> Domain["Distribution math and sampling<br>(src/domain)"]
+    Domain --> Charts["Charts<br>(Chart.js)"]
 ```
-
----
 
 ## Tech Stack
 
-- **Frontend**: React, TypeScript, Vite
-- **Math & Charts**: Custom mathematical distribution functions, Canvas / SVG rendering
-- **Quality & Styling**: Biome, Vitest, Testing Library
-- **Environment**: Docker, Docker Compose
-
----
+| Area | Tools |
+| --- | --- |
+| Frontend | React, TypeScript, Vite |
+| Charts | Chart.js (canvas). Distribution math and random sampling are implemented in `src/domain` |
+| Styling | Tailwind CSS |
+| Quality | Biome, Vitest |
+| Environment | Docker, Docker Compose |
 
 ## Local Development
 
@@ -52,7 +48,7 @@ docker compose up
 Run quality checks and test suites through the container:
 
 ```bash
-# Unit & component tests
+# Unit tests
 docker compose run --rm app npm test
 
 # TypeScript type verification
@@ -65,12 +61,10 @@ docker compose run --rm app npm run lint
 docker compose run --rm app npm run build
 ```
 
----
-
 ## Analytics
 
 Production-only GA4 tracks content navigation, graph exploration, and feedback. See [measurement definitions and dashboard guidance](docs/analytics.md) for event meanings and verification.
 
 ## Deployment
 
-Pushing to the `main` branch automatically triggers GitHub Actions to run tests, build static assets, and deploy to GitHub Pages.
+Pushing to the `main` branch runs [the deploy workflow](.github/workflows/deploy.yml), which runs lint, type checks, tests, and the build, then deploys to GitHub Pages. The one-time Pages setting is described at the top of that workflow.

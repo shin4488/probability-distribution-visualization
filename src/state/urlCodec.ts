@@ -12,7 +12,7 @@ import type { AppState, CardState } from './appState';
 import { clampSampleSize, defaultCardState, SAMPLE_SIZE } from './appState';
 
 /**
- * URLクエリの形式(人間が読めるよう、値の文字集合を [0-9.,-hs] に限定して
+ * URLクエリの形式(人間が読めるよう、値には英小文字・数字と . , - だけを使い、
  * パーセントエンコードを避けている):
  *
  *   ?lang=en&theme=dark
@@ -78,6 +78,7 @@ export function encodeAppState(state: AppState): string {
   const parts: string[] = [];
   if (state.page === 'guide') parts.push('page=guide');
   if (state.category !== 'all') parts.push(`category=${state.category}`);
+  // グラフのページでもケースを残し、ページ切替のリンクから元のケースへ戻れるようにする
   if (state.selectedCase) parts.push(`case=${state.selectedCase}`);
   if (state.localeExplicit) parts.push(`lang=${state.locale}`);
   if (state.themeExplicit) parts.push(`theme=${state.theme}`);

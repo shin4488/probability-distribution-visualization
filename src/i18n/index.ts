@@ -14,7 +14,7 @@ const BCP47: Record<Locale, string> = { ja: 'ja-JP', en: 'en-US' };
 const numberFormats = new Map<Locale, Intl.NumberFormat>();
 
 /**
- * 桁数はここで一括制御する。統計量は有効2桁の小数で十分読め、
+ * 桁数はここで一括制御する。統計量は小数第2位まであれば十分読め、
  * それ以上は例文の中でノイズになる。
  */
 export function formatNumber(locale: Locale, value: number): string {

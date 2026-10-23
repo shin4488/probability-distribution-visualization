@@ -9,6 +9,7 @@ import { guideJa } from './guide.ja';
  *   dist.<id>.usecase        活用例。具体的・実用的な場面を書き、{...}には
  *                            DistributionDef.useCaseValues()の現在値が
  *                            ロケール書式で埋め込まれる
+ *   nav.*, guide.*           ページ切替と「ケースから探す」ページの文言(guide.ja.ts)
  * この辞書が全キーの正であり、英語辞書はsatisfiesで同じキー集合を強制される。
  */
 export const ja = {

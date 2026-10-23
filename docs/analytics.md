@@ -50,7 +50,7 @@ Start with the last 28 complete days compared with the previous 28 days. Use the
 3. **Guide:** case-detail readers and chart-link users. Inspect the ordered funnel before claiming where people drop off.
 4. **Topics and feedback:** distributions used and up/down responses. Category choices can be investigated using `guide_category_select` and the registered dimension. Compare mobile with desktop before changing the content.
 
-New events start only after the PR is merged and deployed. Registered dimensions are not retroactive and may take 24–48 hours to become reportable. Empty new charts initially mean no processed data, not necessarily a malfunction. Keep pre-change and post-change periods separate because the definition of a page view and event context changed.
+New events start only after they are deployed. Registered dimensions are not retroactive and may take 24–48 hours to become reportable. Empty new charts initially mean no processed data, not necessarily a malfunction. Keep pre-change and post-change periods separate because the definition of a page view and event context changed.
 
 Localhost never loads the Google tag. Unit tests replace `gtag` with a spy. Do not send synthetic production events to populate charts.
 
