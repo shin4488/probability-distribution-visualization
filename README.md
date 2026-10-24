@@ -1,10 +1,10 @@
 # Probability Distribution Visualizer
 
-An interactive web app for exploring 10 probability distributions. Move a parameter slider and the probability density (PDF) or probability mass (PMF) chart updates immediately.
+An interactive web app for exploring probability distributions. Move a parameter slider and the probability density (PDF) or probability mass (PMF) chart updates immediately.
 
 ## Key Features
 
-- Find by use case: choose an illustrated type of quantity and a concrete situation, check a candidate distribution with its assumptions and limitations, then open its chart. No knowledge of distribution names is needed.
+- “Find by use case” page: choose an illustrated type of quantity and a concrete situation, check a candidate distribution with its assumptions and limitations, then open its chart. No knowledge of distribution names is needed.
 - 10 distributions in learning order: Bernoulli, binomial, Poisson, geometric, negative binomial, normal, log-normal, exponential, gamma, and beta.
 - Parameter sliders and number inputs, with an optional sample histogram shown on the same chart as the theoretical curve.
 - Use-case text for each distribution that includes numbers computed from the current parameters.

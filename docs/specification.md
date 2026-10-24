@@ -54,7 +54,7 @@ Target the following distributions.
 
 ## Confirmed additions
 
-Decisions settled through questions and follow-up instructions during development (confirmed on 2026-07-05).
+Decisions settled through questions and follow-up instructions during development.
 
 ### Settled by answers to questions
 

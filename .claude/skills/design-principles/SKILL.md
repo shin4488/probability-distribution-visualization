@@ -10,7 +10,7 @@ Use the relevant section when a change requires a design decision. Routine edits
 ## Requirements and boundaries
 
 - `docs/specification.md` defines the requirements. Ask about unresolved requirements before implementing them; record answers with `spec-sync`. Update superseded decisions rather than leaving contradictory instructions.
-- Keep `domain` independent of React and Chart.js; `state` may use domain code, and components may use both. A distribution belongs in one domain file and the registry, without distribution-specific UI wiring. Use `add-distribution` when extending the registry.
+- Keep `domain` independent of React and Chart.js; `state` may use domain code, and components may use both. A distribution's math belongs in one domain file and the registry, and the chart UI has no distribution-specific wiring; only the use-case guide adds a per-distribution case and illustration. Use `add-distribution` when extending the registry.
 - Use types and registry-wide tests for cross-file contracts. Follow the root guide for numerical, dependency, environment, and Git constraints.
 - For dependency decisions, compare suitable options and record the rationale in `docs/tech-selection.md`. Consider a small local implementation where practical, but assess maintenance cost as well as transitive dependencies.
 

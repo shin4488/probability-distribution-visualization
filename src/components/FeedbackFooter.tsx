@@ -20,7 +20,7 @@ function hasRecentAnswer(): boolean {
     const saved = JSON.parse(raw) as { at?: number };
     return typeof saved.at === 'number' && Date.now() - saved.at < REASK_AFTER_MS;
   } catch {
-    // 旧形式や壊れた値は「未回答」として扱い、質問を出し直す
+    // 壊れた値は「未回答」として扱い、質問を出し直す
     return false;
   }
 }

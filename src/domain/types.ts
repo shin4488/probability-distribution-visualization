@@ -54,7 +54,6 @@ export interface DistributionDef {
   useCaseValues(p: ParamValues): Record<string, number>;
 }
 
-/** ParamDefのデフォルト値からParamValuesを組み立てる */
 export function defaultParams(def: DistributionDef): ParamValues {
   const values: ParamValues = {};
   for (const param of def.params) {

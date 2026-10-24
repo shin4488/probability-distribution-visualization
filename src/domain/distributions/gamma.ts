@@ -28,10 +28,9 @@ export const gamma: DistributionDef = {
   notation: ({ shape, scale }, fmt) => `Gamma(${fmt(shape)}, ${fmt(scale)})`,
   useCaseValues({ shape, scale }) {
     return {
+      // 例文のkには丸めない値を渡す。整数に丸めると、shape=2.5, θ=2で「k=3, θ=2分」なのに平均5分となり、kと{mean}が食い違う
       shape,
       scale,
-      // 例文は「k={shape}件分」と生の値を使う。丸めた整数を使うと
-      // k×θと{mean}が食い違う(shape=2.5, θ=2で「3件×2分=平均5分」)ため
       mean: shape * scale,
       sd: Math.sqrt(shape) * scale,
     };

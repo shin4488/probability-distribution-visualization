@@ -204,6 +204,7 @@ export function App() {
         }}
       />
 
+      {/* ページ切替だけは相対リンクで遷移して履歴に残し、ブラウザの戻るで前のページへ戻れるようにする(ほかの状態はreplaceStateで同期し、履歴を増やさない) */}
       <nav
         aria-label={translate(state.locale, 'ui.title')}
         className="mb-7 flex gap-1 border-b border-border"

@@ -13,7 +13,7 @@ done
 
 docker info >/dev/null 2>&1 || exit 0
 
-# 固定名だと別 clone のファイルを整形する恐れがある。未作成なら compose run を使う。
+# 固定名だと別 clone のファイルを整形する恐れがある。起動中のコンテナがなければ compose run を使う。
 container=$(docker compose ps --status running -q app 2>/dev/null || true)
 if [ -n "$container" ]; then
   output=$(docker exec "$container" npx --no-install biome check --write "${biome_files[@]}" 2>&1) && exit 0

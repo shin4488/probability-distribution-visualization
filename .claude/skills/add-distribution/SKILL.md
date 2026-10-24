@@ -5,7 +5,7 @@ description: Add a probability distribution, its registry entry, translations, u
 
 # Adding a new probability distribution
 
-Each distribution lives in one domain file and uses the shared UI.
+Each distribution's math lives in one domain file, and its chart card uses the shared UI. Only the use-case guide needs a per-distribution case and illustration (step 4).
 
 ## 1. Write the domain definition
 

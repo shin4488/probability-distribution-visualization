@@ -26,7 +26,7 @@ Steps:
 
 1. Read the current implementation: `src/components/DistributionCard.tsx` is the only file touching `draggable`/`dataTransfer` (handle-armed dragging so card text stays selectable; `setData` needed for Firefox). The reorder action lives in `src/state/appState.ts` and is dispatched from `src/App.tsx`
 2. Confirm the approach with the product owner: Pointer Events drag (better UX, more work) vs. move-up/down buttons (ships in an afternoon, also solves keyboard reordering — see the accessibility item)
-3. For Pointer Events: in `DistributionCard.tsx`, replace the `dragstart`/`dragover`/`drop` handlers with `pointerdown` on the drag handle (`setPointerCapture`), `pointermove` resolving the hovered card via `document.elementFromPoint` against card midpoints, and `pointerup` dispatching the existing reorder action. Delete the `draggable` attribute and all `dataTransfer` code — one code path for mouse and touch
+3. For Pointer Events: in `DistributionCard.tsx`, replace the `dragstart`/`dragenter`/`dragover`/`drop`/`dragend` handlers with `pointerdown` on the drag handle (`setPointerCapture`), `pointermove` resolving the hovered card via `document.elementFromPoint` against card midpoints, and `pointerup` ending the drag. The current code dispatches the existing reorder action on `dragenter`, so cards move while dragging; decide whether the pointer version dispatches it on `pointermove` or only on `pointerup`. Delete the `draggable` attribute and all `dataTransfer` code — one code path for mouse and touch
 4. Add Tailwind `touch-none` on the handle so the browser doesn't hijack the gesture for scrolling
 5. Keep URL sync untouched — the order token in `src/state/urlCodec.ts` doesn't care where the reorder came from
 6. Verify on real devices (iOS Safari, Android Chrome) — DevTools touch emulation is not trustworthy for pointer events — plus a desktop mouse regression pass
@@ -53,21 +53,19 @@ The registry design makes each one a bounded, mechanical addition.
 Steps (per distribution):
 
 1. Confirm with the product owner: placement in the learning order and the tagline/use-case angle. Suggested placements — uniform before bernoulli (the simplest distribution of all); chi-square and t after gamma (chi-square is gamma with k/2, 2; t motivates small-sample inference); Weibull after exponential (its generalization)
-2. Follow `.claude/skills/add-distribution/SKILL.md`: new `src/domain/distributions/<id>.ts` copied from the closest existing shape, add the id to `DistributionId` in `types.ts`, register in `DISTRIBUTIONS` in `distributions/index.ts` at the confirmed position (and extend its learning-order comment)
-3. Samplers in `src/domain/random.ts` if missing: chi-square = gamma(k/2, 2); t = normal / sqrt(chi-square/ν); Weibull = inverse-transform `λ(−ln U)^{1/k}`
-4. i18n: `dist.<id>.name / tagline / param.<key> / usecase` in `ja.ts` then `en.ts` (usecase must embed parameter placeholders — spec requirement)
-5. The registry-sweeping tests (density ≈ 1, sampler convergence, i18n coverage) pick the new entry up automatically; add spot-value tests only for the new math helpers
+2. Samplers in `src/domain/random.ts` if missing: chi-square = gamma(k/2, 2); t = normal / sqrt(chi-square/ν); Weibull = inverse-transform `λ(−ln U)^{1/k}`
+3. Follow `.claude/skills/add-distribution/SKILL.md` for the domain file, registry entry at the confirmed position, translations, use-case guide entry, and verification
 
 ### Embed mode for lectures and blog posts — S
 
-Teachers and bloggers can bring readers to this site by embedding it, but embedding the full app in an iframe drags the toolbar and footer along.
+Teachers and bloggers could embed the app in their pages to bring readers here, but an iframe of the full app also shows the toolbar and footer.
 
 Steps:
 
 1. Confirm scope with the product owner: which chrome disappears (proposal: Toolbar, FilterChips, FeedbackFooter, BackToTop — cards and their controls stay)
 2. `src/state/urlCodec.ts`: add a global `embed` flag, omitted when off (default-omission rule); decode into state in `src/state/appState.ts`
 3. `src/App.tsx`: skip rendering the hidden chrome when `state.embed` is set; verify the continuous `replaceState` URL sync round-trips the flag
-4. README: add an "Embedding" section with a copy-paste snippet, e.g. `<iframe src="https://shin4488.github.io/probability-distribution-visualization/?normal=170,5.5&embed=1" width="480" height="520"></iframe>`
+4. README: add an "Embedding" section with a copy-paste snippet, e.g. `<iframe src="https://shin4488.github.io/probability-distribution-visualization/?normal=70,15&embed=1" width="480" height="520"></iframe>`
 5. Verify: `?embed=1` in the dev server, plus a local HTML file iframing the dev server to check real iframe behavior; `spec-sync` the confirmed spec
 
 ### Accessibility pass — M
@@ -100,7 +98,7 @@ Steps:
        # GitHub Pages subpath serving: absolute asset paths would 404
        ! grep -E '(src|href)="/' dist/index.html
        # GA must stay guarded by the production hostname
-       grep -q "shin4488.github.io" dist/index.html
+       grep -qF "location.hostname !== 'shin4488.github.io'" dist/index.html
        # SEO invariants
        grep -q "<title>" dist/index.html
        [ "$(grep -c 'hreflang' dist/index.html)" -eq 3 ]
@@ -148,7 +146,7 @@ Steps:
 
 1. Design first, confirm with the product owner: URL shape (proposal: `/<id>/` serving ja with a link to `?lang=en`, matching the URL-parameter language precedence), what each page contains, and whether the page redirects into the SPA or is a standing page linking into it
 2. Write `scripts/prerender.mjs` with no new dependency, reading names/taglines/usecases from the i18n/registry modules so they come from the single source of truth instead of a copy. The container's Node.js strips TypeScript types, but it cannot resolve the extensionless relative imports in `src/` (`ERR_MODULE_NOT_FOUND`), so decide how the script loads those modules
-3. For each distribution × locale, emit `dist/<id>/index.html` from a template: crawlable text (name, tagline, use-case copy), per-page `<title>` and meta description, JSON-LD, canonical, and a prominent link into the SPA with that distribution's URL state (e.g. `../?normal=170,5.5&lang=ja`)
+3. For each distribution × locale, emit `dist/<id>/index.html` from a template: crawlable text (name, tagline, use-case copy), per-page `<title>` and meta description, JSON-LD, canonical, and a prominent link into the SPA with that distribution's URL state (e.g. `../?normal=70,15&lang=ja`)
 4. Hook into the build: run the script after `vite build` in the `build` script of package.json — CI and deploy pick it up with no workflow change
 5. Make the script also regenerate `sitemap.xml` (currently a static file in `public/`) so the new URLs are listed with hreflang alternates
 6. Verify: `npm run build` in the container, open the generated pages from `dist/`, check every asset/link resolves relatively; after deploy, request indexing for a couple of pages in Search Console and watch Coverage
@@ -161,7 +159,7 @@ The visualizer's shareable URLs make it citable: an article can deep-link the ex
 Steps (per article):
 
 1. Pick from search demand, highest first: normal → Poisson → binomial
-2. Structure: a motivating real-world question → intuition built with 2–3 parameterized deep links into the visualizer (e.g. `?normal=170,5.5` for heights) → when to reach for this distribution → its neighbors in the learning order, each with its own link
+2. Structure: a motivating real-world question → intuition built with 2–3 parameterized deep links into the visualizer (e.g. `?normal=70,15` for test scores) → when to reach for this distribution → its neighbors in the learning order, each with its own link
 3. Append `&utm_source=zenn&utm_medium=article&utm_campaign=<slug>` to every deep link — GA4 attributes arrivals automatically, no code change needed
 4. After a week, check GA4 → Reports → Acquisition → Traffic acquisition for the utm source; fold what you learn into the next article
 

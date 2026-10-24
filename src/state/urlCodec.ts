@@ -12,8 +12,7 @@ import type { AppState, CardState } from './appState';
 import { clampSampleSize, defaultCardState, SAMPLE_SIZE } from './appState';
 
 /**
- * URLクエリの形式(人間が読めるよう、値には英小文字・数字と . , - だけを使い、
- * パーセントエンコードを避けている):
+ * URLクエリの形式(人間が読めるよう、値には英小文字・数字と . , - だけを使い、パーセントエンコードを避けている):
  *
  *   ?lang=en&theme=dark
  *    &page=guide                ケースから探すページ(chartsは省略)
@@ -107,7 +106,7 @@ export interface DecodedUrlState {
   cards: Record<DistributionId, CardState>;
 }
 
-/** 不正な値はすべて黙ってデフォルトに落とす(共有URLの手編集や改変に耐える) */
+/** 壊れた値はデフォルトに戻し、範囲外の数値は範囲の端と刻みに丸め、エラーにせず読み込む(共有URLの手編集や改変に耐える) */
 export function decodeAppState(search: string): DecodedUrlState {
   const params = new URLSearchParams(search);
 

@@ -30,8 +30,8 @@ export function sampleStandardNormal(rng: Rng): number {
 
 /**
  * ガンマ分布 Gamma(shape, 1)。Marsaglia-Tsang法。
- * shape < 1 は棄却率が悪化し、shape < 1/3 ではdが負になってcを計算できないため、
- * shape+1で生成してから u^(1/shape) を掛けて補正する標準的なブースト手法を使う。
+ * shape < 1 は棄却率が悪化し、shape < 1/3 ではdが負になってcを計算できない。
+ * そのため、shape+1で生成してから u^(1/shape) を掛けて補正する標準的なブースト手法を使う。
  */
 export function sampleStandardGamma(rng: Rng, shape: number): number {
   if (shape < 1) {
