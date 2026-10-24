@@ -17,10 +17,6 @@ interface Props {
 type XY = { x: number; y: number };
 
 /**
- * ベータ分布のα<1などで端点近くの密度が発散すると、山の本体が潰れて読めなくなる。
- * 大部分の点に対して桁違いに大きい値があるときだけy軸の上限を抑える。
- */
-/**
  * 離散分布のx軸をちょうど整数位置の目盛にする。
  * 棒が軸端で切れないようmin/maxを±0.5ずらしているため、Chart.js標準の
  * 目盛生成に任せると-0.5, 0.5, …と半端な位置に目盛が振られてしまう。
@@ -28,12 +24,17 @@ type XY = { x: number; y: number };
 function integerTicks(scale: { min: number; max: number; ticks: { value: number }[] }): void {
   const lo = Math.ceil(scale.min);
   const hi = Math.floor(scale.max);
+  // x軸のmaxTicksLimitと同じく、目盛は多くても11本にする
   const step = Math.max(1, Math.ceil((hi - lo + 1) / 11));
   const ticks: { value: number }[] = [];
   for (let v = lo; v <= hi; v += step) ticks.push({ value: v });
   scale.ticks = ticks;
 }
 
+/**
+ * ベータ分布のα<1などで端点近くの密度が発散すると、山の本体が潰れて読めなくなる。
+ * 大部分の点に対して桁違いに大きい値があるときだけy軸の上限を抑える。
+ */
 function yAxisMax(points: XY[]): number | undefined {
   const ys = points.map((p) => p.y).filter((y) => Number.isFinite(y));
   if (ys.length === 0) return undefined;

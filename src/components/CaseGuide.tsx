@@ -26,6 +26,8 @@ export function CaseGuide({ state, dispatch }: { state: AppState; dispatch: Disp
   const headingRef = useRef<HTMLHeadingElement>(null);
   const previousCase = useRef(state.selectedCase);
   const previousCategory = useRef(state.category);
+  // カテゴリやケースを選んだら、キーボード操作でも次の手順から続けられるよう見出しへフォーカスを移す。
+  // 前回の値と比べるのは、ページを開いた直後にはフォーカスを動かさないため
   useEffect(() => {
     if (
       previousCase.current !== state.selectedCase ||

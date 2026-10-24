@@ -17,8 +17,8 @@ export default defineConfig({
     host: true,
   },
   test: {
-    // テスト対象はUI非依存の純TS(src/domain, src/state)のみなのでDOM環境は不要。
-    // jsdom等を入れずnode環境で高速に回す
+    // テスト対象はDOMを使わない純TSのロジックだけなので、jsdom等を入れずnode環境で高速に回す。
+    // windowを使うanalyticsのテストは、必要な値だけをstubGlobalで差し替える
     environment: 'node',
     include: ['src/**/*.test.ts'],
   },

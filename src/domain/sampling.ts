@@ -10,8 +10,6 @@ export interface HistogramBin {
 
 export interface HistogramResult {
   bins: HistogramBin[];
-  /** 連続分布のビン幅。離散分布では1 */
-  binWidth: number;
 }
 
 /**
@@ -39,7 +37,7 @@ export function buildHistogram(
     for (let k = Math.floor(min); k <= Math.ceil(max); k++) {
       bins.push({ center: k, height: (counts.get(k) ?? 0) / sampleSize });
     }
-    return { bins, binWidth: 1 };
+    return { bins };
   }
 
   // 連続分布: プロット範囲を等幅ビンに分割し、密度(count / (n * binWidth))に正規化。
@@ -57,7 +55,7 @@ export function buildHistogram(
     center: min + (i + 0.5) * binWidth,
     height: count / (sampleSize * binWidth),
   }));
-  return { bins, binWidth };
+  return { bins };
 }
 
 /** PDF/PMFの折れ線・棒グラフ用の点列を作る */

@@ -12,8 +12,7 @@ import type { AppState, CardState } from './appState';
 import { clampSampleSize, defaultCardState, SAMPLE_SIZE } from './appState';
 
 /**
- * URLクエリの形式(人間が読めるよう、値の文字集合を [0-9.,-hs] に限定して
- * パーセントエンコードを避けている):
+ * URLクエリの形式(人間が読めるよう、値には英小文字・数字と . , - だけを使い、パーセントエンコードを避けている):
  *
  *   ?lang=en&theme=dark
  *    &page=guide                ケースから探すページ(chartsは省略)
@@ -78,6 +77,7 @@ export function encodeAppState(state: AppState): string {
   const parts: string[] = [];
   if (state.page === 'guide') parts.push('page=guide');
   if (state.category !== 'all') parts.push(`category=${state.category}`);
+  // グラフのページでもケースを残し、ページ切替のリンクから元のケースへ戻れるようにする
   if (state.selectedCase) parts.push(`case=${state.selectedCase}`);
   if (state.localeExplicit) parts.push(`lang=${state.locale}`);
   if (state.themeExplicit) parts.push(`theme=${state.theme}`);
@@ -106,7 +106,7 @@ export interface DecodedUrlState {
   cards: Record<DistributionId, CardState>;
 }
 
-/** 不正な値はすべて黙ってデフォルトに落とす(共有URLの手編集や改変に耐える) */
+/** 壊れた値はデフォルトに戻し、数値は範囲内に収めて刻みにそろえ、エラーにせず読み込む(共有URLの手編集や改変に耐える) */
 export function decodeAppState(search: string): DecodedUrlState {
   const params = new URLSearchParams(search);
 

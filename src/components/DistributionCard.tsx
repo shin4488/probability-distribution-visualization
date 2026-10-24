@@ -187,6 +187,7 @@ function DistributionCardBase({
             step={p.step}
             value={card.params[p.key]}
             onChange={(value) => {
+              // reducerが保存するのと同じ丸めた値で比べ、範囲外の入力などで値が変わらない操作は計測しない
               if (clampParam(p, value) !== card.params[p.key]) trackParamChange(def.id, p.key);
               onParamChange(p.key, value);
             }}
@@ -229,6 +230,7 @@ function DistributionCardBase({
               step={SAMPLE_SIZE.step}
               value={card.sampleSize}
               onChange={(value) => {
+                // パラメータと同じく、丸めた値で比べて値が変わらない操作は計測しない
                 if (clampSampleSize(value) !== card.sampleSize)
                   trackParamChange(def.id, 'sample_size');
                 onSampleSizeChange(value);

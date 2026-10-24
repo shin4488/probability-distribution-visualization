@@ -106,7 +106,7 @@ export function Toolbar({
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />
-                {/* 非表示中は斜線を重ねる(カードの非表示ボタンと同じ「隠している」の視覚言語) */}
+                {/* 非表示中は、カードの非表示ボタンと同じ斜線を重ねて「隠している」ことを示す */}
                 {!showUseCases && (
                   <path
                     d="M3 3l18 18"

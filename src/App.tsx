@@ -204,6 +204,7 @@ export function App() {
         }}
       />
 
+      {/* ページ切替だけは相対リンクで遷移して履歴に残し、ブラウザの戻るで前のページへ戻れるようにする(ほかの状態はreplaceStateで同期し、履歴を増やさない) */}
       <nav
         aria-label={translate(state.locale, 'ui.title')}
         className="mb-7 flex gap-1 border-b border-border"
@@ -238,6 +239,8 @@ export function App() {
             </p>
           ) : (
             <main
+              // ケースの詳細からグラフを開くと、選んだケースがURLに残り、その分布だけが表示される。
+              // そのときは1枚のカードを幅広く中央に置く
               className={
                 state.selectedCase && visibleOrder.length === 1
                   ? 'mx-auto grid max-w-3xl grid-cols-1 gap-5'

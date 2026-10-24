@@ -22,7 +22,7 @@
 | Preact | Attractive at 3KB with zero dependencies, but passed over due to the debugging cost of subtle differences in the React-compat layer and the smaller body of documentation |
 | Svelte | Small runtime, but its compiler devDependency tree is comparatively large. At this site's scale the performance difference vs React is imperceptible |
 | Vue | Technically sufficient. React vs Vue is a toss-up; React was chosen for its simpler dependency footprint |
-| Plain TS + Vite | Minimal dependencies, but hand-writing state synchronization for 8 cards (URL, theme, language, ordering) is not worth the cost and maintenance burden |
+| Plain TS + Vite | Minimal dependencies, but hand-writing state synchronization for every card (URL, theme, language, ordering) is not worth the cost and maintenance burden |
 
 Build tool: **Vite** (the de-facto standard; devDependency only, never ships at runtime).
 The supported runtime and dependency versions are defined by [docker-compose.yml](../docker-compose.yml) and [package.json](../package.json). Check their compatibility when upgrading; development commands run in Docker.
@@ -41,7 +41,7 @@ The supported runtime and dependency versions are defined by [docker-compose.yml
 **Summary of the decision**: Chart.js best fits the requirements on four counts: effectively a single dependency, canvas update performance, built-in PDF-line + histogram-bar overlays, and heavy community scrutiny.
 If bundle size were the top priority uPlot would win, but Chart.js was chosen for the balance of implementation effort and maintainability.
 
-Measured (vite build): ~389KB total JS (~131KB gzip), essentially all React + Chart.js.
+Most of the production JavaScript is React and Chart.js; `npm run build` prints the current size.
 Tree shaking is enabled by registering only the chart components in use via `Chart.register()`.
 
 ## CSS / styling
@@ -83,7 +83,7 @@ Exact-pinned npm dependencies and hash-pinned actions do not update themselves, 
 
 Implemented without external libraries (each fits in a few dozen lines, not worth another dependency):
 
-- **i18n**: dictionary objects + `{placeholder}` interpolation ([src/i18n/index.ts](../src/i18n/index.ts)). Missing keys are caught at compile time via TypeScript's `satisfies`
+- **i18n**: dictionary objects + `{placeholder}` interpolation ([src/i18n/index.ts](../src/i18n/index.ts)). A key missing from the English dictionary is a compile error via TypeScript's `satisfies`; `i18n.test.ts` checks that every distribution has its `dist.<id>.*` keys in both dictionaries
 - **Drag-and-drop reordering**: HTML5 Drag and Drop API (libraries like dnd-kit would cover this, but add dependencies)
 - **URL state sync**: `URLSearchParams` + `history.replaceState`
 - **RNG & samplers**: mulberry32 (seedable) + Box-Muller / Marsaglia-Tsang / Knuth methods. Statistics libraries (jstat etc.) are weakly maintained and were not adopted
@@ -98,7 +98,7 @@ Implemented without external libraries (each fits in a few dozen lines, not wort
 - **Type boundaries:** Browser code and build configuration require different globals. [tsconfig.json](../tsconfig.json) references separate app and Node projects so one typecheck covers both without leaking DOM types into the Vite config or Node globals into the app.
 - **Build:** TypeScript validates types without emitting JavaScript; Vite handles transpilation.
 - **Vite configuration:** [vite.config.ts](../vite.config.ts) is shared by the dev server, production build, and Vitest. Docker development needs the server reachable from outside its container; project-page deployment needs relative asset paths.
-- **Test environment:** Domain/state tests use a Node environment because they do not need a DOM. Vitest stays on a maintained major line so security fixes such as the redirect-mock file-read fix ([GHSA-82fw-gwwq-j7x9](https://github.com/vitest-dev/vitest/security/advisories/GHSA-82fw-gwwq-j7x9)) are available, and it shares the Vite configuration without additional test settings.
+- **Test environment:** Tests use a Node environment because none of them need a DOM. Vitest stays on a maintained major line so security fixes such as the redirect-mock file-read fix ([GHSA-82fw-gwwq-j7x9](https://github.com/vitest-dev/vitest/security/advisories/GHSA-82fw-gwwq-j7x9)) are available.
 - **Preview setup:** [.claude/launch.json](../.claude/launch.json) describes the Docker preview server for Claude Code, not Vite or TypeScript. It must remain strict JSON, so its rationale belongs here rather than in comments inside that file.
 - **Configuration maintenance:** Keep current settings in the config itself. Other configuration rationale should stay beside the relevant setting when comments are supported.
 
