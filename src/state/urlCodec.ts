@@ -106,7 +106,7 @@ export interface DecodedUrlState {
   cards: Record<DistributionId, CardState>;
 }
 
-/** 壊れた値はデフォルトに戻し、範囲外の数値は範囲の端と刻みに丸め、エラーにせず読み込む(共有URLの手編集や改変に耐える) */
+/** 壊れた値はデフォルトに戻し、数値は範囲内に収めて刻みにそろえ、エラーにせず読み込む(共有URLの手編集や改変に耐える) */
 export function decodeAppState(search: string): DecodedUrlState {
   const params = new URLSearchParams(search);
 

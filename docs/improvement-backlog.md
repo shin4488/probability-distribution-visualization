@@ -95,8 +95,9 @@ Steps:
    - name: Smoke-test build output
      run: |
        test -f dist/index.html
-       # GitHub Pages subpath serving: absolute asset paths would 404
-       ! grep -E '(src|href)="/' dist/index.html
+       # GitHub Pages subpath serving: absolute asset paths would 404.
+       # Use `if` because bash -e ignores the exit status of a command negated with `!`
+       if grep -E '(src|href)="/' dist/index.html; then exit 1; fi
        # GA must stay guarded by the production hostname
        grep -qF "location.hostname !== 'shin4488.github.io'" dist/index.html
        # SEO invariants
