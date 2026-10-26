@@ -70,7 +70,12 @@ describe('decodeAppState', () => {
     expect(decoded.order).toEqual(state.order);
     expect(decoded.hidden).toEqual(['beta']);
     expect(decoded.cards.normal).toEqual(state.cards.normal);
-    expect(decoded.cards.gamma).toEqual(baseState().cards.gamma);
+    // URLにない分布は初期表示のまま(ベルヌーイはp=0.3、標本シミュレーションOFF、標本サイズ1000)
+    expect(decoded.cards.bernoulli).toEqual({
+      params: { p: 0.3 },
+      showHistogram: false,
+      sampleSize: 1000,
+    });
   });
 
   it('範囲外の値はクランプされる', () => {
