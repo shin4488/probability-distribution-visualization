@@ -55,7 +55,7 @@ docker compose run --rm app sh -c "npm run typecheck && npm test"
 The existing tests automatically sweep the whole registry:
 
 - sum/integral of the density ≈ 1 (math.test.ts)
-- sample mean/variance of the sampler converges to theory (random.test.ts)
+- the displayed mean/variance and the sampler's sample mean/variance match hand-computed theoretical values (random.test.ts). Add the new distribution's parameters and textbook mean/variance to its table; a missing entry is a type error
 - the `dist.<id>.*` keys exist in both languages, and every use-case placeholder exists in `useCaseValues()` (i18n.test.ts)
 - every distribution has a guide case and every alternative exists (appState.test.ts)
 
