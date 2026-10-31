@@ -64,7 +64,7 @@ export const ja = {
   'dist.binomial.param.n': '試行回数 n',
   'dist.binomial.param.p': '成功確率 p',
   'dist.binomial.usecase':
-    '成約率{pPct}%の商談を{n}件行うと、成約数は平均{mean}件、約95%の確率で{lo}〜{hi}件に収まります。メールの開封数、製造ロットの不良品数、A/Bテストのコンバージョン数の「起こりうる幅」の見積もりに使えます。',
+    '成約率{pPct}%の商談を{n}件行うと、成約数は平均{mean}件で、{lo}〜{hi}件に収まる確率は約{rangePct}%です。メールの開封数、製造ロットの不良品数、A/Bテストのコンバージョン数の「起こりうる幅」の見積もりに使えます。',
 
   'dist.geometric.name': '幾何分布',
   'dist.geometric.tagline':
@@ -105,7 +105,7 @@ export const ja = {
 
   'dist.beta.name': 'ベータ分布',
   'dist.beta.tagline':
-    '0〜1の値(割合・確率そのもの)の分布。独立な2つのガンマ分布 X, Y から、全体に占める割合 X/(X+Y) として作られる',
+    '0〜1の値(割合・確率そのもの)の分布。尺度が等しい独立な2つのガンマ分布 X, Y から、全体に占める割合 X/(X+Y) として作られる',
   'dist.beta.param.alpha': '形状 α',
   'dist.beta.param.beta': '形状 β',
   'dist.beta.usecase':

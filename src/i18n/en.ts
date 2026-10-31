@@ -54,7 +54,7 @@ export const en = {
   'dist.binomial.param.n': 'Trials n',
   'dist.binomial.param.p': 'Success probability p',
   'dist.binomial.usecase':
-    'Run {n} sales meetings with a {pPct}% close rate and you close {mean} deals on average, with about a 95% chance of landing between {lo} and {hi}. Use it to estimate the plausible range of email opens, defective items in a lot, or A/B-test conversions.',
+    'Run {n} sales meetings with a {pPct}% close rate and you close {mean} deals on average, with about a {rangePct}% chance of landing between {lo} and {hi}. Use it to estimate the plausible range of email opens, defective items in a lot, or A/B-test conversions.',
 
   'dist.geometric.name': 'Geometric',
   'dist.geometric.tagline':
@@ -95,7 +95,7 @@ export const en = {
 
   'dist.beta.name': 'Beta',
   'dist.beta.tagline':
-    'A distribution over values in 0–1 (rates and probabilities themselves), built from two independent gammas X and Y as X/(X+Y) — X’s share of the total',
+    'A distribution over values in 0–1 (rates and probabilities themselves). For two independent gammas X and Y with the same scale, X’s share of the total, X/(X+Y), follows it',
   'dist.beta.param.alpha': 'Shape α',
   'dist.beta.param.beta': 'Shape β',
   'dist.beta.usecase':
