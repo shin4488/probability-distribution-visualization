@@ -39,13 +39,13 @@ export const guideEn = {
   'guide.case.binomial.caution':
     'If one company’s purchase makes another company more likely to buy, the outcomes affect each other. If existing and new customers have very different conversion rates, treating every call as having the same probability can also misrepresent how much the count varies.',
   'guide.case.binomial.alternative': 'To describe uncertainty about the conversion rate itself',
-  'guide.case.poisson.title': 'How many enquiries arrive in an hour?',
-  'guide.case.poisson.summary': 'Enquiries, customer arrivals, or defects within a fixed interval.',
+  'guide.case.poisson.title': 'How many inquiries arrive in an hour?',
+  'guide.case.poisson.summary': 'Inquiries, customer arrivals, or defects within a fixed interval.',
   'guide.case.poisson.why': 'Model the number of events within a fixed time or area.',
   'guide.case.poisson.conditions':
-    'For hourly enquiry counts, the expected count should be roughly the same in each hour being compared, with a steady arrival rate throughout each hour. One enquiry should not trigger another.',
+    'For hourly inquiry counts, the expected count should be roughly the same in each hour being compared, with a steady arrival rate throughout each hour. One inquiry should not trigger another.',
   'guide.case.poisson.caution':
-    'If the average is 20 enquiries per hour during the day but two at night, model day and night separately. Even within one time slot, some days may be much busier than others. If that variation exceeds what a Poisson distribution predicts, consider a negative binomial distribution, which allows greater variability.',
+    'If the average is 20 inquiries per hour during the day but two at night, model day and night separately. Even within one time slot, some days may be much busier than others. If that variation exceeds what a Poisson distribution predicts, consider a negative binomial distribution, which allows greater variability.',
   'guide.case.poisson.alternative': 'When event rates vary between people or places',
   'guide.case.negbinomial.title': 'Visit counts vary a lot between customers',
   'guide.case.negbinomial.summary':
@@ -65,10 +65,10 @@ export const guideEn = {
   'guide.case.geometric.caution':
     'Count the misses before the first hit: zero if the first attempt succeeds, or two if the third succeeds. Add one to count all attempts including the hit. Guaranteed wins or increasing odds do not fit this use.',
   'guide.case.geometric.alternative': 'To model time until the next event instead of attempts',
-  'guide.case.exponential.title': 'How long until the next enquiry?',
+  'guide.case.exponential.title': 'How long until the next inquiry?',
   'guide.case.exponential.summary': 'Time until the next customer or request arrives.',
   'guide.case.exponential.why':
-    'Describe the time until the next randomly arriving enquiry, customer, or request.',
+    'Describe the time until the next randomly arriving inquiry, customer, or request.',
   'guide.case.exponential.conditions':
     'The average arrival rate should remain steady throughout the period you are waiting, and arrivals should not affect each other. Having already waited ten minutes does not make an arrival overdue: the outlook for the remaining wait is the same as when you started.',
   'guide.case.exponential.caution':
@@ -85,7 +85,7 @@ export const guideEn = {
   'guide.case.gamma.alternative': 'When durations grow through multiplicative effects',
   'guide.case.normal.title': 'How much do product dimensions vary?',
   'guide.case.normal.summary':
-    'Dimensions or measurement errors concentrated around a centre with roughly symmetric spread.',
+    'Dimensions or measurement errors concentrated around a center with roughly symmetric spread.',
   'guide.case.normal.why': 'Describe a symmetric, bell-shaped spread around a central value.',
   'guide.case.normal.conditions':
     'Consider this if repeated measurements cluster near the mean and spread out roughly symmetrically. Look for one peak and relatively few extreme values.',
@@ -128,9 +128,9 @@ export const guideEn = {
   'guide.scene.geometric': 'Miss → miss → hit: 2 failures',
   'guide.scene.exponential': 'Measure the time from now until the next event',
   'guide.scene.gamma': 'Add the durations of tasks 1, 2 and 3',
-  'guide.scene.normal': 'Most values near the centre, symmetric spread',
+  'guide.scene.normal': 'Most values near the center, symmetric spread',
   'guide.scene.lognormal': 'Mostly smaller values, with a few very large ones',
   'guide.scene.beta': 'Explore plausible rates between 0% and 100%',
-  'guide.next': 'See candidate and assumptions →',
+  'guide.next': 'See the candidate and its assumptions →',
   'guide.showAll': 'View all cases',
 } as const;
