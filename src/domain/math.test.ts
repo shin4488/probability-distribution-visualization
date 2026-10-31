@@ -12,6 +12,12 @@ describe('lnGamma', () => {
   it('Γ(1/2) = √π', () => {
     expect(Math.exp(lnGamma(0.5))).toBeCloseTo(Math.sqrt(Math.PI), 10);
   });
+
+  it('0.5未満(スライダー下限0.1の形状パラメータ)でも既知の値に一致する', () => {
+    // 期待値はscipy.special.gammaの値
+    expect(Math.exp(lnGamma(0.1))).toBeCloseTo(9.513507698668732, 10);
+    expect(Math.exp(lnGamma(0.25))).toBeCloseTo(3.625609908221908, 10);
+  });
 });
 
 describe('lnChoose', () => {

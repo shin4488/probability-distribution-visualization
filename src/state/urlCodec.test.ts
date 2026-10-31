@@ -115,6 +115,13 @@ describe('decodeAppState', () => {
     expect(decodeAppState('').showUseCases).toBe(true);
   });
 
+  it('刻みに合わない値はスライダーの刻みにそろえる', () => {
+    // 二項分布のnは1刻み、pは0.01刻み。標本サイズは100刻み
+    const decoded = decodeAppState('?binomial=20.6,0.333,s1234');
+    expect(decoded.cards.binomial.params).toEqual({ n: 21, p: 0.33 });
+    expect(decoded.cards.binomial.sampleSize).toBe(1200);
+  });
+
   it('標本サイズは範囲にクランプされる', () => {
     const decoded = decodeAppState('?normal=0,1,h,s999999');
     expect(decoded.cards.normal.sampleSize).toBe(10000);
