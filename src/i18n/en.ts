@@ -8,7 +8,7 @@ export const en = {
   'ui.docTitle': 'Probability Distribution Visualizer | Interactive Statistics',
   'ui.metaDescription':
     'Visualize 10 probability distributions — normal, binomial, Poisson, and more — with interactive parameter sliders, sample simulations, and practical real-world use cases.',
-  'ui.tagline': "Let's move the parameters and get a feel for each distribution's shape and uses",
+  'ui.tagline': "Move the parameters to get a feel for each distribution's shape and uses",
   'ui.homeTitle': 'Back to top (resets the parameters)',
   'ui.backToTop': 'Scroll back to the top',
   'ui.themeToDark': 'Switch to dark mode',
@@ -24,7 +24,7 @@ export const en = {
   'ui.sd': 'Std dev',
   'ui.histogram': 'Sample simulation',
   'ui.histogramHelp':
-    'Generates as many random numbers following this distribution as the sample size, and overlays their histogram on the theoretical curve. Increase the sample size to watch it converge to the theory (the law of large numbers).',
+    'Draws as many random samples from this distribution as the sample size and overlays their histogram on the theoretical curve. As the sample size grows, the histogram gets closer to the theoretical shape (the law of large numbers).',
   'ui.helpLabel': 'Help',
   'ui.sampleSize': 'Sample size',
   'ui.regenerate': 'Resample',
@@ -43,10 +43,10 @@ export const en = {
 
   'dist.bernoulli.name': 'Bernoulli',
   'dist.bernoulli.tagline':
-    'The atomic unit of every binary event: a single trial that happens (1) with probability p or not (0) with 1-p',
+    'The basic unit of every yes/no event: a single trial in which the event happens (1) with probability p or does not (0) with probability 1-p',
   'dist.bernoulli.param.p': 'Success probability p',
   'dist.bernoulli.usecase':
-    'Show an ad with a {pPct}% click rate once: it gets clicked (1) with probability {pPct}% and ignored (0) with probability {qPct}%. Show it 100 times and you expect {per100} clicks. It appears in every probabilistic yes/no situation — coin flips, pass/fail inspections, closing a deal or not.',
+    'Show an ad with a {pPct}% click rate once: it gets clicked (1) with probability {pPct}% and ignored (0) with probability {qPct}%. Show it 100 times and you expect {per100} clicks. It applies to any yes/no outcome that happens by chance, such as coin flips, pass/fail inspections, or whether a deal closes.',
 
   'dist.binomial.name': 'Binomial',
   'dist.binomial.tagline':
@@ -54,18 +54,18 @@ export const en = {
   'dist.binomial.param.n': 'Trials n',
   'dist.binomial.param.p': 'Success probability p',
   'dist.binomial.usecase':
-    'Run {n} sales meetings with a {pPct}% close rate and you close {mean} deals on average, with about a 95% chance of landing between {lo} and {hi}. Use it to estimate the plausible range of email opens, defective items in a lot, or A/B-test conversions.',
+    'Run {n} sales meetings with a {pPct}% close rate and you close {mean} deals on average, with about a {rangePct}% chance of landing between {lo} and {hi}. Use it to estimate the plausible range of email opens, defective items in a lot, or A/B-test conversions.',
 
   'dist.geometric.name': 'Geometric',
   'dist.geometric.tagline':
     'Failures before the first success in repeated Bernoulli trials — the discrete counterpart of the exponential',
   'dist.geometric.param.p': 'Success probability p',
   'dist.geometric.usecase':
-    'With a {pPct}% drop rate in a gacha game, you miss {mean} times on average before the first hit (which arrives on try {trials} on average) — yet a {streak}-miss streak still has a {streakPct}% chance. Use it to estimate sales visits until the first deal or inspections until the first defect: "when does the first success come?"',
+    'With a {pPct}% drop rate in a gacha game, you miss {mean} times on average before the first hit, so the hit comes on try {trials} on average. Even so, the chance of missing {streak} times in a row is {streakPct}%. Use it to estimate when the first success will come, such as sales visits until the first deal or inspections until the first defect.',
 
   'dist.poisson.name': 'Poisson',
   'dist.poisson.tagline':
-    'How many rare events happen in a fixed window — what a binomial becomes when the chances n are countless and each probability p is tiny, determined by the mean λ=np alone',
+    'How many rare events happen in a fixed window: the limit of a binomial with a very large number of trials n and a very small probability p, determined by the mean λ=np alone',
   'dist.poisson.param.lambda': 'Average rate λ',
   'dist.poisson.usecase':
     'A call center receiving {lambda} inquiries per hour on average can staff for {capacity} calls and still be overwhelmed about {overflowPct}% of the time. Even in the binomial situation "many customers, each calling with a tiny probability", knowing just the average λ={lambda} lets you estimate how likely each possible count is. It is widely used for planning counts: server requests, traffic accidents, incident reports.',
@@ -75,7 +75,7 @@ export const en = {
     'Waiting time until the next event — the flip side of the Poisson and the continuous counterpart of the geometric',
   'dist.exponential.param.lambda': 'Rate λ (per minute)',
   'dist.exponential.usecase':
-    'For events occurring {lambda} times per minute on average (mean gap {mean} min), the chance of waiting more than {waitLimit} minutes for the next one is about {waitPct}%. It models arrival gaps at a counter, time to hardware failure, and intervals between requests — the backbone of queueing and reliability design.',
+    'For events occurring at an average rate of {lambda} per minute (mean gap {mean} min), the chance of waiting more than {waitLimit} minutes for the next one is about {waitPct}%. It models arrival gaps at a counter, time to hardware failure, and intervals between requests, and is a standard model in queueing and reliability design.',
 
   'dist.gamma.name': 'Gamma',
   'dist.gamma.tagline':
@@ -87,15 +87,15 @@ export const en = {
 
   'dist.negbinomial.name': 'Negative binomial',
   'dist.negbinomial.tagline':
-    'Failures before the r-th success (the sum of r geometrics) — equivalently a Poisson whose rate λ varies by a gamma, modeling counts with individual differences',
+    'Failures before the r-th success (the sum of r geometrics). It is also a Poisson whose rate λ follows a gamma distribution, so it models counts that vary between individuals',
   'dist.negbinomial.param.r': 'Successes r',
   'dist.negbinomial.param.p': 'Success probability p',
   'dist.negbinomial.usecase':
-    'If everyone purchased at the same pace, counts would be Poisson — but paces differ from person to person. When each customer’s rate λ follows a gamma distribution, the purchase counts you observe overall follow this negative binomial. With r={r}, p={p} the mean is {mean} and the variance is {overdispersion}× the mean (a Poisson is always 1×), making it the standard model for store visits, accidents, or social-media posts — count data noisier than Poisson. Equivalently it is the number of failures before {r} successes at a {pPct}% success rate: the sum of {r} geometric distributions (with r=1 it IS the geometric).',
+    'If everyone purchased at the same pace, counts would be Poisson, but paces differ from person to person. When each customer’s rate λ follows a gamma distribution, the purchase counts you observe overall follow this negative binomial. With r={r}, p={p} the mean is {mean} and the variance is {overdispersion}× the mean (a Poisson is always 1×). It is a standard model for counts that vary more than a Poisson allows, such as store visits, accidents, or social-media posts. It is also the number of failures before {r} successes at a {pPct}% success rate, which is the sum of {r} geometric distributions (with r=1, it is the geometric distribution itself).',
 
   'dist.beta.name': 'Beta',
   'dist.beta.tagline':
-    'A distribution over values in 0–1 (rates and probabilities themselves), built from two independent gammas X and Y as X/(X+Y) — X’s share of the total',
+    'A distribution over values in 0–1 (rates and probabilities themselves). It is the distribution of X/(X+Y), X’s share of the total, for two independent gammas X and Y with the same scale',
   'dist.beta.param.alpha': 'Shape α',
   'dist.beta.param.beta': 'Shape β',
   'dist.beta.usecase':
@@ -107,7 +107,7 @@ export const en = {
   'dist.normal.param.mu': 'Mean μ',
   'dist.normal.param.sigma': 'Std dev σ',
   'dist.normal.usecase':
-    'On a test with mean {mu} and standard deviation {sigma}, about 68% of people score between {lo1} and {hi1}, and about 95% between {lo2} and {hi2}. Scores form a bell because many small factors — right or wrong on each question — add up (the central limit theorem). By the same logic, even when each individual sale is skewed, the total sales of a day become normal — so you can estimate tomorrow’s sales as "roughly within mean ±2σ". The ±3σ control limits of quality control use the same idea: a normal distribution keeps 99.7% of values within mean ±3σ, so anything outside is a sign of a real problem rather than random variation.',
+    'On a test with mean {mu} and standard deviation {sigma}, about 68% of people score between {lo1} and {hi1}, and about 95% between {lo2} and {hi2}. Scores form a bell because many small factors — right or wrong on each question — add up (the central limit theorem). By the same logic, even when individual sales are skewed, a day’s total sales are approximately normal, so you can estimate tomorrow’s sales as "roughly within mean ±2σ". The ±3σ control limits of quality control use the same idea: a normal distribution keeps 99.7% of values within mean ±3σ, so a value outside them points to a real problem rather than random variation.',
 
   'dist.lognormal.name': 'Log-normal',
   'dist.lognormal.tagline':
@@ -115,5 +115,5 @@ export const en = {
   'dist.lognormal.param.mu': 'Log-mean μ',
   'dist.lognormal.param.sigma': 'Log-std dev σ',
   'dist.lognormal.usecase':
-    'A salary is built by multiplying yearly raise rates (×1.05 and so on), and a house price by factors like location, size, and age acting as percentage premiums or discounts. A web page response time likewise depends on how many-fold network conditions and payload size stretch it. Quantities built from compounding multipliers like these tend to be log-normal. With μ={mu} and σ={sigma}, the median is {median} but the mean is {mean} — dragged upward by the long right tail. This is why the average salary always sounds higher than what most people earn.',
+    'A salary is built by multiplying yearly raise rates (×1.05 and so on), and a house price by factors like location, size, and age acting as percentage premiums or discounts. Web page response times work the same way: network conditions and payload size stretch them by some factor. Quantities built from compounding multipliers like these tend to be log-normal. With μ={mu} and σ={sigma}, the median is {median} but the mean is {mean}, pulled upward by the long right tail. This is why average salaries often seem higher than what most people earn.',
 } as const satisfies Record<MessageKey, string>;
