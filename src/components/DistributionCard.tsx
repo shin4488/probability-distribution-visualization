@@ -82,7 +82,7 @@ function DistributionCardBase({
   const useCaseValues = def.useCaseValues(card.params);
 
   const handleDragStart = (e: DragEvent) => {
-    // draggable={dragReady}なのでハンドル経由以外でここには来ないはずだが、念のため防御する
+    // カード内で選択した文字列のドラッグなど、ハンドルを押さずに始まったドラッグもここに届くため、並び替えとして扱わずに取り消す
     if (!dragReady) {
       e.preventDefault();
       return;
